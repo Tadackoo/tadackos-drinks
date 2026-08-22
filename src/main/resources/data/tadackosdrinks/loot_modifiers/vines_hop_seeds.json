@@ -1,0 +1,16 @@
+{
+  "type": "tadackosdrinks:add_seed",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:blocks/vine"
+    },
+    {
+      "condition": "minecraft:survives_explosion"
+    },
+    {
+      "condition":"minecraft:random_chance","chance":0.025
+    }
+  ],
+  "item": "tadackosdrinks:hop_seeds"
+}

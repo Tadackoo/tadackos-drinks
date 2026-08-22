@@ -1,0 +1,345 @@
+{
+  "multipart": [
+    {
+      "when": { "variant": 0 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_oak"
+      }
+    },
+    {
+      "when": { "variant": 0 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 0 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_spruce"
+      }
+    },
+    {
+      "when": { "variant": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_spruce"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_spruce",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_birch"
+      }
+    },
+    {
+      "when": { "variant": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_birch"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_birch",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_jungle"
+      }
+    },
+    {
+      "when": { "variant": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_jungle"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_jungle",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 4 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_acacia"
+      }
+    },
+    {
+      "when": { "variant": 4 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_acacia"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 4 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_acacia",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 5 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_dark_oak"
+      }
+    },
+    {
+      "when": { "variant": 5 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_dark_oak"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 5 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_dark_oak",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 6 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_mangrove"
+      }
+    },
+    {
+      "when": { "variant": 6 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_mangrove"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 6 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_mangrove",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 7 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_cherry"
+      }
+    },
+    {
+      "when": { "variant": 7 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_cherry"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 7 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_cherry",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 8 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_bamboo"
+      }
+    },
+    {
+      "when": { "variant": 8 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_bamboo"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 8 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_bamboo",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 9 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_crimson"
+      }
+    },
+    {
+      "when": { "variant": 9 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_crimson"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 9 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_crimson",
+        "x": 180
+      }
+    },
+    {
+      "when": { "variant": 10 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_warped"
+      }
+    },
+    {
+      "when": { "variant": 10 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_warped"
+      }
+    },
+    {
+      "when": { "trellis": true, "variant": 10 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_warped",
+        "x": 180
+      }
+    },
+    {
+      "when": { "wire_north": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired"
+      }
+    },
+    {
+      "when": { "wire_east": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired",
+        "y": 90
+      }
+    },
+    {
+      "when": { "wire_south": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired",
+        "y": 180
+      }
+    },
+    {
+      "when": { "wire_west": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired",
+        "y": 270
+      }
+    },
+    {
+      "when": { "wire_north": true, "age": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped"
+      }
+    },
+    {
+      "when": { "wire_east": true, "age": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 90
+      }
+    },
+    {
+      "when": { "wire_south": true, "age": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 180
+      }
+    },
+    {
+      "when": { "wire_west": true, "age": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 270
+      }
+    },
+    {
+      "when": { "wire_north": true, "age": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped"
+      }
+    },
+    {
+      "when": { "wire_east": true, "age": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 90
+      }
+    },
+    {
+      "when": { "wire_south": true, "age": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 180
+      }
+    },
+    {
+      "when": { "wire_west": true, "age": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 270
+      }
+    },
+    {
+      "when": { "wire_north": true, "age": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped"
+      }
+    },
+    {
+      "when": { "wire_east": true, "age": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 90
+      }
+    },
+    {
+      "when": { "wire_south": true, "age": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 180
+      }
+    },
+    {
+      "when": { "wire_west": true, "age": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_graped",
+        "y": 270
+      }
+    },
+    {
+      "when": { "age": 0 },
+      "apply": {
+        "model": "tadackosdrinks:block/grape_stage0"
+      }
+    },
+    {
+      "when": { "age": 1 },
+      "apply": {
+        "model": "tadackosdrinks:block/grape_stage1"
+      }
+    },
+    {
+      "when": { "age": 2 },
+      "apply": {
+        "model": "tadackosdrinks:block/grape_stage2"
+      }
+    },
+    {
+      "when": { "age": 3 },
+      "apply": {
+        "model": "tadackosdrinks:block/grape_stage3"
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "age=0,facing=north": {
+      "model": "tadackosdrinks:block/grape_side_stage0",
+      "y": 90
+    },
+    "age=0,facing=south": {
+      "model": "tadackosdrinks:block/grape_side_stage0",
+      "y": 90
+    },
+    "age=0,facing=west": {
+      "model": "tadackosdrinks:block/grape_side_stage0"
+    },
+    "age=0,facing=east": {
+      "model": "tadackosdrinks:block/grape_side_stage0"
+    },
+    "age=1,facing=north": {
+      "model": "tadackosdrinks:block/grape_side_stage1_white",
+      "y": 90
+    },
+    "age=1,facing=south": {
+      "model": "tadackosdrinks:block/grape_side_stage1_white",
+      "y": 90
+    },
+    "age=1,facing=west": {
+      "model": "tadackosdrinks:block/grape_side_stage1_white"
+    },
+    "age=1,facing=east": {
+      "model": "tadackosdrinks:block/grape_side_stage1_white"
+    }
+  }
+}

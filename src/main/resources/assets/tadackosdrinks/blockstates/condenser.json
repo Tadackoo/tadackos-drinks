@@ -1,0 +1,36 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tadackosdrinks:block/condenser"
+      }
+    },
+    {
+      "when": { "connect_north": true },
+      "apply": {
+        "model": "tadackosdrinks:block/still_pipe"
+      }
+    },
+    {
+      "when": { "connect_east": true },
+      "apply": {
+        "model": "tadackosdrinks:block/still_pipe",
+        "y": 90
+      }
+    },
+    {
+      "when": { "connect_south": true },
+      "apply": {
+        "model": "tadackosdrinks:block/still_pipe",
+        "y": 180
+      }
+    },
+    {
+      "when": { "connect_west": true },
+      "apply": {
+        "model": "tadackosdrinks:block/still_pipe",
+        "y": 270
+      }
+    }
+  ]
+}

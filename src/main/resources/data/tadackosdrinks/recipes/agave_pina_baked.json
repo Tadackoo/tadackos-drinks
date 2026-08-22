@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "tadackosdrinks:agave_pina"
+  },
+  "result": "tadackosdrinks:agave_pina_baked"
+}

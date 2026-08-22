@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "part=bottom,age=0": { "model": "tadackosdrinks:block/juniper_stage0" },
+    "part=bottom,age=1": { "model": "tadackosdrinks:block/juniper_stage1" },
+    "part=bottom,age=2": { "model": "tadackosdrinks:block/juniper_stage2" },
+    "part=bottom,age=3": { "model": "tadackosdrinks:block/juniper_stage3" },
+    "part=bottom,age=4": { "model": "tadackosdrinks:block/juniper_stage4" },
+    "part=middle,age=0": { "model": "tadackosdrinks:block/shot_glass_empty" },
+    "part=middle,age=1": { "model": "tadackosdrinks:block/shot_glass_empty" },
+    "part=middle,age=2": { "model": "tadackosdrinks:block/juniper2_stage0" },
+    "part=middle,age=3": { "model": "tadackosdrinks:block/juniper2_stage1" },
+    "part=middle,age=4": { "model": "tadackosdrinks:block/juniper2_stage2" },
+    "part=top": { "model": "tadackosdrinks:block/juniper2_stage0" }
+  }
+}

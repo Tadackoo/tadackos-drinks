@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:guide_book"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.tadackosdrinks.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.tadackosdrinks.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "textures/block/oak_log.png"
+  },
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": [
+              "minecraft:crafting_table"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

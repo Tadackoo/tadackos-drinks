@@ -1,0 +1,17 @@
+{
+  "type": "tadackosdrinks:shapeless_bucket_consuming",
+  "ingredients": [
+    {
+      "item": "tadackosdrinks:juniper_berries"
+    },
+    {
+      "item": "tadackosdrinks:juniper_berries"
+    },
+    {
+      "item": "tadackosdrinks:concentrated_tequila_aged_bucket"
+    }
+  ],
+  "result": {
+    "item": "tadackosdrinks:spirit_agave_mid_spiced_bucket"
+  }
+}

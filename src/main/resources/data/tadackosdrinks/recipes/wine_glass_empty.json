@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    " # ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "count": 6,
+    "item": "tadackosdrinks:wine_glass_empty"
+  }
+}

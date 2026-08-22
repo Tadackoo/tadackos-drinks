@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:hangover_icon"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.hangover_inebriation.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.hangover_inebriation.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:hangover",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:effects_changed",
+      "conditions": {
+        "effects": {
+          "tadackosdrinks:hangover": {},
+          "tadackosdrinks:inebriation": {}
+        }
+      }
+    }
+  }
+}

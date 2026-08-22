@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "state=open,facing=north": {"model": "tadackosdrinks:block/fermenting_barrel_birch"},
+    "state=open,facing=south": {"model": "tadackosdrinks:block/fermenting_barrel_birch", "y": 180},
+    "state=open,facing=west":  {"model": "tadackosdrinks:block/fermenting_barrel_birch", "y": 270},
+    "state=open,facing=east":  {"model": "tadackosdrinks:block/fermenting_barrel_birch", "y": 90},
+
+    "state=closed,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch"},
+    "state=closed,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch", "y": 180},
+    "state=closed,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch", "y": 270},
+    "state=closed,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch", "y": 90},
+
+    "state=closed,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch"},
+    "state=closed,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch", "y": 180},
+    "state=closed,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch", "y": 270},
+    "state=closed,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch", "y": 90},
+
+    "state=yeast,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch"},
+    "state=yeast,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch", "y": 180},
+    "state=yeast,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch", "y": 270},
+    "state=yeast,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_birch", "y": 90},
+
+    "state=yeast,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch"},
+    "state=yeast,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch", "y": 180},
+    "state=yeast,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch", "y": 270},
+    "state=yeast,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_birch", "y": 90}
+  }
+}

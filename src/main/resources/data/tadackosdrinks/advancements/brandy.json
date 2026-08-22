@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:brandy_grape_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.brandy.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.brandy.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:distillation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:brandy_grape_bucket",
+              "tadackosdrinks:brandy_apple_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

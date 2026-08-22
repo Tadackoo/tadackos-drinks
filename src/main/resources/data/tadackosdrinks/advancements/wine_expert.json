@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:wine_red_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.wine_expert.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.wine_expert.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:wine",
+  "criteria": {
+    "red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": ["tadackosdrinks:wine_red_aged_bucket"] } ] }
+    },
+    "rose": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": ["tadackosdrinks:wine_rose_aged_bucket"] } ] }
+    },
+    "orange": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": ["tadackosdrinks:wine_orange_aged_bucket"] } ] }
+    },
+    "white": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": ["tadackosdrinks:wine_white_aged_bucket"] } ] }
+    }
+  },
+  "requirements": [
+    ["red"],
+    ["rose"],
+    ["orange"],
+    ["white"]
+  ]
+}

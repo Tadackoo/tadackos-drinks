@@ -1,0 +1,15 @@
+{
+  "type": "tadackosdrinks:shapeless_bucket_consuming",
+  "ingredients": [
+    {
+      "item": "tadackosdrinks:concentrated_whisky_barley_bucket"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "item": "tadackosdrinks:whisky_barley_bucket"
+  }
+}

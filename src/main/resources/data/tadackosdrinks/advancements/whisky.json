@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:whisky_wheat_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.whisky.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.whisky.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:distillation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:whisky_wheat_bucket",
+              "tadackosdrinks:whisky_barley_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

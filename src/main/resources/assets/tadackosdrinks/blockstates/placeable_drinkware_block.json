@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "variant=beer_empty,facing=north": { "model": "tadackosdrinks:block/beer_glass_empty" },
+    "variant=beer_empty,facing=south": { "model": "tadackosdrinks:block/beer_glass_empty", "y": 180 },
+    "variant=beer_empty,facing=west":  { "model": "tadackosdrinks:block/beer_glass_empty", "y": 270 },
+    "variant=beer_empty,facing=east":  { "model": "tadackosdrinks:block/beer_glass_empty", "y": 90 },
+    "variant=beer,facing=north": { "model": "tadackosdrinks:block/beer_glass_empty" },
+    "variant=beer,facing=south": { "model": "tadackosdrinks:block/beer_glass_empty", "y": 180 },
+    "variant=beer,facing=west":  { "model": "tadackosdrinks:block/beer_glass_empty", "y": 270 },
+    "variant=beer,facing=east":  { "model": "tadackosdrinks:block/beer_glass_empty", "y": 90 },
+    "variant=wine_empty": { "model": "tadackosdrinks:block/wine_glass_empty" },
+    "variant=wine_red": { "model": "tadackosdrinks:block/wine_glass_empty" },
+    "variant=wine_rose": { "model": "tadackosdrinks:block/wine_glass_empty" },
+    "variant=wine_orange": { "model": "tadackosdrinks:block/wine_glass_empty" },
+    "variant=wine_white": { "model": "tadackosdrinks:block/wine_glass_empty" },
+    "variant=cider": { "model": "tadackosdrinks:block/beer_glass_empty" },
+    "variant=mead": { "model": "tadackosdrinks:block/wine_glass_empty" },
+    "variant=whisky_empty": { "model": "tadackosdrinks:block/whisky_glass_empty" },
+    "variant=whisky": { "model": "tadackosdrinks:block/whisky_glass_empty" },
+    "variant=brandy_empty": { "model": "tadackosdrinks:block/brandy_glass_empty" },
+    "variant=brandy": { "model": "tadackosdrinks:block/brandy_glass_empty" },
+    "variant=rum_light": { "model": "tadackosdrinks:block/whisky_glass_empty" },
+    "variant=rum": { "model": "tadackosdrinks:block/whisky_glass_empty" },
+    "variant=shot_empty": { "model": "tadackosdrinks:block/shot_glass_empty" },
+    "variant=shot": { "model": "tadackosdrinks:block/shot_glass_empty" },
+    "variant=tequila": { "model": "tadackosdrinks:block/shot_glass_empty" }
+  }
+}

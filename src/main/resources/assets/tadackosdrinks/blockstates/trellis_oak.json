@@ -1,0 +1,87 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_oak"
+      }
+    },
+    {
+      "when": { "rope": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_roped"
+      }
+    },
+    {
+      "when": { "wire_north": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired"
+      }
+    },
+    {
+      "when": { "wire_east": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired",
+        "y": 90
+      }
+    },
+    {
+      "when": { "wire_south": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired",
+        "y": 180
+      }
+    },
+    {
+      "when": { "wire_west": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_wired",
+        "y": 270
+      }
+    },
+    {
+      "when": { "down": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak"
+      }
+    },
+    {
+      "when": { "up": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak",
+        "x": 180
+      }
+    },
+    {
+      "when": { "south": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak",
+        "x": 90,
+        "y": 0
+      }
+    },
+    {
+      "when": { "west": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": { "north": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": { "east": true },
+      "apply": {
+        "model": "tadackosdrinks:block/trellis_side_oak",
+        "x": 90,
+        "y": 270
+      }
+    }
+  ]
+}

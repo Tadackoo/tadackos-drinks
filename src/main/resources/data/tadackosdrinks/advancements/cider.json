@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:cider_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.cider.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.cider.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:fermentation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:cider_bucket",
+              "tadackosdrinks:cider_aged_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:keg"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.all_drinks.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.all_drinks.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:main",
+  "criteria": {
+    "beer_wheat": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:beer_wheat_glass"] } }
+    },
+    "beer_wheat_hopped": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:beer_wheat_hopped_glass"] } }
+    },
+    "beer_barley": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:beer_barley_glass"] } }
+    },
+    "beer_barley_hopped": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:beer_barley_hopped_glass"] } }
+    },
+    "wine_red": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_red_glass"] } }
+    },
+    "wine_red_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_red_aged_glass"] } }
+    },
+    "wine_rose": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_rose_glass"] } }
+    },
+    "wine_rose_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_rose_aged_glass"] } }
+    },
+    "wine_orange": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_orange_glass"] } }
+    },
+    "wine_orange_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_orange_aged_glass"] } }
+    },
+    "wine_white": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_white_glass"] } }
+    },
+    "wine_white_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:wine_white_aged_glass"] } }
+    },
+    "cider": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:cider_glass"] } }
+    },
+    "cider_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:cider_aged_glass"] } }
+    },
+    "mead": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:mead_glass"] } }
+    },
+    "mead_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:mead_aged_glass"] } }
+    },
+    "whisky_wheat": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:whisky_wheat_glass"] } }
+    },
+    "whisky_barley": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:whisky_barley_glass"] } }
+    },
+    "brandy_grape": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:brandy_grape_glass"] } }
+    },
+    "brandy_apple": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:brandy_apple_glass"] } }
+    },
+    "rum_juice": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:rum_juice_glass"] } }
+    },
+    "rum_juice_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:rum_juice_glass"] } }
+    },
+    "rum_molasses": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:rum_molasses_glass"] } }
+    },
+    "rum_molasses_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:rum_molasses_glass"] } }
+    },
+    "vodka_wheat": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_wheat_glass"] } }
+    },
+    "vodka_barley": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_barley_glass"] } }
+    },
+    "vodka_grape": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_grape_glass"] } }
+    },
+    "vodka_apple": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_apple_glass"] } }
+    },
+    "vodka_honey": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_honey_glass"] } }
+    },
+    "vodka_sugarcane_juice": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_sugarcane_juice_glass"] } }
+    },
+    "vodka_sugarcane_molasses": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_sugarcane_molasses_glass"] } }
+    },
+    "vodka_potato": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_potato_glass"] } }
+    },
+    "vodka_agave": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:vodka_agave_glass"] } }
+    },
+    "gin_wheat": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_wheat_glass"] } }
+    },
+    "gin_barley": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_barley_glass"] } }
+    },
+    "gin_grape": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_grape_glass"] } }
+    },
+    "gin_apple": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_apple_glass"] } }
+    },
+    "gin_honey": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_honey_glass"] } }
+    },
+    "gin_sugarcane_juice": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_sugarcane_juice_glass"] } }
+    },
+    "gin_sugarcane_molasses": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_sugarcane_molasses_glass"] } }
+    },
+    "gin_potato": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_potato_glass"] } }
+    },
+    "gin_agave": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:gin_agave_glass"] } }
+    },
+    "tequila": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:tequila_glass"] } }
+    },
+    "tequila_aged": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["tadackosdrinks:tequila_aged_glass"] } }
+    }
+  },
+  "requirements": [
+    ["beer_wheat"],
+    ["beer_wheat_hopped"],
+    ["beer_barley"],
+    ["beer_barley_hopped"],
+    ["wine_red"],
+    ["wine_red_aged"],
+    ["wine_rose"],
+    ["wine_rose_aged"],
+    ["wine_orange"],
+    ["wine_orange_aged"],
+    ["wine_white"],
+    ["wine_white_aged"],
+    ["cider"],
+    ["cider_aged"],
+    ["mead"],
+    ["mead_aged"],
+    ["whisky_wheat"],
+    ["whisky_barley"],
+    ["brandy_grape"],
+    ["brandy_apple"],
+    ["rum_juice"],
+    ["rum_juice_aged"],
+    ["rum_molasses"],
+    ["rum_molasses_aged"],
+    ["vodka_wheat"],
+    ["vodka_barley"],
+    ["vodka_grape"],
+    ["vodka_apple"],
+    ["vodka_honey"],
+    ["vodka_sugarcane_juice"],
+    ["vodka_sugarcane_molasses"],
+    ["vodka_potato"],
+    ["vodka_agave"],
+    ["gin_wheat"],
+    ["gin_barley"],
+    ["gin_grape"],
+    ["gin_apple"],
+    ["gin_honey"],
+    ["gin_sugarcane_juice"],
+    ["gin_sugarcane_molasses"],
+    ["gin_potato"],
+    ["gin_agave"],
+    ["tequila"],
+    ["tequila_aged"]
+  ]
+}

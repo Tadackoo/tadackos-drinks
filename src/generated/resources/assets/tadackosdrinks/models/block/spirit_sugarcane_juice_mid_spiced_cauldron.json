@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_cauldron_full",
+  "textures": {
+    "content": "tadackosdrinks:block/spirit_spiced_still",
+    "particle": "tadackosdrinks:block/spirit_spiced_still"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:rum_juice_aged_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.rum.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.rum.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:distillation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:rum_juice_bucket",
+              "tadackosdrinks:rum_juice_aged_bucket",
+              "tadackosdrinks:rum_molasses_bucket",
+              "tadackosdrinks:rum_molasses_aged_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

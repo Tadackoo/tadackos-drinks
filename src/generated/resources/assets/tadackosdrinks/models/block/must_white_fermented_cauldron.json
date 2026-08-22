@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_cauldron_full",
+  "textures": {
+    "content": "tadackosdrinks:block/must_still",
+    "particle": "tadackosdrinks:block/must_still"
+  }
+}

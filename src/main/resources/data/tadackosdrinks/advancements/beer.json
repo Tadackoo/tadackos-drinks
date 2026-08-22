@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:beer_wheat_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.beer.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.beer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:fermentation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:beer_wheat_bucket",
+              "tadackosdrinks:beer_wheat_hopped_bucket",
+              "tadackosdrinks:beer_barley_bucket",
+              "tadackosdrinks:beer_barley_hopped_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

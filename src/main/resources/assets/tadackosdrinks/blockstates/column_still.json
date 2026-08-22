@@ -1,0 +1,47 @@
+{
+  "multipart": [
+    { "when": { "part": "bottom", "clock": false, "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom" } },
+    { "when": { "part": "bottom", "clock": false, "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 90 } },
+    { "when": { "part": "bottom", "clock": false, "facing": "south" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 180 } },
+    { "when": { "part": "bottom", "clock": false, "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 270 } },
+
+    { "when": { "part": "bottom", "clock": true, "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked" } },
+    { "when": { "part": "bottom", "clock": true, "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked", "y": 90 } },
+    { "when": { "part": "bottom", "clock": true, "facing": "south" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked", "y": 180 } },
+    { "when": { "part": "bottom", "clock": true, "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked", "y": 270 } },
+
+    { "when": { "part": "middle", "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still" } },
+    { "when": { "part": "middle", "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still", "y": 90 } },
+    { "when": { "part": "middle", "facing": "south" }, "apply": { "model": "tadackosdrinks:block/column_still", "y": 180 } },
+    { "when": { "part": "middle", "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/column_still", "y": 270 } },
+
+    { "when": { "part": "top", "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still_top" } },
+    { "when": { "part": "top", "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still_top", "y": 90 } },
+    { "when": { "part": "top", "facing": "south" }, "apply": { "model": "tadackosdrinks:block/column_still_top", "y": 180 } },
+    { "when": { "part": "top", "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/column_still_top", "y": 270 } },
+
+    { "when": { "part": "top", "condenser": "north" }, "apply": { "model": "tadackosdrinks:block/still_pipe" } },
+    { "when": { "part": "top", "condenser": "east"  }, "apply": { "model": "tadackosdrinks:block/still_pipe", "y": 90 } },
+    { "when": { "part": "top", "condenser": "south" }, "apply": { "model": "tadackosdrinks:block/still_pipe", "y": 180 } },
+    { "when": { "part": "top", "condenser": "west"  }, "apply": { "model": "tadackosdrinks:block/still_pipe", "y": 270 } },
+
+    { "when": { "part": "top", "condenser": "north_below" }, "apply": { "model": "tadackosdrinks:block/still_pipe" } },
+    { "when": { "part": "top", "condenser": "east_below"  }, "apply": { "model": "tadackosdrinks:block/still_pipe", "y": 90 } },
+    { "when": { "part": "top", "condenser": "south_below" }, "apply": { "model": "tadackosdrinks:block/still_pipe", "y": 180 } },
+    { "when": { "part": "top", "condenser": "west_below"  }, "apply": { "model": "tadackosdrinks:block/still_pipe", "y": 270 } },
+
+    { "when": { "condenser": "north" }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner" } },
+    { "when": { "condenser": "east"  }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner", "y": 90 } },
+    { "when": { "condenser": "south" }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner", "y": 180 } },
+    { "when": { "condenser": "west"  }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner", "y": 270 } },
+
+    { "when": { "condenser": "north_below" }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner" } },
+    { "when": { "condenser": "north_below" }, "apply": { "model": "tadackosdrinks:block/still_pipe_vertical" } },
+    { "when": { "condenser": "east_below"  }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner", "y": 90 } },
+    { "when": { "condenser": "east_below"  }, "apply": { "model": "tadackosdrinks:block/still_pipe_vertical", "y": 90 } },
+    { "when": { "condenser": "south_below" }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner", "y": 180 } },
+    { "when": { "condenser": "south_below" }, "apply": { "model": "tadackosdrinks:block/still_pipe_vertical", "y": 180 } },
+    { "when": { "condenser": "west_below"  }, "apply": { "model": "tadackosdrinks:block/still_pipe_corner", "y": 270 } },
+    { "when": { "condenser": "west_below"  }, "apply": { "model": "tadackosdrinks:block/still_pipe_vertical", "y": 270 } }
+  ]
+}

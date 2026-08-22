@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:vodka_wheat_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.vodka.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.vodka.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:distillation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:vodka_wheat_bucket",
+              "tadackosdrinks:vodka_barley_bucket",
+              "tadackosdrinks:vodka_grape_bucket",
+              "tadackosdrinks:vodka_apple_bucket",
+              "tadackosdrinks:vodka_honey_bucket",
+              "tadackosdrinks:vodka_sugarcane_juice_bucket",
+              "tadackosdrinks:vodka_sugarcane_molasses_bucket",
+              "tadackosdrinks:vodka_potato_bucket",
+              "tadackosdrinks:vodka_agave_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

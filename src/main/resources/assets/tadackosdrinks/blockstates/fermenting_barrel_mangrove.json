@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "state=open,facing=north": {"model": "tadackosdrinks:block/fermenting_barrel_mangrove"},
+    "state=open,facing=south": {"model": "tadackosdrinks:block/fermenting_barrel_mangrove", "y": 180},
+    "state=open,facing=west":  {"model": "tadackosdrinks:block/fermenting_barrel_mangrove", "y": 270},
+    "state=open,facing=east":  {"model": "tadackosdrinks:block/fermenting_barrel_mangrove", "y": 90},
+
+    "state=closed,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove"},
+    "state=closed,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove", "y": 180},
+    "state=closed,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove", "y": 270},
+    "state=closed,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove", "y": 90},
+
+    "state=closed,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove"},
+    "state=closed,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove", "y": 180},
+    "state=closed,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove", "y": 270},
+    "state=closed,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove", "y": 90},
+
+    "state=yeast,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove"},
+    "state=yeast,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove", "y": 180},
+    "state=yeast,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove", "y": 270},
+    "state=yeast,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_mangrove", "y": 90},
+
+    "state=yeast,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove"},
+    "state=yeast,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove", "y": 180},
+    "state=yeast,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove", "y": 270},
+    "state=yeast,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_mangrove", "y": 90}
+  }
+}

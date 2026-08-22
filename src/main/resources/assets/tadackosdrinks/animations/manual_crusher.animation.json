@@ -1,0 +1,43 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"use": {
+			"animation_length": 6,
+			"bones": {
+				"bone": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"6.0": {
+							"vector": [0, 0, 720]
+						}
+					}
+				},
+				"bone2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"6.0": {
+							"vector": [0, 0, -720]
+						}
+					}
+				}
+			}
+		},
+      "idle": {
+        "animation_length": 1,
+        "bones": {
+          "bone2": {
+            "position": {
+              "0.0": {
+                "vector": [0, 0, 0]
+              }
+            }
+          }
+        }
+      }
+	},
+	"geckolib_format_version": 2
+}

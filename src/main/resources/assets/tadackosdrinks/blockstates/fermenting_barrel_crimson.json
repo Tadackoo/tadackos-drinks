@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "state=open,facing=north": {"model": "tadackosdrinks:block/fermenting_barrel_crimson"},
+    "state=open,facing=south": {"model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 180},
+    "state=open,facing=west":  {"model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 270},
+    "state=open,facing=east":  {"model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 90},
+
+    "state=closed,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson"},
+    "state=closed,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 180},
+    "state=closed,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 270},
+    "state=closed,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 90},
+
+    "state=closed,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson"},
+    "state=closed,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 180},
+    "state=closed,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 270},
+    "state=closed,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 90},
+
+    "state=yeast,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson"},
+    "state=yeast,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 180},
+    "state=yeast,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 270},
+    "state=yeast,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 90},
+
+    "state=yeast,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson"},
+    "state=yeast,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 180},
+    "state=yeast,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 270},
+    "state=yeast,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 90}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "tadackosdrinks:barley"
+    }
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "item": "minecraft:bread"
+  }
+}

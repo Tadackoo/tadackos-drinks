@@ -1,0 +1,11 @@
+{
+  "parent": "block/template_cauldron_full",
+  "textures": {
+    "bottom": "block/cauldron_bottom",
+    "content": "tadackosdrinks:block/must_still",
+    "inside": "block/cauldron_inner",
+    "particle": "block/cauldron_side",
+    "side": "block/cauldron_side",
+    "top": "block/cauldron_top"
+  }
+}

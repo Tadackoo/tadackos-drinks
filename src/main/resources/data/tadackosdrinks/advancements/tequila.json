@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:tequila_aged_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.tequila.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.tequila.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:distillation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:tequila_bucket",
+              "tadackosdrinks:tequila_aged_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

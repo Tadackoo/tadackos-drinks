@@ -1,0 +1,23 @@
+{
+  "type": "tadackosdrinks:shapeless_bucket_consuming",
+  "ingredients": [
+    {
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "item": "minecraft:egg"
+    },
+    {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    {
+      "item": "tadackosdrinks:juniper_berries"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
+    }
+  ],
+  "result": {
+    "item": "tadackosdrinks:hangover_cure"
+  }
+}

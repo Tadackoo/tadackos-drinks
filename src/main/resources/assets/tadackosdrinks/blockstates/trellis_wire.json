@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "tadackosdrinks:block/trellis_wire",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "tadackosdrinks:block/trellis_wire",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "tadackosdrinks:block/trellis_wire"
+    },
+    "facing=east": {
+      "model": "tadackosdrinks:block/trellis_wire"
+    }
+  }
+}

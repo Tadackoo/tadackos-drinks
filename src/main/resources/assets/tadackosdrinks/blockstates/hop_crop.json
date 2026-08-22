@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "age=0": { "model": "tadackosdrinks:block/hop_stage0" },
+    "age=1": { "model": "tadackosdrinks:block/hop_stage1" },
+    "age=2": { "model": "tadackosdrinks:block/hop_stage2" },
+    "age=3": { "model": "tadackosdrinks:block/hop_stage3" }
+  }
+}

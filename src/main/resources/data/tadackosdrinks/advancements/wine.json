@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:wine_red_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.wine.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.wine.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:fermentation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:wine_red_bucket",
+              "tadackosdrinks:wine_red_aged_bucket",
+              "tadackosdrinks:wine_rose_bucket",
+              "tadackosdrinks:wine_rose_aged_bucket",
+              "tadackosdrinks:wine_orange_bucket",
+              "tadackosdrinks:wine_orange_aged_bucket",
+              "tadackosdrinks:wine_white_bucket",
+              "tadackosdrinks:wine_white_aged_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

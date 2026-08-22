@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:inebriation_icon"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.death_inebriation.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.death_inebriation.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:main",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:effects_changed",
+      "conditions": {
+        "effects": {
+          "tadackosdrinks:inebriation": {
+            "amplifier": 5
+          }
+        }
+      }
+    }
+  }
+}

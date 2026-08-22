@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "tadackosdrinks:item/barley_seeds_malted"
+  }
+}

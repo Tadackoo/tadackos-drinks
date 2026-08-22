@@ -1,0 +1,23 @@
+{
+  "type": "tadackosdrinks:shapeless_bucket_consuming",
+  "ingredients": [
+    {
+      "item": "tadackosdrinks:hops"
+    },
+    {
+      "item": "tadackosdrinks:hops"
+    },
+    {
+      "item": "tadackosdrinks:hops"
+    },
+    {
+      "item": "tadackosdrinks:hops"
+    },
+    {
+      "item": "tadackosdrinks:wort_barley_bucket"
+    }
+  ],
+  "result": {
+    "item": "tadackosdrinks:wort_barley_hopped_bucket"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "item": "tadackosdrinks:gin_wheat_glass"
+    },
+    "title": {
+      "translate": "advancements.tadackosdrinks.gin.title"
+    },
+    "description": {
+      "translate": "advancements.tadackosdrinks.gin.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "tadackosdrinks:distillation",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tadackosdrinks:gin_wheat_bucket",
+              "tadackosdrinks:gin_barley_bucket",
+              "tadackosdrinks:gin_grape_bucket",
+              "tadackosdrinks:gin_apple_bucket",
+              "tadackosdrinks:gin_honey_bucket",
+              "tadackosdrinks:gin_sugarcane_juice_bucket",
+              "tadackosdrinks:gin_sugarcane_molasses_bucket",
+              "tadackosdrinks:gin_potato_bucket",
+              "tadackosdrinks:gin_agave_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

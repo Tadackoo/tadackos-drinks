@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " L ",
+    "WPW",
+    "WPW"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:lever"
+    },
+    "W": {
+      "item": "minecraft:warped_planks"
+    },
+    "P": {
+      "item": "minecraft:heavy_weighted_pressure_plate"
+    }
+  },
+  "result": {
+    "item": "tadackosdrinks:manual_press_warped"
+  }
+}
