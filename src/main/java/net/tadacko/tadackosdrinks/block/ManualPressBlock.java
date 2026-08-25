@@ -49,13 +49,10 @@ public class ManualPressBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos blockPos,
-                                 Player player, InteractionHand hand, BlockHitResult result) {
-        // Check if it's on the server side
+    public InteractionResult use(BlockState state, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult result) {
         if (!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity instanceof ManualPressBlockEntity manualPressBlockEntity) {
-                // Call a method in the block entity to handle the interaction
                 if (manualPressBlockEntity.handleRightClick(player, hand)) {
                     return InteractionResult.SUCCESS;
                 }
@@ -93,40 +90,23 @@ public class ManualPressBlock extends BaseEntityBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide
-                ? null // No client-side ticker needed
-                : createTickerHelper(type, ModBlockEntities.MANUAL_PRESS.get(), ManualPressBlockEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.MANUAL_PRESS.get(), ManualPressBlockEntity::tick);
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-        // Try to fetch the BlockEntity from the loot context
         Object beObj = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (beObj instanceof ManualPressBlockEntity press) {
-            // if it's default/empty, return a plain block item so it stacks with freshly crafted ones
-            if (press.isDefaultState()) {
-                return Collections.singletonList(new ItemStack(this.asItem()));
-            }
-
-            // otherwise save the BE NBT and attach it
-            // create single ItemStack for this block (the BlockItem registered for this block)
+        if (beObj instanceof ManualPressBlockEntity press && !press.isDefaultState()) {
             ItemStack stack = new ItemStack(this.asItem());
-
-            // use your public helper that returns the BE NBT (add saveToItemTag() to your BE if not present)
             CompoundTag tag = press.saveToItemTag();
-
-            // remove position fields
             tag.remove("x");
             tag.remove("y");
             tag.remove("z");
-
-            // attach under standard key so vanilla will restore it on place
             stack.getOrCreateTag().put("BlockEntityTag", tag);
-
             return Collections.singletonList(stack);
         }
 
-        // fallback to default behavior (loot table)
+        // fallback to loot table
         return super.getDrops(state, builder);
     }
 }

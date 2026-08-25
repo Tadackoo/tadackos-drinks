@@ -13,10 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MilkBucketItem;
 import net.minecraft.world.item.crafting.*;
 
-/**
- * A shapeless recipe that fully consumes all ingredients, including container
- * items like buckets (which would normally leave behind an empty bucket).
- */
+/** A shapeless recipe that fully consumes filled buckets (which would normally leave behind an empty bucket). */
 public class ShapelessBucketConsumingRecipe extends ShapelessRecipe {
 
     public ShapelessBucketConsumingRecipe(ResourceLocation id, String group,
@@ -25,10 +22,6 @@ public class ShapelessBucketConsumingRecipe extends ShapelessRecipe {
         super(id, group, category, result, ingredients);
     }
 
-    /**
-     * Only suppresses the "remaining item" for buckets. Other container items
-     * (e.g. glass bottles -> empty bottles) keep their normal vanilla behavior.
-     */
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
         NonNullList<ItemStack> remaining = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
@@ -36,10 +29,7 @@ public class ShapelessBucketConsumingRecipe extends ShapelessRecipe {
         for (int i = 0; i < remaining.size(); i++) {
             ItemStack stack = container.getItem(i);
 
-            if (stack.getItem() instanceof BucketItem || stack.getItem() instanceof MilkBucketItem) {
-                // Bucket: leave this slot's remaining item as EMPTY (fully consumed)
-                continue;
-            }
+            if (stack.getItem() instanceof BucketItem || stack.getItem() instanceof MilkBucketItem) continue;
 
             if (stack.hasCraftingRemainingItem()) {
                 // Non-bucket container item (e.g. glass bottle): keep vanilla behavior
@@ -55,11 +45,8 @@ public class ShapelessBucketConsumingRecipe extends ShapelessRecipe {
         return ModRecipeSerializers.SHAPELESS_BUCKET_CONSUMING.get();
     }
 
-    // -------------------------------------------------------------------------
     // Serializer — mirrors ShapelessRecipe.Serializer but produces our class
-    // -------------------------------------------------------------------------
     public static class Serializer implements RecipeSerializer<ShapelessBucketConsumingRecipe> {
-
         @Override
         public ShapelessBucketConsumingRecipe fromJson(ResourceLocation id, JsonObject json) {
             String group = GsonHelper.getAsString(json, "group", "");

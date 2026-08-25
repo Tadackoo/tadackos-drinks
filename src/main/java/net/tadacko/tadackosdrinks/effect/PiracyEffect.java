@@ -21,10 +21,10 @@ public class PiracyEffect extends MobEffect {
     public static class PiracyEventHandler {
         private static final Random RANDOM = new Random();
 
+        // fallback defaults, overridden by config values
         public static float piracy0NothingChance = 50f;
         public static float piracy0GoldChance = 40f;
         public static float piracy0EmeraldChance = 7f;
-
         public static float piracy1NothingChance = 30f;
         public static float piracy1GoldChance = 50f;
         public static float piracy1EmeraldChance = 15f;
@@ -32,23 +32,13 @@ public class PiracyEffect extends MobEffect {
         @SubscribeEvent
         public static void onEntityDeath(LivingDeathEvent event) {
             if (event.getEntity().level().isClientSide) return;
-            // Don't drop items from players
-            if (event.getEntity() instanceof net.minecraft.world.entity.player.Player) {
-                return;
-            }
+            if (event.getEntity() instanceof net.minecraft.world.entity.player.Player) return;
 
-            // Check if the damage source is from an entity
             if (event.getSource().getEntity() instanceof LivingEntity attacker) {
-
-                // Check if attacker has Piracy effect
                 if (attacker.hasEffect(ModEffects.PIRACY.get())) {
                     int amplifier = attacker.getEffect(ModEffects.PIRACY.get()).getAmplifier();
-
                     ItemStack drop = getPiracyDrop(amplifier);
-
-                    if (!drop.isEmpty()) {
-                        event.getEntity().spawnAtLocation(drop);
-                    }
+                    if (!drop.isEmpty()) event.getEntity().spawnAtLocation(drop);
                 }
             }
         }
@@ -56,7 +46,7 @@ public class PiracyEffect extends MobEffect {
         private static ItemStack getPiracyDrop(int amplifier) {
             float roll = RANDOM.nextFloat() * 100f;
 
-            if (amplifier == 0) { // Piracy I
+            if (amplifier == 0) {
                 if (roll < piracy0NothingChance) {
                     return ItemStack.EMPTY; // 50% nothing
                 } else if (roll < piracy0NothingChance + piracy0GoldChance) {
@@ -66,7 +56,7 @@ public class PiracyEffect extends MobEffect {
                 } else {
                     return new ItemStack(Items.DIAMOND); // 3% diamond
                 }
-            } else if (amplifier >= 1) { // Piracy II
+            } else if (amplifier >= 1) {
                 if (roll < piracy1NothingChance) {
                     return ItemStack.EMPTY; // 30% nothing
                 } else if (roll < piracy1NothingChance + piracy1GoldChance) {

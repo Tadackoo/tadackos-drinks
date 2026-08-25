@@ -175,12 +175,12 @@ public class ColumnStillRenderer implements BlockEntityRenderer<ColumnStillBlock
                 red, green, blue, alpha, combinedLight, combinedOverlay);
 
         // Surface cap 1: narrow, right behind the gauge (matches window width)
-        renderFluidSurfaceQuad(consumer, pose, sprite,
+        FermentingBarrelRenderer.renderFluidQuad(consumer, pose, sprite,
                 WINDOW_MIN_X, fillY, SURFACE_NEAR_MIN_Z, WINDOW_MAX_X, SURFACE_NEAR_MAX_Z,
                 red, green, blue, alpha, combinedLight, combinedOverlay);
 
         // Surface cap 2: wide, representing the full interior tube cross-section
-        renderFluidSurfaceQuad(consumer, pose, sprite,
+        FermentingBarrelRenderer.renderFluidQuad(consumer, pose, sprite,
                 SURFACE_FAR_MIN_X, fillY, SURFACE_FAR_MIN_Z, SURFACE_FAR_MAX_X, SURFACE_FAR_MAX_Z,
                 red, green, blue, alpha, combinedLight, combinedOverlay);
     }
@@ -210,35 +210,6 @@ public class ColumnStillRenderer implements BlockEntityRenderer<ColumnStillBlock
         float v1 = sprite.getV(vSize);
         renderDoubleSidedQuad(consumer, pose, minX, minY, maxX, maxY, z, u0, u1, v0, v1,
                 red, green, blue, alpha, combinedLight, combinedOverlay);
-    }
-
-    /** Horizontal fluid surface cap (perpendicular to the gauge), normal facing up - same style as the pot still's surface quad. */
-    private void renderFluidSurfaceQuad(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite,
-                                        float minX, float y, float minZ, float maxX, float maxZ,
-                                        float red, float green, float blue, float alpha,
-                                        int combinedLight, int combinedOverlay) {
-        float uSize = (maxX - minX) * 16f;
-        float vSize = (maxZ - minZ) * 16f;
-
-        consumer.vertex(pose.pose(), minX, y, minZ).color(red, green, blue, alpha)
-                .uv(sprite.getU(0), sprite.getV(0))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
-
-        consumer.vertex(pose.pose(), minX, y, maxZ).color(red, green, blue, alpha)
-                .uv(sprite.getU(0), sprite.getV(vSize))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
-
-        consumer.vertex(pose.pose(), maxX, y, maxZ).color(red, green, blue, alpha)
-                .uv(sprite.getU(uSize), sprite.getV(vSize))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
-
-        consumer.vertex(pose.pose(), maxX, y, minZ).color(red, green, blue, alpha)
-                .uv(sprite.getU(uSize), sprite.getV(0))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
     }
 
     /**
@@ -280,7 +251,7 @@ public class ColumnStillRenderer implements BlockEntityRenderer<ColumnStillBlock
                 .normal(pose.normal(), 0, 0, 1).endVertex();
     }
 
-    // --- CLOCK HAND (copied unchanged from PotStillRenderer) ---
+    // --- CLOCK HAND (copied from PotStillRenderer) ---
     private void renderClockHand(ColumnStillBlockEntity blockEntity, PoseStack poseStack,
                                  MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 

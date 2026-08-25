@@ -9,28 +9,22 @@ import net.tadacko.tadackosdrinks.fluid.ModFluids;
 /**
  * Sets up cauldron fill/empty interactions for every fluid registered in ModFluids.
  * <p>
- * Adding a new fluid only requires one line in ModFluids.register(); this class
- * picks it up automatically through ModFluids.ALL_FLUIDS.
- * <p>
  * Call bootstrap() from FMLCommonSetupEvent (enqueueWork) after registry events fire.
  */
 public class WortCauldronInteraction {
-
     public static void bootstrap() {
         for (ModFluids.FluidEntry entry : ModFluids.ALL_FLUIDS) {
-            var bucketItem  = entry.bucket().get();
+            var bucketItem = entry.bucket().get();
             var cauldronState = entry.cauldron().get().defaultBlockState();
-            var map         = entry.cauldronInteractions();
+            var map = entry.cauldronInteractions();
 
-            // Empty cauldron + filled bucket → fill the cauldron
-            CauldronInteraction.EMPTY.put(bucketItem,
-                    (state, level, pos, player, hand, stack) ->
+            // fill cauldron
+            CauldronInteraction.EMPTY.put(bucketItem, (state, level, pos, player, hand, stack) ->
                             CauldronInteraction.emptyBucket(level, pos, player, hand, stack,
                                     cauldronState, SoundEvents.BUCKET_EMPTY));
 
-            // Filled cauldron + empty bucket → fill the bucket
-            map.put(Items.BUCKET,
-                    (state, level, pos, player, hand, stack) ->
+            // fill bucket
+            map.put(Items.BUCKET, (state, level, pos, player, hand, stack) ->
                             CauldronInteraction.fillBucket(state, level, pos, player, hand, stack,
                                     new ItemStack(bucketItem), s -> true, SoundEvents.BUCKET_FILL));
         }

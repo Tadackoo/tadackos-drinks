@@ -25,10 +25,7 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
     @Override
     public void render(ManualPressBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        // First render the GeckoLib animated model
         geoRenderer.render(blockEntity, partialTicks, poseStack, bufferSource, packedLight, packedOverlay);
-
-        // Then render the fluid on top
         renderFluid(blockEntity, partialTicks, poseStack, bufferSource, packedLight, packedOverlay);
     }
 
@@ -57,7 +54,6 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
 
         poseStack.pushPose();
 
-        // Center the fluid block (12x12x4 centered in a 16x16x16 block)
         float minX = 2f / 16f;
         float maxX = 14f / 16f;
         float minZ = 2f / 16f;
@@ -68,57 +64,33 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.translucent());
         Matrix4f matrix = poseStack.last().pose();
 
-        // Render all 6 faces of the fluid cube
-        // Bottom face (Y-)
-        renderQuad(vertexConsumer, matrix,
-                minX, minY, minZ,
-                maxX, minY, minZ,
-                maxX, minY, maxZ,
-                minX, minY, maxZ,
-                sprite, red, green, blue, alpha, combinedLight, 0, -1, 0);
-
-        // Top face (Y+) - only render if height > 0
+        // Render side faces of the fluid cube
         if (maxY > 0.001f) {
-            renderQuad(vertexConsumer, matrix,
-                    minX, maxY, minZ,
-                    minX, maxY, maxZ,
-                    maxX, maxY, maxZ,
-                    maxX, maxY, minZ,
-                    sprite, red, green, blue, alpha, combinedLight, 0, 1, 0);
-        }
-
-        // North face (Z-) - reversed vertex order
-        if (maxY > 0.001f) {
+            // North face - reversed vertex order
             renderQuad(vertexConsumer, matrix,
                     minX, maxY, minZ,
                     maxX, maxY, minZ,
                     maxX, minY, minZ,
                     minX, minY, minZ,
                     sprite, red, green, blue, alpha, combinedLight, 0, 0, -1);
-        }
 
-        // South face (Z+) - reversed vertex order
-        if (maxY > 0.001f) {
+            // South face - reversed vertex order
             renderQuad(vertexConsumer, matrix,
                     maxX, maxY, maxZ,
                     minX, maxY, maxZ,
                     minX, minY, maxZ,
                     maxX, minY, maxZ,
                     sprite, red, green, blue, alpha, combinedLight, 0, 0, 1);
-        }
 
-        // West face (X-) - reversed vertex order
-        if (maxY > 0.001f) {
+            // West face - reversed vertex order
             renderQuad(vertexConsumer, matrix,
                     minX, maxY, maxZ,
                     minX, maxY, minZ,
                     minX, minY, minZ,
                     minX, minY, maxZ,
                     sprite, red, green, blue, alpha, combinedLight, -1, 0, 0);
-        }
 
-        // East face (X+) - reversed vertex order
-        if (maxY > 0.001f) {
+            // East face - reversed vertex order
             renderQuad(vertexConsumer, matrix,
                     maxX, maxY, minZ,
                     maxX, maxY, maxZ,

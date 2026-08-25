@@ -32,31 +32,16 @@ public final class NauseaWarpHandler {
 
         MobEffectInstance custom = player.getEffect(ModEffects.MILD_NAUSEA.get());
 
+        if (custom == null && player.hasEffect(MobEffects.CONFUSION)) {
+            player.removeEffect(MobEffects.CONFUSION);
+        }
         if (custom != null) {
             // Refresh every tick so it never drops into the 60-tick fade-out window
             // while our effect is still active.
             player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, HIDDEN_EFFECT_DURATION, 0, true, false, false));
 
             float target = (custom.getAmplifier() + 1) / 4.0F;
-            if (player.spinningEffectIntensity > target) {
-                player.spinningEffectIntensity = target;
-            }
-            return;
-        }
-
-        // Our effect just ended (expired, milk, /effect clear...). Stop refreshing:
-        // the hidden instance's own duration keeps counting down on its own (tick()
-        // still runs client-side, it's only the *removal* that's server-gated), so
-        // once it drops under 60 remaining, LocalPlayer's own vanilla logic takes
-        // over and fades spinningEffectIntensity out smoothly via the -0.05F/tick decay branch —
-        // no extra code needed from us for that part.
-        //
-        // Only once the warp has fully settled do we clean up the orphaned instance,
-        // so removal never causes a visible snap (removeEffect -> removeEffectNoUpdate
-        // -> LocalPlayer's override zeroes spinningEffectIntensity instantly, which is fine here
-        // since it's already at 0).
-        if (player.hasEffect(MobEffects.CONFUSION) && player.spinningEffectIntensity <= 0.0F) {
-            player.removeEffect(MobEffects.CONFUSION);
+            if (player.spinningEffectIntensity > target) player.spinningEffectIntensity = target;
         }
     }
 }

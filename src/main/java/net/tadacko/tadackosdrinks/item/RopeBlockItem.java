@@ -29,12 +29,10 @@ public class RopeBlockItem extends BlockItem {
         BlockState clickedState = level.getBlockState(clickedPos);
         Player player = context.getPlayer();
 
-        // Check if we clicked on a trellis or rope block
         if (clickedState.getBlock() instanceof TrellisBlock || clickedState.is(ModBlocks.ROPE.get())) {
             BlockPos belowPos = clickedPos.below();
             BlockState belowState = level.getBlockState(belowPos);
 
-            // Check if the position below can be replaced
             if (belowState.canBeReplaced(new BlockPlaceContext(context)) || belowState.isAir()) {
                 // Create a new hit result for the position below
                 Vec3 hitVec = Vec3.atCenterOf(belowPos);
@@ -46,11 +44,7 @@ public class RopeBlockItem extends BlockItem {
                 );
 
                 // Create a new context for the position below
-                UseOnContext modifiedContext = new UseOnContext(
-                        context.getPlayer(),
-                        context.getHand(),
-                        newHit
-                );
+                UseOnContext modifiedContext = new UseOnContext(context.getPlayer(), context.getHand(), newHit);
 
                 // Place the block below
                 return super.useOn(modifiedContext);
@@ -64,11 +58,8 @@ public class RopeBlockItem extends BlockItem {
                 boolean hasSupport = aboveState.getBlock() instanceof TrellisBlock || aboveState.is(ModBlocks.ROPE.get());
                 boolean canPlaceAtTarget = targetState.canBeReplaced(new BlockPlaceContext(context)) || targetState.isAir();
 
-                // If normal placement won't work either, show blocked message
                 if (!hasSupport || !canPlaceAtTarget) {
-                    if (player != null && level.isClientSide) {
-                        player.displayClientMessage(Component.translatable("message.tadackosdrinks.rope_fail_obstructed"), true);
-                    }
+                    if (player != null && level.isClientSide) player.displayClientMessage(Component.translatable("message.tadackosdrinks.rope_fail_obstructed"), true);
                     return InteractionResult.FAIL;
                 }
                 // Otherwise fall through to normal placement
@@ -81,15 +72,11 @@ public class RopeBlockItem extends BlockItem {
         BlockState aboveState = level.getBlockState(aboveTarget);
         BlockState targetState = level.getBlockState(targetPos);
 
-        // Check if there's support above the target position
         boolean hasSupport = aboveState.getBlock() instanceof TrellisBlock || aboveState.is(ModBlocks.ROPE.get());
         boolean canPlaceAtTarget = targetState.canBeReplaced(new BlockPlaceContext(context)) || targetState.isAir();
 
         if (!hasSupport || !canPlaceAtTarget) {
-            // No support above - show message and fail
-            if (player != null && level.isClientSide) {
-                player.displayClientMessage(Component.translatable("message.tadackosdrinks.rope_fail_target"), true);
-            }
+            if (player != null && level.isClientSide) player.displayClientMessage(Component.translatable("message.tadackosdrinks.rope_fail_target"), true);
             return InteractionResult.FAIL;
         }
 

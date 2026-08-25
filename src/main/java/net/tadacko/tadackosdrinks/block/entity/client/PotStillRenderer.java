@@ -20,8 +20,6 @@ import net.tadacko.tadackosdrinks.block.PotStillBlock;
 import net.tadacko.tadackosdrinks.block.entity.PotStillBlockEntity;
 
 public class PotStillRenderer implements BlockEntityRenderer<PotStillBlockEntity> {
-
-    // Pot still fluid bounds
     private static final float MIN_HEIGHT = 1f / 16f;
     private static final float MAX_HEIGHT = 7.99f / 16f;
     private static final int MAX_FLUID = 3000;
@@ -63,9 +61,9 @@ public class PotStillRenderer implements BlockEntityRenderer<PotStillBlockEntity
         if (!fluid.isEmpty()) {
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
 
-            renderFluidQuad(consumer, poseStack, sprite,
+            FermentingBarrelRenderer.renderFluidQuad(consumer, poseStack.last(), sprite,
                     3/16f, fluidHeight, 3/16f,
-                    13/16f, fluidHeight, 13/16f,
+                    13/16f, 13/16f,
                     red, green, blue, alpha,
                     combinedLight, combinedOverlay);
         }
@@ -77,43 +75,6 @@ public class PotStillRenderer implements BlockEntityRenderer<PotStillBlockEntity
         }
 
         poseStack.popPose();
-    }
-
-    // --- SHARED FLUID QUAD (unchanged, reusable) ---
-    private void renderFluidQuad(VertexConsumer consumer, PoseStack poseStack, TextureAtlasSprite sprite,
-                                 float minX, float y, float minZ,
-                                 float maxX, float y2, float maxZ,
-                                 float red, float green, float blue, float alpha,
-                                 int combinedLight, int combinedOverlay) {
-
-        PoseStack.Pose pose = poseStack.last();
-
-        float uSize = (maxX - minX) * 16f;
-        float vSize = (maxZ - minZ) * 16f;
-
-        consumer.vertex(pose.pose(), minX, y, minZ)
-                .color(red, green, blue, alpha)
-                .uv(sprite.getU(0), sprite.getV(0))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
-
-        consumer.vertex(pose.pose(), minX, y, maxZ)
-                .color(red, green, blue, alpha)
-                .uv(sprite.getU(0), sprite.getV(vSize))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
-
-        consumer.vertex(pose.pose(), maxX, y, maxZ)
-                .color(red, green, blue, alpha)
-                .uv(sprite.getU(uSize), sprite.getV(vSize))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
-
-        consumer.vertex(pose.pose(), maxX, y, minZ)
-                .color(red, green, blue, alpha)
-                .uv(sprite.getU(uSize), sprite.getV(0))
-                .overlayCoords(combinedOverlay).uv2(combinedLight)
-                .normal(pose.normal(), 0, 1, 0).endVertex();
     }
 
     // --- CLOCK HAND (simplified: no aging logic) ---

@@ -13,7 +13,6 @@ import net.tadacko.tadackosdrinks.block.entity.KegBlockEntity;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID)
 public class DrinkwareInteractionHandler {
-
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (!event.getEntity().isCrouching()) return;

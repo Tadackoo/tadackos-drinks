@@ -50,13 +50,12 @@ public class HangoverEffect extends MobEffect {
     @Override
     public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributes, int amplifier) {
         super.removeAttributeModifiers(entity, attributes, amplifier);
-        // Clean up the flag when effect is removed
         entity.getPersistentData().getCompound(TadackosDrinks.MOD_ID).remove(KEY_EFFECTS_APPLIED);
     }
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
-        return true; // Ensures applyEffectTick is called
+        return true;
     }
 
     @Override

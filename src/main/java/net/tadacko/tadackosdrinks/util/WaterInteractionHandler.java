@@ -38,9 +38,6 @@ public class WaterInteractionHandler {
 
     public static boolean throwMalting = false; // fallback default, overridden by config value
 
-    // -----------------------
-    // Dropped items handling
-    // -----------------------
     @SubscribeEvent
     public static void onItemSpawn(EntityJoinLevelEvent event) {
         if (!throwMalting) return;
@@ -76,16 +73,11 @@ public class WaterInteractionHandler {
             ItemStack newStack = getMaltedVersion(oldStack);
             if (newStack == null) continue;
 
-            // Set the new stack count to match the original
             newStack.setCount(oldStack.getCount());
             itemEntity.setItem(newStack);
             iterator.remove();
         }
     }
-
-    // -----------------------
-    // Right-click handling
-    // -----------------------
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
@@ -104,8 +96,8 @@ public class WaterInteractionHandler {
         InteractionHand hand = event.getHand();
         ItemStack held = player.getItemInHand(hand);
         ItemStack maltedSample = getMaltedVersion(held);
+        if (maltedSample == null) return;
         boolean converted = false;
-        if (maltedSample == null) return; // nothing to do
 
         // Quick checks for RightClickBlock
         if (event instanceof PlayerInteractEvent.RightClickBlock rcBlock) {
@@ -123,17 +115,11 @@ public class WaterInteractionHandler {
         }
 
         // Raycast fallback for deep/open water
-        if (!converted) {
-            converted = doFluidRaycastAndConvert(event.getLevel(), player, hand, maltedSample);
-        }
+        if (!converted) converted = doFluidRaycastAndConvert(event.getLevel(), player, hand, maltedSample);
 
-        // Only cancel if conversion actually happened
         if (converted) cancelEvent(event);
     }
 
-    // -----------------------
-    // Conversion helpers
-    // -----------------------
     private static boolean doFluidRaycastAndConvert(Level level, Player player, InteractionHand hand, ItemStack maltedSample) {
         double range = 5.0D;
         Vec3 eye = player.getEyePosition(1.0F);
@@ -143,7 +129,7 @@ public class WaterInteractionHandler {
         ClipContext ctx = new ClipContext(eye, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, player);
         HitResult hr = level.clip(ctx);
 
-        if (hr == null || hr.getType() != HitResult.Type.BLOCK) return false;
+        if (hr.getType() != HitResult.Type.BLOCK) return false;
 
         BlockHitResult bhr = (BlockHitResult) hr;
         BlockPos hit = bhr.getBlockPos();

@@ -10,11 +10,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -23,10 +25,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
-import net.tadacko.tadackosdrinks.config.ModCommonConfigs;
 import net.tadacko.tadackosdrinks.item.ModItems;
-
-import javax.annotation.Nullable;
 
 public class HopCropBlock extends CropBlock {
     public static final int SPREAD_AGE = 2;
@@ -44,7 +43,6 @@ public class HopCropBlock extends CropBlock {
     public static final IntegerProperty UNSUPPORTED = IntegerProperty.create("unsupported", 0, 2);
     // how many scheduled ticks without support before breaking
     private static final int UNSUPPORTED_THRESHOLD = 2;
-    // schedule delay between checks (in ticks)
     private static final int CHECK_DELAY = 1; // check every tick while unsupported
 
     public HopCropBlock(Properties pProperties) {
@@ -63,10 +61,8 @@ public class HopCropBlock extends CropBlock {
         super.neighborChanged(state, level, pos, changedBlock, fromPos, isMoving);
         if (level.isClientSide) return;
 
-        // only care about changes to the block *above*
         if (!fromPos.equals(pos.above())) return;
 
-        // schedule a survival check shortly after neighbor changed
         level.scheduleTick(pos, this, CHECK_DELAY);
     }
 
@@ -77,20 +73,15 @@ public class HopCropBlock extends CropBlock {
         }
 
         if (!pLevel.isClientSide) {
-            // how many hops to drop/give
-            int j = 1 + pLevel.random.nextInt(2);
+            int j = 1 + pLevel.random.nextInt(2); // 50% split 1 or 2
             ItemStack drop = new ItemStack(ModItems.HOPS.get(), j);
 
-            // try to give to player, otherwise spawn as an entity
             if (!pPlayer.addItem(drop)) {
-                ItemEntity itemEntity = new ItemEntity(pLevel,
-                        pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, drop);
+                ItemEntity itemEntity = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, drop);
                 pLevel.addFreshEntity(itemEntity);
             }
-            // reset crop to a lower age
             pLevel.setBlock(pPos, this.getStateForAge(MAX_AGE - 1), 2);
         }
-        // success on both sides
         return InteractionResult.sidedSuccess(pLevel.isClientSide);
     }
 
@@ -168,48 +159,28 @@ public class HopCropBlock extends CropBlock {
         pBuilder.add(AGE, UNSUPPORTED);
     }
 
-    @Override
-    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity tileEntity, ItemStack stack) {
-        super.playerDestroy(level, player, pos, state, tileEntity, stack);
-        if (!level.isClientSide) {
-            BlockState rope = ModBlocks.ROPE.get().defaultBlockState();
-            level.setBlock(pos, rope, 3);
-        }
-    }
-
-    @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        if (!level.isClientSide) {
-            BlockState rope = ModBlocks.ROPE.get().defaultBlockState();
-            level.setBlock(pos, rope, 3);
-        }
-        super.playerWillDestroy(level, pos, state, player);
-    }
-
+    // onRemove + defer replacement to make it work in creative and drop stuff in survival
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        super.onRemove(state, level, pos, newState, isMoving);
-
-        // When being removed and replaced by air (i.e. actually broken), place a rope.
-        // Do nothing if being replaced by another rope (prevents loops) or replaced by same block.
-        if (!level.isClientSide && newState.isAir()) {
-            BlockState rope = ModBlocks.ROPE.get().defaultBlockState();
-            level.setBlock(pos, rope, 3);
-            level.scheduleTick(pos, ModBlocks.ROPE.get(), CHECK_DELAY);
+        if (newState.isAir() && level instanceof ServerLevel serverLevel) {
+            serverLevel.getServer().execute(() -> {
+                BlockState rope = ModBlocks.ROPE.get().defaultBlockState();
+                level.setBlock(pos, rope, Block.UPDATE_ALL);
+                level.scheduleTick(pos, ModBlocks.ROPE.get(), CHECK_DELAY);
+            });
         }
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
-        // Check the *above* support specifically (rope/trellis/another hop)
         BlockState above = level.getBlockState(pos.above());
         boolean hasAboveSupport = above.is(this) || above.is(ModBlocks.ROPE.get()) || above.getBlock() instanceof TrellisBlock;
 
         if (hasAboveSupport) {
-            // reset counter when supported
             if (state.getValue(UNSUPPORTED) != 0) {
                 BlockState reset = state.setValue(UNSUPPORTED, 0);
-                level.setBlock(pos, reset, 3);
+                level.setBlock(pos, reset, Block.UPDATE_ALL);
             }
             return;
         }
@@ -217,13 +188,11 @@ public class HopCropBlock extends CropBlock {
         int unsupported = state.getValue(UNSUPPORTED);
         int next = Math.min(UNSUPPORTED_THRESHOLD, unsupported + CHECK_DELAY);
         BlockState updated = state.setValue(UNSUPPORTED, next);
-        level.setBlock(pos, updated, 3);
+        level.setBlock(pos, updated, Block.UPDATE_ALL);
 
-        if (next >= UNSUPPORTED_THRESHOLD) {
-            // destroy and drop items
+        if (next == UNSUPPORTED_THRESHOLD) {
             level.destroyBlock(pos, true);
         } else {
-            // schedule another check
             level.scheduleTick(pos, this, CHECK_DELAY);
         }
     }

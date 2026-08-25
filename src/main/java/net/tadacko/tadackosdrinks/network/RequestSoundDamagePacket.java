@@ -1,5 +1,6 @@
 package net.tadacko.tadackosdrinks.network;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,24 +31,23 @@ public class RequestSoundDamagePacket {
 
             long nowTicks = player.level().getGameTime();
 
-            final String NBT_KEY = "lastHangoverSoundHurt";
+            final String KEY_LAST_HURT = "last_hangover_sound_hurt";
             final long HURT_COOLDOWN_TICKS = 5L; // 0.25s
 
-            // confirm player still has hangover amp >= 2
             MobEffectInstance inst = player.getEffect(ModEffects.HANGOVER.get());
             if (inst == null || inst.getAmplifier() < 2) return;
 
-            // per-player cooldown stored in persistent data
-            net.minecraft.nbt.CompoundTag pdata = player.getPersistentData().getCompound(TadackosDrinks.MOD_ID);
-            long last = pdata.getLong(NBT_KEY);
+            CompoundTag root = player.getPersistentData();
+            CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);
+            long last = persistent.getLong(KEY_LAST_HURT);
             if (nowTicks - last < HURT_COOLDOWN_TICKS) return;
 
-            // apply damage on server (small, tune as desired)
             float dmg = 1F;
             if (!(player.level() instanceof ServerLevel serverLevel)) return;
             boolean applied = player.hurt(ModDamageSources.hangover(serverLevel), dmg);
             if (applied) {
-                pdata.putLong(NBT_KEY, nowTicks);
+                persistent.putLong(KEY_LAST_HURT, nowTicks);
+                root.put(TadackosDrinks.MOD_ID, persistent);
             }
         });
 

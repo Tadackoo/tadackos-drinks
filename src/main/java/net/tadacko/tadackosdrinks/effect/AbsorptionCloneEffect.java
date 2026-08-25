@@ -11,16 +11,12 @@ public class AbsorptionCloneEffect extends MobEffect {
     }
 
     public void removeAttributeModifiers(LivingEntity pLivingEntity, AttributeMap pAttributeMap, int pAmplifier) {
-        if (!pLivingEntity.level().isClientSide) {
-            pLivingEntity.setAbsorptionAmount(pLivingEntity.getAbsorptionAmount() - (float)(4 * (pAmplifier + 1)));
-        }
+        if (!pLivingEntity.level().isClientSide) pLivingEntity.setAbsorptionAmount(pLivingEntity.getAbsorptionAmount() - (float)(4 * (pAmplifier + 1)));
         super.removeAttributeModifiers(pLivingEntity, pAttributeMap, pAmplifier);
     }
 
     public void addAttributeModifiers(LivingEntity pLivingEntity, AttributeMap pAttributeMap, int pAmplifier) {
-        if (!pLivingEntity.level().isClientSide) {
-            pLivingEntity.setAbsorptionAmount(pLivingEntity.getAbsorptionAmount() + (float)(4 * (pAmplifier + 1)));
-        }
+        if (!pLivingEntity.level().isClientSide) pLivingEntity.setAbsorptionAmount(pLivingEntity.getAbsorptionAmount() + (float)(4 * (pAmplifier + 1)));
         super.addAttributeModifiers(pLivingEntity, pAttributeMap, pAmplifier);
     }
 }

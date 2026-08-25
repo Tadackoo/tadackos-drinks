@@ -21,11 +21,9 @@ import net.tadacko.tadackosdrinks.block.entity.FermentingBarrelBlockEntity;
 import net.tadacko.tadackosdrinks.block.BarrelState;
 
 public class FermentingBarrelRenderer implements BlockEntityRenderer<FermentingBarrelBlockEntity> {
-
-    // Constants for barrel dimensions (in pixels/16ths of a block)
     private static final float MIN_HEIGHT = 2f / 16f;  // Bottom of barrel interior
     private static final float MAX_HEIGHT = 14f / 16f; // Top liquid level
-    private static final int MAX_FLUID = 1000; // Maximum fluid capacity
+    private static final int MAX_FLUID = 1000;
 
     public FermentingBarrelRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -65,38 +63,38 @@ public class FermentingBarrelRenderer implements BlockEntityRenderer<FermentingB
         poseStack.pushPose();
 
         if (!fluid.isEmpty()) {
-            // Use translucent render type for proper transparency
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
+            PoseStack.Pose pose = poseStack.last();
 
             // Render only the top surface of the fluid at calculated height
-            // Main center liquid surface (element 49 from your original model)
-            renderFluidQuad(consumer, poseStack, sprite,
-                    3/16f, fluidHeight, 3/16f,   // min x, y, z
-                    13/16f, fluidHeight, 13/16f, // max x, y, z
+            // Main center liquid surface
+            renderFluidQuad(consumer, pose, sprite,
+                    3/16f, fluidHeight, 3/16f,
+                    13/16f, 13/16f,
                     red, green, blue, alpha, combinedLight, combinedOverlay);
 
-            // Left edge (element 50)
-            renderFluidQuad(consumer, poseStack, sprite,
+            // Left edge
+            renderFluidQuad(consumer, pose, sprite,
                     2/16f, fluidHeight, 4/16f,
-                    3/16f, fluidHeight, 12/16f,
+                    3/16f, 12/16f,
                     red, green, blue, alpha, combinedLight, combinedOverlay);
 
-            // Bottom edge (element 51)
-            renderFluidQuad(consumer, poseStack, sprite,
+            // Bottom edge
+            renderFluidQuad(consumer, pose, sprite,
                     4/16f, fluidHeight, 13/16f,
-                    12/16f, fluidHeight, 14/16f,
+                    12/16f, 14/16f,
                     red, green, blue, alpha, combinedLight, combinedOverlay);
 
-            // Right edge (element 52)
-            renderFluidQuad(consumer, poseStack, sprite,
+            // Right edge
+            renderFluidQuad(consumer, pose, sprite,
                     13/16f, fluidHeight, 4/16f,
-                    14/16f, fluidHeight, 12/16f,
+                    14/16f, 12/16f,
                     red, green, blue, alpha, combinedLight, combinedOverlay);
 
-            // Top edge (element 53)
-            renderFluidQuad(consumer, poseStack, sprite,
+            // Top edge
+            renderFluidQuad(consumer, pose, sprite,
                     4/16f, fluidHeight, 2/16f,
-                    12/16f, fluidHeight, 3/16f,
+                    12/16f, 3/16f,
                     red, green, blue, alpha, combinedLight, combinedOverlay);
         }
 
@@ -115,18 +113,16 @@ public class FermentingBarrelRenderer implements BlockEntityRenderer<FermentingB
         poseStack.popPose();
     }
 
-    private void renderFluidQuad(VertexConsumer consumer, PoseStack poseStack, TextureAtlasSprite sprite,
+    public static void renderFluidQuad(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite,
                                  float minX, float y, float minZ,
-                                 float maxX, float y2, float maxZ,
+                                 float maxX, float maxZ,
                                  float red, float green, float blue, float alpha,
                                  int combinedLight, int combinedOverlay) {
-        PoseStack.Pose pose = poseStack.last();
-
         // Calculate UV coordinates based on quad size
         float uSize = (maxX - minX) * 16f;
         float vSize = (maxZ - minZ) * 16f;
 
-        // Top face of the liquid surface (upward facing plane)
+        // Top face of the liquid surface
         consumer.vertex(pose.pose(), minX, y, minZ)
                 .color(red, green, blue, alpha)
                 .uv(sprite.getU(0), sprite.getV(0))
@@ -167,23 +163,23 @@ public class FermentingBarrelRenderer implements BlockEntityRenderer<FermentingB
     private void renderClockHand(FermentingBarrelBlockEntity blockEntity, PoseStack poseStack,
                                  MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         // --- compute pivot based on block facing ---
-// centre of block
+        // centre of block
         final float centerX = 8f / 16f;
         final float centerZ = 8f / 16f;
         final float pivotY = 15.5f / 16f; // unchanged
 
-// base offset (this points toward +Z / south in model space)
+        // base offset (this points toward +Z / south in model space)
         final float baseOffsetX = 0f;
         final float baseOffsetZ = -(10f - 8f) / 16f; // original pivotZ (10/16) minus centre (8/16)
 
-// read block facing safely from the blockstate
+        // read block facing safely from the blockstate
         BlockState state = blockEntity.getBlockState();
         Direction facing = Direction.SOUTH; // default fallback
         if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
             facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         }
 
-// rotate the base offset clockwise in 90° steps depending on facing
+        // rotate the base offset clockwise in 90° steps depending on facing
         int rot;
         switch (facing) {
             case SOUTH -> rot = 0;

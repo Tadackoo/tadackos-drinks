@@ -1,11 +1,14 @@
 package net.tadacko.tadackosdrinks.item;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.tadacko.tadackosdrinks.block.ModBlocks;
 import net.tadacko.tadackosdrinks.block.GrapeCropBlock;
+import net.tadacko.tadackosdrinks.block.ModBlocks;
 import net.tadacko.tadackosdrinks.block.TrellisBlock;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,10 +20,10 @@ public class SeedGrapeItem extends BlockItem {
 
     @Override
     protected @Nullable BlockState getPlacementState(BlockPlaceContext pContext) {
-        BlockState clicked = pContext.getLevel().getBlockState(pContext.getClickedPos());
-        if (!(clicked.getBlock() instanceof TrellisBlock)) {
-            return null;
-        }
+        Level level = pContext.getLevel();
+        BlockPos clickedPos = pContext.getClickedPos();
+        BlockState clicked = level.getBlockState(clickedPos);
+        if (!(clicked.getBlock() instanceof TrellisBlock && level.getBlockState(clickedPos.below()).is(Blocks.FARMLAND))) return null;
 
         // get the normal placement state (vanilla logic)
         BlockState placeState = super.getPlacementState(pContext);
@@ -51,7 +54,6 @@ public class SeedGrapeItem extends BlockItem {
         if (trellisState.is(ModBlocks.TRELLIS_CRIMSON.get())) return 9;
         if (trellisState.is(ModBlocks.TRELLIS_WARPED.get())) return 10;
 
-        // fallback
         return 0;
     }
 }

@@ -154,7 +154,6 @@ public class CopperPotBlockEntity extends BlockEntity implements IFluidColorProv
         // Check if there's wort in the tank to boil
         FluidStack fluidStack = entity.fluidTank.getFluid();
         if (PotStillBlockEntity.isValidHeatSource(level, pos.below()) && fluidStack.getAmount() > 0 && BOILING_RESULTS.containsKey(fluidStack.getFluid())) {
-            // Boil wort logic
             entity.progress++;
 
             if (entity.progress % 20 == 0) {
@@ -163,7 +162,6 @@ public class CopperPotBlockEntity extends BlockEntity implements IFluidColorProv
             }
 
             if (entity.progress >= MAX_PROGRESS) {
-                // Convert the fluid to its boiled variant
                 Fluid resultFluid = BOILING_RESULTS.get(fluidStack.getFluid());
 
                 if (resultFluid != null) {
@@ -183,10 +181,6 @@ public class CopperPotBlockEntity extends BlockEntity implements IFluidColorProv
         BlockPos pos = this.getBlockPos();
         BlockState state = this.getBlockState();
 
-
-        // Generic fluid container (vanilla buckets, kegs, anything with IFluidHandlerItem)
-        // -> bulk transfer with the barrel's tank.
-        // Fluid validity for fills is handled internally by FluidTank.fill() via isFluidValid().
         FluidStack before = this.fluidTank.getFluid().copy();
         if (FluidUtil.interactWithFluidHandler(player, hand, this.fluidTank)) {
             FluidStack after = this.fluidTank.getFluid();
@@ -218,16 +212,15 @@ public class CopperPotBlockEntity extends BlockEntity implements IFluidColorProv
     // returns a tag suitable for putting into an ItemStack under "BlockEntityTag"
     public CompoundTag saveToItemTag() {
         CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag); // allowed here because this is the BE class
+        this.saveAdditional(tag);
         return tag;
     }
 
     // Return true when the block entity has no meaningful data and can be represented by a plain item
     public boolean isDefaultState() {
-        if (this.fluidTank != null && !this.fluidTank.isEmpty()) return false;
+        if (!this.fluidTank.isEmpty()) return false;
         if (this.progress != 0) return false;
 
-        // If we got here, it's default/empty
         return true;
     }
 }

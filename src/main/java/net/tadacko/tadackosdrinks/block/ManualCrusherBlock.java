@@ -33,8 +33,8 @@ import java.util.List;
 
 public class ManualCrusherBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE = Block.box(
-            3.0D, 0.0D, 3.0D,   // min X, Y, Z
-            13.0D, 10.0D, 13.0D // max X, Y, Z
+            3.0D, 0.0D, 3.0D,
+            13.0D, 10.0D, 13.0D
     );
 
     public ManualCrusherBlock(Properties properties) {
@@ -49,13 +49,10 @@ public class ManualCrusherBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
-                                 Player player, InteractionHand hand, BlockHitResult hit) {
-        // Check if it's on the server side
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof ManualCrusherBlockEntity manualCrusherBlockEntity) {
-                // Call a method in the block entity to handle the interaction
                 if (manualCrusherBlockEntity.handleRightClick(player, hand)) {
                     return InteractionResult.SUCCESS;
                 }
@@ -86,6 +83,11 @@ public class ManualCrusherBlock extends BaseEntityBlock {
     }
 
     @Override
+    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return false;
+    }
+
+    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
@@ -93,40 +95,23 @@ public class ManualCrusherBlock extends BaseEntityBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide
-                ? null // No client-side ticker needed
-                : createTickerHelper(type, ModBlockEntities.MANUAL_CRUSHER.get(), ManualCrusherBlockEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.MANUAL_CRUSHER.get(), ManualCrusherBlockEntity::tick);
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-        // Try to fetch the BlockEntity from the loot context
         Object beObj = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (beObj instanceof ManualCrusherBlockEntity crusher) {
-            // if it's default/empty, return a plain block item so it stacks with freshly crafted ones
-            if (crusher.isDefaultState()) {
-                return Collections.singletonList(new ItemStack(this.asItem()));
-            }
-
-            // otherwise save the BE NBT and attach it
-            // create single ItemStack for this block (the BlockItem registered for this block)
+        if (beObj instanceof ManualCrusherBlockEntity crusher && !crusher.isDefaultState()) {
             ItemStack stack = new ItemStack(this.asItem());
-
-            // use your public helper that returns the BE NBT (add saveToItemTag() to your BE if not present)
             CompoundTag tag = crusher.saveToItemTag();
-
-            // remove position fields
             tag.remove("x");
             tag.remove("y");
             tag.remove("z");
-
-            // attach under standard key so vanilla will restore it on place
             stack.getOrCreateTag().put("BlockEntityTag", tag);
-
             return Collections.singletonList(stack);
         }
 
-        // fallback to default behavior (loot table)
+        // fallback to loot table
         return super.getDrops(state, builder);
     }
 }

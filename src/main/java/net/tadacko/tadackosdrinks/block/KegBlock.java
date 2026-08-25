@@ -59,8 +59,7 @@ public class KegBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
-                                 Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.sidedSuccess(true);
 
         if (!(level.getBlockEntity(pos) instanceof KegBlockEntity keg)) return InteractionResult.PASS;
@@ -68,7 +67,7 @@ public class KegBlock extends Block implements EntityBlock {
         ItemStack held = player.getItemInHand(hand);
         IFluidHandler tank = keg.getFluidHandler();
 
-        // held empty drinkware -> fill it from the keg
+        // fill drinkware from keg
         Optional<Item> filled = DrinkwareTransfer.tryFill(tank, held);
         if (filled.isPresent()) {
             giveResult(player, hand, held, new ItemStack(filled.get()));
@@ -76,7 +75,7 @@ public class KegBlock extends Block implements EntityBlock {
             return InteractionResult.sidedSuccess(false);
         }
 
-        // held full drinkware -> empty it into the keg
+        // empty drinkware into keg
         Optional<Item> emptied = DrinkwareTransfer.tryEmpty(tank, held);
         if (emptied.isPresent()) {
             giveResult(player, hand, held, new ItemStack(emptied.get()));
@@ -84,7 +83,7 @@ public class KegBlock extends Block implements EntityBlock {
             return InteractionResult.sidedSuccess(false);
         }
 
-        // fall back to generic fluid-handler items (other kegs, buckets, modded tanks, etc.)
+        // generic fluid container transfer
         FluidStack before = keg.getFluid().copy();
         if (FluidUtil.interactWithFluidHandler(player, hand, tank)) {
             FluidStack after = keg.getFluid();
@@ -126,7 +125,6 @@ public class KegBlock extends Block implements EntityBlock {
         }
     }
 
-    // not a full cube
     @Override
     public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
         return false;

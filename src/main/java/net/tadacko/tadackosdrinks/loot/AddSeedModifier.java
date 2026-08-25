@@ -37,9 +37,7 @@ public class AddSeedModifier extends LootModifier {
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         // If the tool was shears, do nothing (vanilla behaviour)
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
-        if (tool != null && tool.getItem() == Items.SHEARS) {
-            return generatedLoot;
-        }
+        if (tool != null && tool.getItem() == Items.SHEARS) return generatedLoot;
 
         // Add one of the configured item to the generated loot
         generatedLoot.add(new ItemStack(item));

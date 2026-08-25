@@ -9,8 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.tadacko.tadackosdrinks.TadackosDrinks;
 
 public class ModFeatures {
-    public static final DeferredRegister<Feature<?>> FEATURES =
-            DeferredRegister.create(ForgeRegistries.FEATURES, TadackosDrinks.MOD_ID);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, TadackosDrinks.MOD_ID);
 
     public static final RegistryObject<JuniperFeature> JUNIPER_FEATURE =
             FEATURES.register("juniper_feature", () -> new JuniperFeature(NoneFeatureConfiguration.CODEC));

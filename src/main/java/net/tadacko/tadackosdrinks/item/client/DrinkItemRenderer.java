@@ -40,9 +40,7 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext ctx,
-                             PoseStack poseStack, MultiBufferSource buffers,
-                             int light, int overlay) {
+    public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource buffers, int light, int overlay) {
         if (!(stack.getItem() instanceof PlaceableDrinkwareItem drinkItem)) return;
 
         DrinkVariant variant = drinkItem.getVariant();

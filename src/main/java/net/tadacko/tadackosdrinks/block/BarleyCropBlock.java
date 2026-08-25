@@ -17,19 +17,4 @@ public class BarleyCropBlock extends CropBlock {
     protected ItemLike getBaseSeedId() {
         return ModItems.BARLEY_SEEDS.get();
     }
-
-    @Override
-    public IntegerProperty getAgeProperty() {
-        return AGE;
-    }
-
-    @Override
-    public int getMaxAge() {
-        return 7;
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AGE);
-    }
 }

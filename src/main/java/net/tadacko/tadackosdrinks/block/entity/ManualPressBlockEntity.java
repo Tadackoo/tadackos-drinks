@@ -39,9 +39,9 @@ import java.util.Set;
 public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntity {
     public boolean isProcessing = false;
     private int progress = 0;
-    private boolean isReturning = false; // Tracks if the press is returning to idle position
+    private boolean isReturning = false;
     private static final int MAX_PROGRESS = 60; // 3 seconds
-    private static final int TOTAL_ANIMATION_TIME = 120; // 6 seconds total (60 forward + 60 reverse)
+    private static final int TOTAL_ANIMATION_TIME = 120; // 6 seconds total
 
     private final FluidTank fluidTank = new FluidTank(1000) {
         @Override
@@ -131,7 +131,7 @@ public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntit
             // Play the "use" animation when processing or returning
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("use", Animation.LoopType.PLAY_ONCE));
         } else {
-            // Play idle animation when completely idle
+            // Play idle animation when idle
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
         }
         return PlayState.CONTINUE;
@@ -161,7 +161,7 @@ public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntit
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, ManualPressBlockEntity entity) {
-        if (level.isClientSide) return;
+        // ticker server side only, no guard needed
 
         FluidStack fluidStack = entity.fluidTank.getFluid();
         Fluid currentFluid = fluidStack.getFluid();
@@ -174,6 +174,7 @@ public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntit
                 return;
             }
 
+            // don't question the donkey
             if (entity.progress % 20 == 0 || entity.progress == 0) {
                 level.playSeededSound(null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D,
                         SoundEvents.DONKEY_ANGRY, SoundSource.BLOCKS, 0.05F, 2.0F, 444964984);
@@ -274,9 +275,7 @@ public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntit
             }
         }
 
-        // Generic fluid container (vanilla buckets, kegs, anything with IFluidHandlerItem)
-        // -> bulk transfer with the barrel's tank.
-        // Fluid validity for fills is handled internally by FluidTank.fill() via isFluidValid().
+        // generic fluid container transfer
         FluidStack before = this.fluidTank.getFluid().copy();
         if (FluidUtil.interactWithFluidHandler(player, hand, this.fluidTank)) {
             FluidStack after = this.fluidTank.getFluid();
@@ -300,7 +299,6 @@ public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntit
         return fluidTank;
     }
 
-    // Also make these fields public or add getters:
     public int getProgress() {
         return progress;
     }
@@ -316,7 +314,7 @@ public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntit
     // returns a tag suitable for putting into an ItemStack under "BlockEntityTag"
     public CompoundTag saveToItemTag() {
         CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag); // allowed here because this is the BE class
+        this.saveAdditional(tag);
         return tag;
     }
 
@@ -325,7 +323,6 @@ public class ManualPressBlockEntity extends BlockEntity implements GeoBlockEntit
         if (!this.fluidTank.isEmpty()) return false;
         if (this.progress != 0) return false;
 
-        // If we got here, it's default/empty
         return true;
     }
 }

@@ -50,8 +50,6 @@ public class ColumnStillBlockEntity extends BlockEntity implements IFluidColorPr
     private enum Tier { LOW, MID, HIGH, MAX }
 
     private static final Map<Fluid, Family> FLUID_FAMILY = buildFamilyMap();
-    // 0 = raw base fluid (wash/beer/wine/must/cider), 1/2/3 = already-distilled LOW/MID/HIGH spirit.
-    // MAX is deliberately absent - it's the terminal output tier, never a valid input.
     private static final Map<Fluid, Integer> FLUID_INPUT_TIER = buildInputTierMap();
     private static final Map<Family, Map<Tier, BlockState>> FAMILY_TIER_RESULTS = buildTierResults();
 
@@ -554,7 +552,7 @@ public class ColumnStillBlockEntity extends BlockEntity implements IFluidColorPr
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, ColumnStillBlockEntity entity) {
-        if (level.isClientSide) return;
+        // ticker server side only, no guard needed
         if (state.getValue(ColumnStillBlock.SEGMENT) != 0) return; // safety: only the master processes
 
         int height = state.getValue(ColumnStillBlock.HEIGHT);

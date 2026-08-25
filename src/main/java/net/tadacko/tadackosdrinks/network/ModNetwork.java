@@ -20,7 +20,6 @@ public class ModNetwork {
     private static int id = 0;
 
     public static void register() {
-        // register packets here
         CHANNEL.registerMessage(id++, RequestLightDamagePacket.class,
                 RequestLightDamagePacket::encode,
                 RequestLightDamagePacket::decode,

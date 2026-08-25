@@ -107,8 +107,7 @@ public class KegBlockEntity extends BlockEntity {
         return fluidTank.isEmpty();
     }
 
-    // Writes the fluid into the same "Fluid" sub-tag format FluidHandlerItemStack
-    // (used by KegItem's capability) reads from, so it round-trips correctly.
+    // Writes the fluid into the same "Fluid" sub-tag format FluidHandlerItemStack reads from, so it round-trips correctly.
     public CompoundTag saveToItemTag() {
         CompoundTag tag = new CompoundTag();
         FluidStack fluid = fluidTank.getFluid();

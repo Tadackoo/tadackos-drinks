@@ -76,22 +76,16 @@ public class FermentingBarrelBlock extends BaseEntityBlock {
                                  Player player, InteractionHand hand, BlockHitResult result) {
         ItemStack held = player.getItemInHand(hand);
 
-        // SERVER ONLY
         if (!level.isClientSide) {
-            // 1) Sneak + right-click: remove the clock if present and give it back to the player
             if (player.isCrouching()) {
                 if (state.getValue(CLOCK)) {
-                    // set CLOCK = false
-                    level.setBlock(blockPos, state.setValue(CLOCK, false), 3);
+                    level.setBlock(blockPos, state.setValue(CLOCK, false), Block.UPDATE_ALL);
 
-                    // give clock back in survival
                     if (!player.isCreative()) {
                         ItemStack clockStack = new ItemStack(Items.CLOCK);
                         boolean added = player.getInventory().add(clockStack);
                         if (!added) {
-                            // drop into the world if player's inventory is full
-                            ItemEntity drop = new ItemEntity(level,
-                                    blockPos.getX() + 0.5, blockPos.getY() + 1.0, blockPos.getZ() + 0.5,
+                            ItemEntity drop = new ItemEntity(level, blockPos.getX() + 0.5, blockPos.getY() + 1.0, blockPos.getZ() + 0.5,
                                     clockStack);
                             level.addFreshEntity(drop);
                         }
@@ -101,21 +95,14 @@ public class FermentingBarrelBlock extends BaseEntityBlock {
                 }
             }
 
-            // 2) Right-click with a clock: insert it (if not already present)
             if (held.is(Items.CLOCK)) {
                 if (!state.getValue(CLOCK)) {
-                    level.setBlock(blockPos, state.setValue(CLOCK, true), 3);
-
-                    // consume 1 clock in survival
-                    if (!player.isCreative()) {
-                        held.shrink(1);
-                    }
-
+                    level.setBlock(blockPos, state.setValue(CLOCK, true), Block.UPDATE_ALL);
+                    if (!player.isCreative()) held.shrink(1);
                     return InteractionResult.SUCCESS;
                 }
             }
 
-            // 3) Otherwise fallback to existing block-entity interaction
             BlockEntity be = level.getBlockEntity(blockPos);
             if (be instanceof FermentingBarrelBlockEntity barrel) {
                 if (barrel.handleRightClick(player, hand)) {
@@ -132,8 +119,6 @@ public class FermentingBarrelBlock extends BaseEntityBlock {
         builder.add(BlockStateProperties.HORIZONTAL_FACING, STATE, CLOCK);
     }
 
-    /* BLOCK ENTITY */
-
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
@@ -148,13 +133,17 @@ public class FermentingBarrelBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlockEntities.FERMENTING_BARREL.get(),
-                FermentingBarrelBlockEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.FERMENTING_BARREL.get(), FermentingBarrelBlockEntity::tick);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return false;
     }
 
     @Override
@@ -168,36 +157,22 @@ public class FermentingBarrelBlock extends BaseEntityBlock {
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-        // Try to fetch the BlockEntity from the loot context
         Object beObj = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (beObj instanceof FermentingBarrelBlockEntity barrel) {
-            // if it's default/empty, return a plain block item so it stacks with freshly crafted ones
-            if (barrel.isDefaultState()) {
-                return Collections.singletonList(new ItemStack(this.asItem()));
-            }
-
-            // otherwise save the BE NBT and attach it
-            // create single ItemStack for this block (the BlockItem registered for this block)
+        if (beObj instanceof FermentingBarrelBlockEntity barrel && !barrel.isDefaultState()) {
             ItemStack stack = new ItemStack(this.asItem());
-
-            // use public helper that returns the BE NBT
             CompoundTag tag = barrel.saveToItemTag();
-
-            // remove position fields
             tag.remove("x");
             tag.remove("y");
             tag.remove("z");
-
-            // attach under standard key so vanilla will restore it on place
             stack.getOrCreateTag().put("BlockEntityTag", tag);
-
             return Collections.singletonList(stack);
         }
 
-        // fallback to default behavior (loot table)
+        // fallback to loot table
         return super.getDrops(state, builder);
     }
 
+    @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (level.isClientSide) return;
 
@@ -205,11 +180,8 @@ public class FermentingBarrelBlock extends BaseEntityBlock {
             if (entity instanceof ItemEntity itemEntity) {
                 ItemStack stack = itemEntity.getItem();
 
-                // Get the block entity
                 if (level.getBlockEntity(pos) instanceof FermentingBarrelBlockEntity blockEntity) {
-                    // Try to handle the item
                     if (blockEntity.handleItemEntityCollision(stack)) {
-                        // If the item was consumed, reduce the stack size
                         stack.shrink(1);
                         if (stack.isEmpty()) {
                             itemEntity.discard();

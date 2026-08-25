@@ -7,7 +7,6 @@ import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.function.Consumer;
 
-// Pure visual marker effect, same as vanilla Confusion — no attribute modifiers, no tick logic.
 public class MildNauseaEffect extends MobEffect {
     public MildNauseaEffect(MobEffectCategory category, int color) {
         super(category, color);

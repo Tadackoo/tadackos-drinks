@@ -15,9 +15,7 @@ public class SeedHopItem extends BlockItem {
     @Override
     protected @Nullable BlockState getPlacementState(BlockPlaceContext pContext) {
         BlockState clicked = pContext.getLevel().getBlockState(pContext.getClickedPos());
-        if (!clicked.is(ModBlocks.ROPE.get())) {
-            return null;
-        }
+        if (!clicked.is(ModBlocks.ROPE.get())) return null;
 
         return super.getPlacementState(pContext);
     }

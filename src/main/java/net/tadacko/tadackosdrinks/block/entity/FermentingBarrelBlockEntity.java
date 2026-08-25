@@ -43,21 +43,17 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
 public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidColorProvider {
-    // Constants for yeast types and maximum amount
     public static final int MAX_YEAST_AMOUNT = 2;
     public static final int MAX_GRAIN_AMOUNT = 4;
     public static final int MAX_SUGAR_AMOUNT = 4;
 
-    // Add yeast tracking variables
     private int yeastAmount = 0;
-
-    // ingredients for yeast
     private int grainAmount = 0;
     private int sugarAmount = 0;
 
     private int progress = 0;
-    private static final int MAX_PROGRESS = 72000 /*60*/; // fermenting time 1h
-    private static final int MAX_AGING_PROGRESS = 576000 /*60*/; // aging time 8h
+    private static final int MAX_PROGRESS = 72000 /*60*/; // 1h
+    private static final int MAX_AGING_PROGRESS = 576000 /*60*/; // 8h
     public boolean isProcessing = false;
 
     private final FluidTank fluidTank = new FluidTank(1000) {
@@ -222,7 +218,6 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
         }
     }
 
-    // Check if the fluid in the tank is valid for fermentation
     private boolean hasFluidForFermentation() {
         FluidStack fluidStack = fluidTank.getFluid();
         return fluidStack.getAmount() > 0 && FERMENTING_RESULTS.containsKey(fluidStack.getFluid());
@@ -233,7 +228,6 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
         return fluidStack.getAmount() > 0 && AGING_RESULTS.containsKey(fluidStack.getFluid());
     }
 
-    // Check if the fluid in the tank is water
     private boolean hasWaterForCultivation() {
         FluidStack fluidStack = fluidTank.getFluid();
         return fluidStack.getAmount() > 0 && fluidStack.getFluid() == Fluids.WATER;
@@ -305,34 +299,25 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, FermentingBarrelBlockEntity entity) {
-        // only run on server
-        if (level.isClientSide) return;
-
+        // ticker server side only, no guard needed
         if (!entity.isProcessing) return;
 
-        // Check if there's wort in the tank
         FluidStack fluidStack = entity.fluidTank.getFluid();
 
         if (state.getValue(FermentingBarrelBlock.STATE) == BarrelState.CLOSED) {
             if (entity.hasFluidForFermentation() && entity.yeastAmount == MAX_YEAST_AMOUNT) {
-                // Fermenting logic - only progress if we have yeast
                 entity.progress++;
 
                 syncClockIfNeeded(level, pos, state, entity);
 
                 if (entity.progress >= MAX_PROGRESS) {
-                    // Get the current fluid
                     Fluid currentFluid = fluidStack.getFluid();
-
-                    // Convert to appropriate beer based on wort type
                     Fluid resultFluid = FERMENTING_RESULTS.get(currentFluid);
 
                     if (resultFluid != null) {
-                        // Convert the wort to beer
                         FluidStack resultFluidStack = new FluidStack(resultFluid, fluidStack.getAmount());
                         entity.fluidTank.setFluid(resultFluidStack);
 
-                        // Reset progress and yeast
                         entity.isProcessing = false;
                         entity.progress = 0;
                         entity.yeastAmount = 0;
@@ -346,18 +331,13 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
                 syncClockIfNeeded(level, pos, state, entity);
 
                 if (entity.progress >= MAX_AGING_PROGRESS) {
-
                     Fluid currentFluid = fluidStack.getFluid();
-
-                    // Convert to appropriate fluid
                     Fluid resultFluid = AGING_RESULTS.get(currentFluid);
 
                     if (resultFluid != null) {
-                        // Convert the wort to beer
                         FluidStack resultFluidStack = new FluidStack(resultFluid, fluidStack.getAmount());
                         entity.fluidTank.setFluid(resultFluidStack);
 
-                        // Reset progress
                         entity.isProcessing = false;
                         entity.progress = 0;
 
@@ -372,7 +352,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
                 if (entity.progress >= MAX_PROGRESS) {
                     level.setBlock(pos, state.setValue(FermentingBarrelBlock.STATE, BarrelState.YEAST), 3);
 
-                    // Reset progress and ingredients except grain type, we need it in handleRightClick
+                    // don't reset grain type, it's needed in handleRightClick
                     entity.isProcessing = false;
                     entity.progress = 0;
                     entity.grainAmount = 0;
@@ -385,7 +365,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
     }
 
     public boolean handleRightClick(Player player, InteractionHand hand) {
-        if (level == null || level.isClientSide) return false; // client must not change world here
+        if (level == null || level.isClientSide) return false;
         ItemStack heldItem = player.getItemInHand(hand);
 
         BlockPos pos = this.getBlockPos();
@@ -402,7 +382,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
 
         FluidStack fluidStack = this.fluidTank.getFluid();
 
-        // Remove fluid if the player holds empty drinkware
+        // drinkware transfer
         if (state.getValue(FermentingBarrelBlock.STATE) == BarrelState.OPEN) {
             Optional<Item> filledGlassItem = DrinkwareTransfer.tryFill(this.fluidTank, heldItem);
             if (filledGlassItem.isPresent()) {
@@ -413,11 +393,9 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
                     } else {
                         heldItem.shrink(1);
 
-                        // Try to add the bucket to the player's inventory
+                        // try to add glass to inventory, drop if full
                         boolean added = player.getInventory().add(filledGlass);
-
                         if (!added) {
-                            // Drop the bucket if the inventory is full
                             player.drop(filledGlass, false);
                         }
                     }
@@ -427,7 +405,6 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
 
                 level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-                // Reset ingredients when emptying the barrel
                 this.yeastAmount = 0;
                 this.grainAmount = 0;
                 this.sugarAmount = 0;
@@ -438,8 +415,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
             }
         }
 
-        // Generic fluid container (vanilla buckets, kegs, anything with IFluidHandlerItem)
-        // -> bulk transfer with the barrel's tank.
+        // generic fluid container transfer
         // Fluid validity for fills is handled internally by FluidTank.fill() via isFluidValid().
         if (state.getValue(FermentingBarrelBlock.STATE) == BarrelState.OPEN) {
             FluidStack before = this.fluidTank.getFluid().copy();
@@ -449,7 +425,6 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
                 SoundEvent sound = wasDrained ? SoundEvents.BUCKET_FILL : SoundEvents.BUCKET_EMPTY;
                 level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-                // Reset ingredients whenever fluid is removed, same as the old bucket-drain logic
                 if (wasDrained) {
                     this.yeastAmount = 0;
                     this.grainAmount = 0;
@@ -463,7 +438,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
             }
         }
 
-        // Close the barrel
+        // close barrel
         if (heldItem.isEmpty() && state.getValue(FermentingBarrelBlock.STATE) == BarrelState.OPEN) {
             if ((hasFluidForFermentation() && this.yeastAmount == MAX_YEAST_AMOUNT) || hasFluidForAging() ||
                     (hasWaterForCultivation() && this.grainAmount == MAX_GRAIN_AMOUNT && this.sugarAmount == MAX_SUGAR_AMOUNT))
@@ -474,7 +449,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
             return true;
         }
 
-        // Open the barrel
+        // open barrel
         if (heldItem.isEmpty() && state.getValue(FermentingBarrelBlock.STATE) == BarrelState.CLOSED && !this.isProcessing) {
             level.setBlock(pos, state.setValue(FermentingBarrelBlock.STATE, BarrelState.OPEN), 3);
             setChanged(level, pos, state);
@@ -482,7 +457,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
             return true;
         }
 
-        // Open a barrel with yeast
+        // open barrel with yeast
         if (heldItem.isEmpty() && state.getValue(FermentingBarrelBlock.STATE) == BarrelState.YEAST && fluidStack.getAmount() != 0 &&
                 fluidStack.getFluid() == Fluids.WATER) {
             this.fluidTank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
@@ -498,7 +473,7 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
             return true;
         }
 
-        // Can't open the barrel
+        // can't open barrel
         if (heldItem.isEmpty() && state.getValue(FermentingBarrelBlock.STATE) == BarrelState.CLOSED && this.progress != 0) {
             player.displayClientMessage(Component.translatable("message.tadackosdrinks.fermenting_barrel_open_fail_progress"), true);
         }
@@ -506,12 +481,10 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
         return false;
     }
 
-    // Method to handle item entity collisions (called from Block class)
     public boolean handleItemEntityCollision(ItemStack stack) {
         if (level == null || level.isClientSide) return false;
         Item item = stack.getItem();
 
-        // Check if the item is a yeast type
         if (item == ModItems.YEAST.get()) {
             if (yeastAmount >= MAX_YEAST_AMOUNT) return false;
             return addYeastCollision();
@@ -559,7 +532,6 @@ public class FermentingBarrelBlockEntity extends BlockEntity implements IFluidCo
         if (this.sugarAmount != 0) return false;
         if (this.progress != 0) return false;
 
-        // If we got here, it's default/empty
         return true;
     }
 

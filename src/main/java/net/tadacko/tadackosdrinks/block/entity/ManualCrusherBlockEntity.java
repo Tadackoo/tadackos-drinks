@@ -34,7 +34,7 @@ import java.util.Map;
 public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEntity {
     public boolean isProcessing = false;
     private int progress = 0;
-    private static final int MAX_PROGRESS = 120; // 6 seconds
+    private static final int MAX_PROGRESS = 120; // 6 s
 
     private final ItemStackHandler inventory = new ItemStackHandler(1);
 
@@ -131,6 +131,7 @@ public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEnt
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, ManualCrusherBlockEntity entity) {
+        // ticker server side only, no guard needed
         if (!entity.isProcessing) return;
 
         entity.progress++;
@@ -142,22 +143,21 @@ public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEnt
 
         if (entity.progress >= MAX_PROGRESS) {
             Item originalInput = entity.inventory.getStackInSlot(0).getItem();
-            // Completion: if originalInput is grapes or apples, try to put MUST_* into the cauldron below.
+            // fluid results
             if (FLUID_RESULTS.containsKey(originalInput)) {
                 BlockPos below = pos.below();
                 BlockState belowState = level.getBlockState(below);
 
-                // require vanilla cauldron.
                 if (belowState.getBlock() == Blocks.CAULDRON) {
                     BlockState newState = FLUID_RESULTS.get(originalInput).defaultBlockState();
                     level.setBlock(below, newState, 3);
                 }
 
-                // consumed into cauldron
                 entity.finishProcessing(level, pos, state);
                 return;
             }
 
+            // item results
             ItemStack inputStack = entity.inventory.getStackInSlot(0);
 
             Item crushedItem = CRUSHING_RESULTS.get(inputStack.getItem());
@@ -186,13 +186,10 @@ public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEnt
         ItemStack heldItem = player.getItemInHand(hand);
 
         boolean isDryCrushable = CRUSHING_RESULTS.containsKey(heldItem.getItem());
-
         boolean isGrapes = heldItem.getItem() == ModItems.GRAPES_RED.get() ||
                 heldItem.getItem() == ModItems.GRAPES_WHITE.get();
-
         boolean isApple = heldItem.getItem() == Items.APPLE;
 
-        // If grapes, require a cauldron directly below to start processing
         if (isGrapes || isApple) {
             if (isGrapes && heldItem.getCount() < 12) {
                 player.displayClientMessage(Component.translatable("message.tadackosdrinks.manual_crusher_fail_grape_count"), true);
@@ -206,7 +203,7 @@ public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEnt
 
             if (belowState.getBlock() != Blocks.CAULDRON) {
                 player.displayClientMessage(Component.translatable("message.tadackosdrinks.manual_crusher_fail_cauldron"), true);
-                return false; // no cauldron below -> don't start
+                return false;
             }
         }
 
@@ -216,22 +213,19 @@ public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEnt
             if (isGrapes) insertCount = 12;
             if (isApple) insertCount = 8;
 
-            // Insert the item into the block's inventory (store exact count)
+            // put in inventory for rendering
             this.inventory.setStackInSlot(0, new ItemStack(heldItem.getItem(), insertCount));
 
-            // Remove the items from the player's hand
             if (!player.isCreative()) {
                 heldItem.shrink(insertCount);
             }
 
-            // Start the animation and processing
             this.progress = 0;
             this.isProcessing = true;
 
-            if (level != null && !level.isClientSide) {
-                // Notify the client
-                level.sendBlockUpdated(pos, state, state, 3);
-            }
+            // Notify the client
+            level.sendBlockUpdated(pos, state, state, 3);
+
             setChanged();
             return true;
         }
@@ -242,7 +236,7 @@ public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEnt
     // returns a tag suitable for putting into an ItemStack under "BlockEntityTag"
     public CompoundTag saveToItemTag() {
         CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag); // allowed here because this is the BE class
+        this.saveAdditional(tag);
         return tag;
     }
 
@@ -250,7 +244,6 @@ public class ManualCrusherBlockEntity extends BlockEntity implements GeoBlockEnt
     public boolean isDefaultState() {
         if (this.progress != 0) return false;
 
-        // If we got here, it's default/empty
         return true;
     }
 

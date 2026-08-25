@@ -26,14 +26,12 @@ public class TequilaDrinkItem extends DrinkItem {
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
-        // Call parent to handle food effects, stats, etc.
         ItemStack result = super.finishUsingItem(pStack, pLevel, pLivingEntity);
 
         if (!pLevel.isClientSide) {
             if (!drinkSecondaryEffects) return result;
             long baseDuration = BacUtils.computeEffectDurationTicks(this.abv, this.volumeL, pLivingEntity);
 
-            // Apply multiplier
             long totalDuration = (long) (baseDuration * tequilaDurationMultiplier * (amplifier + 1));
             if (totalDuration > Integer.MAX_VALUE) totalDuration = Integer.MAX_VALUE;
 
@@ -42,40 +40,21 @@ public class TequilaDrinkItem extends DrinkItem {
             List<MobEffectInstance> eligibleEffects = new ArrayList<>();
 
             for (MobEffectInstance effect : activeEffects) {
-                // Skip if effect is not beneficial
-                if (!effect.getEffect().isBeneficial()) {
-                    continue;
-                }
+                // skip if effect not beneficial or is included in inebriation
+                if (!effect.getEffect().isBeneficial()) continue;
+                if (effect.getEffect() == ModEffects.CAMARADERIE.get()) continue;
+                if (effect.getEffect() == MobEffects.LUCK) continue;
 
-                // Skip Camaraderie
-                if (effect.getEffect() == ModEffects.CAMARADERIE.get()) {
-                    continue;
-                }
-
-                // Skip Luck
-                if (effect.getEffect() == MobEffects.LUCK) {
-                    continue;
-                }
-
-                // This effect is eligible
                 eligibleEffects.add(effect);
             }
 
             if (!eligibleEffects.isEmpty()) {
-                // Calculate duration to add to each eligible effect
                 int durationPerEffect = (int) (totalDuration / eligibleEffects.size());
 
-                // Add duration to each eligible effect
                 for (MobEffectInstance effect : eligibleEffects) {
                     int newDuration = effect.getDuration() + durationPerEffect;
-                    // Create new effect instance with extended duration
-                    MobEffectInstance extendedEffect = new MobEffectInstance(
-                            effect.getEffect(),
-                            newDuration,
-                            effect.getAmplifier(),
-                            effect.isAmbient(),
-                            effect.isVisible(),
-                            effect.showIcon()
+                    MobEffectInstance extendedEffect = new MobEffectInstance(effect.getEffect(), newDuration, effect.getAmplifier(), effect.isAmbient(),
+                            effect.isVisible(), effect.showIcon()
                     );
                     pLivingEntity.addEffect(extendedEffect);
                 }

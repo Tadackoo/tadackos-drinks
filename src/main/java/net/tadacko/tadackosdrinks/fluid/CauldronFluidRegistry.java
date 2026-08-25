@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class CauldronFluidRegistry {
-
     public record Entry(Fluid fluid, int amount) {}
 
     private static final Map<Block, Entry> BY_BLOCK = new HashMap<>();

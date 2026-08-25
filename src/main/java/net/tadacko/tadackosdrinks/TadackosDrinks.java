@@ -301,7 +301,6 @@ public class TadackosDrinks
         }
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModEvents {
         @SubscribeEvent
@@ -340,23 +339,19 @@ public class TadackosDrinks
                     var blockEntity = world.getBlockEntity(pos);
                     if (blockEntity instanceof IFluidColorProvider fluidProvider) {
                         var fluidStack = fluidProvider.getFluid();
-                        if (!fluidStack.isEmpty()) {
-                            return IClientFluidTypeExtensions.of(fluidStack.getFluid().getFluidType()).getTintColor();
-                        }
+                        if (!fluidStack.isEmpty()) return IClientFluidTypeExtensions.of(fluidStack.getFluid().getFluidType()).getTintColor();
                     }
                 }
 
                 // Fallback: works even with no world/pos (e.g. GUI/icon rendering of an isolated
                 // blockstate), since the block type itself identifies the fluid.
                 Fluid fluid = CAULDRON_FLUIDS.get(state.getBlock());
-                if (fluid != null) {
-                    return IClientFluidTypeExtensions.of(fluid.getFluidType()).getTintColor();
-                }
+                if (fluid != null) return IClientFluidTypeExtensions.of(fluid.getFluidType()).getTintColor();
 
                 return 0xFFFFFF;
             };
 
-            // Every cauldron-enabled fluid's cauldron block, kept in sync via ModFluids.ALL_FLUIDS.
+            // Every fluid's cauldron block, kept in sync via ModFluids.ALL_FLUIDS.
             List<Block> cauldronBlocks = new ArrayList<>();
             for (ModFluids.FluidEntry entry : ModFluids.ALL_FLUIDS) {
                 cauldronBlocks.add(entry.cauldron().get());

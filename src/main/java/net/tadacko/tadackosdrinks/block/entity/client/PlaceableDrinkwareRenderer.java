@@ -22,14 +22,7 @@ public class PlaceableDrinkwareRenderer
     public PlaceableDrinkwareRenderer(BlockEntityRendererProvider.Context ctx) {}
 
     @Override
-    public void render(
-            PlaceableDrinkwareBlockEntity be,
-            float partialTick,
-            PoseStack poseStack,
-            MultiBufferSource buffers,
-            int light,
-            int overlay
-    ) {
+    public void render(PlaceableDrinkwareBlockEntity be, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int light, int overlay) {
         DrinkVariant variant = be.getBlockState().getValue(PlaceableDrinkwareBlock.VARIANT);
 
         Volume vol = DrinkRenderHelper.getVolume(variant);

@@ -48,17 +48,17 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock {
         // default: no connections
         this.registerDefaultState(
                 this.stateDefinition.any()
-                        .setValue(ROPE,  false)
-                        .setValue(WIRE_NORTH,  false)
-                        .setValue(WIRE_SOUTH,  false)
-                        .setValue(WIRE_EAST,  false)
-                        .setValue(WIRE_WEST,  false)
-                        .setValue(UP,    false)
-                        .setValue(DOWN,  false)
+                        .setValue(ROPE, false)
+                        .setValue(WIRE_NORTH, false)
+                        .setValue(WIRE_SOUTH, false)
+                        .setValue(WIRE_EAST, false)
+                        .setValue(WIRE_WEST, false)
+                        .setValue(UP, false)
+                        .setValue(DOWN, false)
                         .setValue(NORTH, false)
                         .setValue(SOUTH, false)
-                        .setValue(EAST,  false)
-                        .setValue(WEST,  false)
+                        .setValue(EAST, false)
+                        .setValue(WEST, false)
                         .setValue(WATERLOGGED, false)
         );
     }
@@ -68,7 +68,7 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock {
         b.add(ROPE, WIRE_NORTH, WIRE_SOUTH, WIRE_EAST, WIRE_WEST, UP, DOWN, NORTH, SOUTH, EAST, WEST, WATERLOGGED);
     }
 
-    // compute all six flags at placement
+    // compute all flags at placement
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         Level level = ctx.getLevel();
@@ -78,32 +78,9 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock {
             boolean conn = connectsTo(level, pos.relative(dir));
             state = state.setValue(getProp(dir), conn);
         }
-        // initialize WIRE_* properties (horizontal only)
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BooleanProperty wireProp = getWireProp(dir);
-            BlockPos checkPos = pos.relative(dir);
-            BlockState neighborState = level.getBlockState(checkPos);
-            boolean hasWire = false;
 
-            // Count trellis wire or grape wire crop only when:
-            // - the neighbor has no FACING property (treat as always connected), OR
-            // - the neighbor's FACING points either toward OR away from this block
-            if (neighborState.is(ModBlocks.TRELLIS_WIRE.get()) || neighborState.is(ModBlocks.GRAPE_WIRE_CROP_RED.get()) ||
-                    neighborState.is(ModBlocks.GRAPE_WIRE_CROP_WHITE.get())) {
-                if (!neighborState.hasProperty(GrapeWireCropBlock.FACING)) {
-                    // neighbor has no facing property (e.g. trellis wire); count it
-                    hasWire = true;
-                } else {
-                    Direction neighborFacing = neighborState.getValue(GrapeWireCropBlock.FACING);
-                    // Accept facing toward this block OR away from this block
-                    if (neighborFacing == dir.getOpposite() || neighborFacing == dir) {
-                        hasWire = true;
-                    }
-                }
-            }
+        state = GrapeCropBlock.updateWireConnections(state, level, pos);
 
-            state = state.setValue(wireProp, hasWire);
-        }
         boolean water = level.getFluidState(pos).getType() == Fluids.WATER;
         state = state.setValue(WATERLOGGED, water);
 
@@ -115,57 +92,24 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.defaultFluidState() : super.getFluidState(state);
     }
 
-    // update only the changed side, leave others alone
+    // update only the changed side, leave others alone - cap
     @Override
-    public BlockState updateShape(BlockState state, Direction side,
-                                  BlockState neighbor, LevelAccessor level,
-                                  BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction side, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         BlockState updated = state;
 
-        // Recompute all six directional ARM properties (UP/DOWN/NORTH/...)
         for (Direction dir : Direction.values()) {
-            BooleanProperty armProp = getProp(dir); // UP, DOWN, NORTH, SOUTH, EAST, WEST
-            BlockPos checkPos = pos.relative(dir);
-            boolean conn = connectsTo(level, checkPos);
-            updated = updated.setValue(armProp, conn);
+            boolean conn = connectsTo(level, pos.relative(dir));
+            updated = updated.setValue(getProp(dir), conn);
         }
 
-        // Update horizontal WIRE_* properties based on presence of TrellisWire or GrapeWireCrop blocks
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BooleanProperty wireProp = getWireProp(dir);
-            BlockPos checkPos = pos.relative(dir);
-            BlockState neighborState = level.getBlockState(checkPos);
-            boolean hasWire = false;
+        updated = GrapeCropBlock.updateWireConnections(updated, level, pos);
 
-            // Count trellis wire or grape wire crop only when:
-            // - the neighbor has no FACING property (treat as always connected), OR
-            // - the neighbor's FACING points either toward OR away from this block
-            if (neighborState.is(ModBlocks.TRELLIS_WIRE.get()) || neighborState.is(ModBlocks.GRAPE_WIRE_CROP_RED.get()) ||
-                    neighborState.is(ModBlocks.GRAPE_WIRE_CROP_WHITE.get())) {
-                if (!neighborState.hasProperty(GrapeWireCropBlock.FACING)) {
-                    // neighbor has no facing property (e.g. trellis wire); count it
-                    hasWire = true;
-                } else {
-                    Direction neighborFacing = neighborState.getValue(GrapeWireCropBlock.FACING);
-                    // Accept facing toward this block OR away from this block
-                    if (neighborFacing == dir.getOpposite() || neighborFacing == dir) {
-                        hasWire = true;
-                    }
-                }
-            }
-
-            updated = updated.setValue(wireProp, hasWire);
-        }
-
-        // Preserve rope behaviour (unchanged)
         Block below = level.getBlockState(pos.below()).getBlock();
         boolean hasRope = below instanceof RopeBlock || below instanceof HopCropBlock;
         updated = updated.setValue(ROPE, hasRope);
 
         // schedule water tick if waterlogged so flowing works
-        if (updated.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-        }
+        if (updated.getValue(WATERLOGGED)) level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 
         return updated;
     }
@@ -202,7 +146,6 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock {
         };
     }
 
-    // new helper: map horizontal directions to the WIRE_* boolean properties
     public static BooleanProperty getWireProp(Direction dir) {
         return switch(dir) {
             case NORTH -> WIRE_NORTH;

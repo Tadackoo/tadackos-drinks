@@ -30,8 +30,8 @@ public abstract class FoodDataMixin {
         if (this.tadackosdrinks$currentPlayer != null && this.tadackosdrinks$currentPlayer.hasEffect(ModEffects.IMPROVED_DIGESTION.get())) {
             int amplifier = this.tadackosdrinks$currentPlayer.getEffect(ModEffects.IMPROVED_DIGESTION.get()).getAmplifier();
 
-            // At amp 0: 50% slower = need 8.0 exhaustion (double)
-            // At amp 1+: 75% slower = need 16.0 exhaustion (quadruple)
+            // At amp 0: 50% slower = need 8.0 exhaustion
+            // At amp 1+: 75% slower = need 16.0 exhaustion
             float multiplier = (amplifier + 1) * 2.0f;
 
             return original * multiplier;

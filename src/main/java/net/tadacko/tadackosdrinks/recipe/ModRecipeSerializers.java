@@ -11,9 +11,6 @@ public class ModRecipeSerializers {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TadackosDrinks.MOD_ID);
 
-    /** Shapeless recipe that consumes all ingredients (no container-item leftovers). */
     public static final RegistryObject<RecipeSerializer<ShapelessBucketConsumingRecipe>>
-            SHAPELESS_BUCKET_CONSUMING = RECIPE_SERIALIZERS.register(
-            "shapeless_bucket_consuming",
-            ShapelessBucketConsumingRecipe.Serializer::new);
+            SHAPELESS_BUCKET_CONSUMING = RECIPE_SERIALIZERS.register("shapeless_bucket_consuming", ShapelessBucketConsumingRecipe.Serializer::new);
 }

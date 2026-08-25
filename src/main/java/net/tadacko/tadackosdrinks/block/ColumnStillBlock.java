@@ -42,13 +42,12 @@ public class ColumnStillBlock extends BaseEntityBlock {
     public static final int MAX_HEIGHT = 8;
 
     public static final EnumProperty<net.minecraft.core.Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    // 0 = bottom (master) segment, up to MAX_HEIGHT - 1
     public static final IntegerProperty SEGMENT = IntegerProperty.create("segment", 0, MAX_HEIGHT - 1);
     // Total height of the column this segment currently belongs to (replicated on every segment)
     public static final IntegerProperty HEIGHT = IntegerProperty.create("height", 1, MAX_HEIGHT);
     public static final EnumProperty<CondenserPos> CONDENSER = EnumProperty.create("condenser", CondenserPos.class);
     public static final BooleanProperty CLOCK = BooleanProperty.create("clock");
-    // Drives blockstate model selection directly - avoids needing "segment == height - 1" logic in JSON
+    // Drives blockstate model selection
     public static final EnumProperty<ColumnStillPart> PART = EnumProperty.create("part", ColumnStillPart.class);
 
     private static final VoxelShape SHAPE = Block.box(
@@ -74,7 +73,6 @@ public class ColumnStillBlock extends BaseEntityBlock {
         BlockPos pos = pContext.getClickedPos();
         BlockState below = level.getBlockState(pos.below());
 
-        // Duplicated from below to display message.
         if (level.getBlockState(pos.above()).is(this)) {
             Player player = pContext.getPlayer();
             if (!level.isClientSide && player != null) {
@@ -112,30 +110,18 @@ public class ColumnStillBlock extends BaseEntityBlock {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        // Don't allow a placement that would sit directly under an existing column-still block.
         if (level.getBlockState(pos.above()).is(this)) {
             return false;
         }
 
         BlockState below = level.getBlockState(pos.below());
         if (below.is(this)) {
-            // Reject placement that would push the column past MAX_HEIGHT
             return below.getValue(SEGMENT) + 1 < MAX_HEIGHT;
         }
         return true;
     }
 
     /* COLUMN MAINTENANCE */
-
-    /** Scan the four horizontal neighbours and return the first CondenserPos found. */
-    private static CondenserPos findCondenserDir(Level level, BlockPos pos) {
-        for (Direction dir : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
-            if (level.getBlockState(pos.relative(dir)).is(ModBlocks.CONDENSER.get())) {
-                return CondenserPos.fromDirection(dir);
-            }
-        }
-        return CondenserPos.NONE;
-    }
 
     /**
      * Re-scans the whole vertical column containing anyPos: finds the bottom, counts contiguous height,
@@ -159,7 +145,7 @@ public class ColumnStillBlock extends BaseEntityBlock {
         // Direct (own-neighbour) condenser attachment per segment, computed first so we can propagate upward.
         CondenserPos[] direct = new CondenserPos[height];
         for (int i = 0; i < height; i++) {
-            direct[i] = findCondenserDir(level, bottomPos.above(i));
+            direct[i] = PotStillBlock.findCondenserDir(level, bottomPos.above(i));
         }
 
         for (int i = 0; i < height; i++) {
@@ -225,42 +211,36 @@ public class ColumnStillBlock extends BaseEntityBlock {
         }
     }
 
-    /* INTERACTION */
-
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos,
                                  Player player, InteractionHand hand, BlockHitResult result) {
-        ItemStack held = player.getItemInHand(hand);
-        int segment = state.getValue(SEGMENT);
-        BlockPos bottomPos = pos.below(segment);
-
         if (!level.isClientSide) {
-            // Clock only interacts on the bottom segment
-            if (segment == 0) {
-                if (player.isCrouching() && state.getValue(CLOCK)) {
-                    level.setBlock(pos, state.setValue(CLOCK, false), 3);
+            ItemStack held = player.getItemInHand(hand);
+            int segment = state.getValue(SEGMENT);
+            BlockPos bottomPos = pos.below(segment);
+            BlockState bottomState = level.getBlockState(bottomPos);
 
-                    if (!player.isCreative()) {
-                        ItemStack clockStack = new ItemStack(Items.CLOCK);
-                        boolean added = player.getInventory().add(clockStack);
-                        if (!added) {
-                            ItemEntity drop = new ItemEntity(level,
-                                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
-                                    clockStack);
-                            level.addFreshEntity(drop);
-                        }
+            if (player.isCrouching() && bottomState.getValue(CLOCK)) {
+                level.setBlock(bottomPos, bottomState.setValue(CLOCK, false), Block.UPDATE_ALL);
+
+                if (!player.isCreative()) {
+                    ItemStack clockStack = new ItemStack(Items.CLOCK);
+                    boolean added = player.getInventory().add(clockStack);
+                    if (!added) {
+                        ItemEntity drop = new ItemEntity(level,
+                                pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                                clockStack);
+                        level.addFreshEntity(drop);
                     }
-
-                    return InteractionResult.SUCCESS;
                 }
 
-                if (held.is(Items.CLOCK) && !state.getValue(CLOCK)) {
-                    level.setBlock(pos, state.setValue(CLOCK, true), 3);
-                    if (!player.isCreative()) {
-                        held.shrink(1);
-                    }
-                    return InteractionResult.SUCCESS;
-                }
+                return InteractionResult.SUCCESS;
+            }
+
+            if (held.is(Items.CLOCK) && !bottomState.getValue(CLOCK)) {
+                level.setBlock(bottomPos, bottomState.setValue(CLOCK, true), Block.UPDATE_ALL);
+                if (!player.isCreative()) held.shrink(1);
+                return InteractionResult.SUCCESS;
             }
 
             // Fluid / GUI interaction always routes to the master (bottom) block entity
@@ -280,8 +260,6 @@ public class ColumnStillBlock extends BaseEntityBlock {
         builder.add(FACING, SEGMENT, HEIGHT, CONDENSER, CLOCK, PART);
     }
 
-    /* BLOCK ENTITY */
-
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
@@ -297,13 +275,17 @@ public class ColumnStillBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlockEntities.COLUMN_STILL.get(),
-                ColumnStillBlockEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.COLUMN_STILL.get(), ColumnStillBlockEntity::tick);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return false;
     }
 
     @Override
@@ -326,7 +308,7 @@ public class ColumnStillBlock extends BaseEntityBlock {
             }
         }
 
-        // Non-bottom segments (or an empty bottom) just drop a plain block item
-        return Collections.singletonList(new ItemStack(this.asItem()));
+        // Non-bottom segments (or an empty bottom) fallback to loot table
+        return super.getDrops(state, builder);
     }
 }

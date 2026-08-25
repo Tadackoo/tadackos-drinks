@@ -40,8 +40,7 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState()
-                .setValue(BlockStateProperties.HORIZONTAL_FACING, pContext.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, pContext.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -49,12 +48,7 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
         return new PlaceableDrinkwareBlockEntity(pos, state);
     }
 
-    // use() override removed — no longer needed, crouch-pickup is handled
-    // entirely by DrinkwareInteractionHandler#onRightClickBlock, which fires
-    // before vanilla dispatch and cancels the interaction first
-
-    // shared pickup logic, called from PlayerInteractEvent.RightClickBlock
-    // to bypass vanilla's sneak-bypass-use skip when an offhand item is held
+    // called from DrinkwareInteractionHandler to make it work when stuff in offhand
     public boolean tryPickup(Level level, BlockPos pos, Player player) {
         BlockEntity be = level.getBlockEntity(pos);
         if (!(be instanceof PlaceableDrinkwareBlockEntity jarBE)) return false;
@@ -66,14 +60,12 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
         give.setCount(1);
         if (!player.getInventory().add(give)) player.drop(give, false);
 
-        // clear BE and remove block
         jarBE.setStoredStack(ItemStack.EMPTY);
-        level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         level.playSound(null, pos, SoundEvents.METAL_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
         return true;
     }
 
-    // on break/remove -> drop stored item
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!player.getAbilities().instabuild) {
@@ -86,13 +78,11 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
         super.playerWillDestroy(level, pos, state, player);
     }
 
-    // not a full cube
     @Override
     public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
         return false;
     }
 
-    // blockstates property
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.HORIZONTAL_FACING, VARIANT);

@@ -21,7 +21,6 @@ public class RopeBlock extends Block {
     public static final IntegerProperty UNSUPPORTED = IntegerProperty.create("unsupported", 0, 2);
     // how many scheduled ticks without support before breaking
     private static final int UNSUPPORTED_THRESHOLD = 2;
-    // schedule delay between checks (in ticks)
     private static final int CHECK_DELAY = 1; // check every tick while unsupported
 
     public RopeBlock(Properties pProperties) {
@@ -44,7 +43,6 @@ public class RopeBlock extends Block {
     @Override
     public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pPos, BlockPos pNeighborPos) {
         if (pDirection == Direction.UP) {
-            // schedule a survival check shortly after neighbor changed
             pLevel.scheduleTick(pPos, this, CHECK_DELAY);
         }
         return super.updateShape(pState, pDirection, pNeighborState, pLevel, pPos, pNeighborPos);
@@ -63,16 +61,13 @@ public class RopeBlock extends Block {
 
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
-        // check survival (use your existing canSurvive logic)
         boolean survives = this.canSurvive(state, level, pos);
-
         int unsupported = state.getValue(UNSUPPORTED);
 
         if (survives) {
-            // reset counter if it was non-zero
             if (unsupported != 0) {
                 BlockState reset = state.setValue(UNSUPPORTED, 0);
-                level.setBlock(pos, reset, 3);
+                level.setBlock(pos, reset, Block.UPDATE_ALL);
             }
             return;
         }
@@ -80,13 +75,11 @@ public class RopeBlock extends Block {
         // still unsupported: increment counter
         int next = Math.min(UNSUPPORTED_THRESHOLD, unsupported + CHECK_DELAY);
         BlockState updated = state.setValue(UNSUPPORTED, next);
-        level.setBlock(pos, updated, 3);
+        level.setBlock(pos, updated, Block.UPDATE_ALL);
 
-        if (next >= UNSUPPORTED_THRESHOLD) {
-            // destroy and drop items
+        if (next == UNSUPPORTED_THRESHOLD) {
             level.destroyBlock(pos, true);
         } else {
-            // schedule another check
             level.scheduleTick(pos, this, CHECK_DELAY);
         }
     }

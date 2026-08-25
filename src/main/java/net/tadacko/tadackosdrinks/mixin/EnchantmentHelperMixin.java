@@ -16,39 +16,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Mixin into EnchantmentHelper to add treasure enchantments to the available list
- */
+/** Mixin into EnchantmentHelper to add treasure enchantments to the available list */
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
-
     @Inject(
             method = "getAvailableEnchantmentResults",
             at = @At("RETURN"),
             cancellable = true
     )
-    private static void addTreasureEnchantments(
-            int level,
-            ItemStack stack,
-            boolean treasureAllowed,
-            CallbackInfoReturnable<List<EnchantmentInstance>> cir
-    ) {
+    private static void addTreasureEnchantments(int level, ItemStack stack, boolean treasureAllowed, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         Player player = EnchantingPlayerTracker.getCurrentEnchantingPlayer();
 
-        if (player == null) {
-            return;
-        }
-
-        if (!player.hasEffect(ModEffects.ERUDITION.get())) {
-            return;
-        }
+        if (player == null) return;
+        if (!player.hasEffect(ModEffects.ERUDITION.get())) return;
 
         int effectAmplifier = player.getEffect(ModEffects.ERUDITION.get()).getAmplifier();
 
         List<EnchantmentInstance> originalList = cir.getReturnValue();
         List<EnchantmentInstance> newList = new ArrayList<>(originalList);
 
-        // Add our custom treasure enchantments at appropriate levels
         if (effectAmplifier >= 0) {
             if (Enchantments.FROST_WALKER.canEnchant(stack)) {
                 int enchLevel = getEnchantmentLevel(Enchantments.FROST_WALKER, level);
@@ -83,9 +69,7 @@ public class EnchantmentHelperMixin {
      */
     private static int getEnchantmentLevel(Enchantment enchantment, int power) {
         int maxLevel = enchantment.getMaxLevel();
-        if (maxLevel == 1) {
-            return 1;
-        }
+        if (maxLevel == 1) return 1;
 
         // Special handling for Swift Sneak which has very high cost requirements
         // The 'power' parameter here seems to be lower than expected, so we adjust thresholds
@@ -109,9 +93,7 @@ public class EnchantmentHelperMixin {
             int maxCost = enchantment.getMaxCost(testLevel);
 
             // If the power falls within the range for this level, use it
-            if (power >= minCost && power <= maxCost + 50) {
-                appropriateLevel = testLevel;
-            }
+            if (power >= minCost && power <= maxCost + 50) appropriateLevel = testLevel;
         }
 
         return appropriateLevel;

@@ -19,8 +19,6 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.tadacko.tadackosdrinks.effect.ModEffects;
-import net.tadacko.tadackosdrinks.network.ModNetwork;
-import net.tadacko.tadackosdrinks.network.RequestSoundDamagePacket;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
@@ -33,43 +31,38 @@ import java.util.Set;
  */
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HangoverVignetteRenderer {
-    // tuning
     private static final float MAX_VIGNETTE_ALPHA = 1f;
     private static final float MAX_HEARING_DISTANCE = 32f;
-    private static final int DECAY_TICKS = 100; // fade length in ticks (20 ticks ~= 1s)
-
+    private static final int DECAY_TICKS = 100;
     // client-side send cooldown to avoid spamming the server
     private static long clientLastSent = 0L;
     private static final long CLIENT_SEND_COOLDOWN_MS = 250L; // ~0.25s
     private static final float SOUND_DAMAGE_THRESHOLD = 0.3f;  // client intensity threshold
 
-
-    // whitelist of loud sounds (same level)
     private static final Set<ResourceLocation> SOUND_WHITELIST = new HashSet<>();
     static {
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.generic.explode"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.ghast.shoot"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.blaze.shoot"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.wither.shoot"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.wither.spawn"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.ender_dragon.growl"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.ender_dragon.death"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "block.anvil.land"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "block.anvil.place"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "block.anvil.use"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "block.anvil.destroy"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.firework_rocket.blast"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.firework_rocket.large_blast"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "entity.firework_rocket.twinkle"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "ambient.weather.thunder"));
-        SOUND_WHITELIST.add(new ResourceLocation("minecraft", "ambient.weather.lightning.impact"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.generic.explode"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.ghast.shoot"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.blaze.shoot"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.wither.shoot"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.wither.spawn"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.ender_dragon.growl"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.ender_dragon.death"));
+        SOUND_WHITELIST.add(new ResourceLocation("block.anvil.land"));
+        SOUND_WHITELIST.add(new ResourceLocation("block.anvil.place"));
+        SOUND_WHITELIST.add(new ResourceLocation("block.anvil.use"));
+        SOUND_WHITELIST.add(new ResourceLocation("block.anvil.destroy"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.firework_rocket.blast"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.firework_rocket.large_blast"));
+        SOUND_WHITELIST.add(new ResourceLocation("entity.firework_rocket.twinkle"));
+        SOUND_WHITELIST.add(new ResourceLocation("ambient.weather.thunder"));
+        SOUND_WHITELIST.add(new ResourceLocation("ambient.weather.lightning.impact"));
     }
 
-    // runtime: store last triggered intensity and ticks since trigger
-    private static float lastIntensity = 0f;    // initial intensity set when a sound triggers (0..1)
+    private static float lastIntensity = 0f;
     private static int ticksSinceLast = Integer.MAX_VALUE;
 
-    private static final ResourceLocation VIGNETTE_TEX = new ResourceLocation("minecraft", "textures/misc/vignette.png");
+    private static final ResourceLocation VIGNETTE_TEX = new ResourceLocation("textures/misc/vignette.png");
 
     @SubscribeEvent
     public static void onPlaySound(PlaySoundEvent event) {
@@ -77,7 +70,6 @@ public class HangoverVignetteRenderer {
         if (mc.level == null || mc.player == null) return;
         LocalPlayer player = mc.player;
 
-        // check effect using your import
         if (!player.hasEffect(ModEffects.HANGOVER.get())) return;
 
         SoundInstance snd = event.getSound();
@@ -99,18 +91,15 @@ public class HangoverVignetteRenderer {
         lastIntensity = Math.max(lastIntensity, intensity);
         ticksSinceLast = 0;
 
-        // optionally request server damage if intensity is high enough and amplifier >= 2
         MobEffectInstance hang = player.getEffect(ModEffects.HANGOVER.get());
         int amp = (hang == null) ? 0 : hang.getAmplifier();
         if (amp >= 2 && lastIntensity >= SOUND_DAMAGE_THRESHOLD) {
             long now = System.currentTimeMillis();
             if (now - clientLastSent >= CLIENT_SEND_COOLDOWN_MS) {
                 clientLastSent = now;
-                // send packet to server asking to apply validated hangover damage
-                ModNetwork.CHANNEL.sendToServer(new RequestSoundDamagePacket());
+                net.tadacko.tadackosdrinks.network.ModNetwork.CHANNEL.sendToServer(new net.tadacko.tadackosdrinks.network.RequestSoundDamagePacket());
             }
         }
-
         //System.out.println("[VIGNETTE TRIGGER] id=" + id + " dist=" + dist + " intensity=" + intensity + " lastIntensity=" + lastIntensity);
     }
 
@@ -141,14 +130,11 @@ public class HangoverVignetteRenderer {
         int sw = mc.getWindow().getGuiScaledWidth();
         int sh = mc.getWindow().getGuiScaledHeight();
 
-        // alpha 0..MAX_VIGNETTE_ALPHA (how strong the vignette is)
         float alpha = Math.min(1f, current) * MAX_VIGNETTE_ALPHA;
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
         // flush GuiGraphics' own buffered draws first so our raw quads render in the correct order
         guiGraphics.flush();
-
-        // GL state
         RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
 
@@ -181,7 +167,6 @@ public class HangoverVignetteRenderer {
         buf.vertex(mat, 0f, 0f, 0f).uv(0f, 0f).endVertex();
         t.end();
 
-        // restore state
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();

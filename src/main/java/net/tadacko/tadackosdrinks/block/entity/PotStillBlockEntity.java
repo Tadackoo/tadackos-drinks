@@ -283,19 +283,17 @@ public class PotStillBlockEntity extends BlockEntity implements IFluidColorProvi
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, PotStillBlockEntity entity) {
-        if (level.isClientSide) return;
+        // ticker server side only, no guard needed
 
         FluidStack fluidStack = entity.fluidTank.getFluid();
         Fluid currentFluid = fluidStack.getFluid();
 
-        // Resolve condenser position from block state
         CondenserPos condenserEnum = state.getValue(PotStillBlock.CONDENSER);
         entity.condenserDir = condenserEnum.toDirection(); // null when NONE
 
-        // The cauldron must be directly below the condenser block
         BlockPos condenserPos = entity.condenserDir != null ? pos.relative(entity.condenserDir) : null;
         BlockPos cauldronPos = condenserPos != null ? condenserPos.below() : null;
-        entity.cauldronPresent = cauldronPos != null && level.getBlockState(cauldronPos).is(Blocks.CAULDRON); // empty cauldron only
+        entity.cauldronPresent = cauldronPos != null && level.getBlockState(cauldronPos).is(Blocks.CAULDRON);
 
         if (entity.isProcessing) {
             // Stop if the condenser or the cauldron below it disappeared
@@ -318,7 +316,6 @@ public class PotStillBlockEntity extends BlockEntity implements IFluidColorProvi
                 BlockState resultBlockState = DISTILLATION_RESULTS.get(currentFluid);
 
                 if (resultBlockState != null) {
-                    // Fill the cauldron below the condenser with the distilled spirit
                     level.setBlock(cauldronPos, resultBlockState, 3);
                     entity.fluidTank.drain(3000, IFluidHandler.FluidAction.EXECUTE);
                 }
@@ -343,9 +340,7 @@ public class PotStillBlockEntity extends BlockEntity implements IFluidColorProvi
         BlockPos pos = this.getBlockPos();
         BlockState state = this.getBlockState();
 
-        // Generic fluid container (vanilla buckets, kegs, anything with IFluidHandlerItem)
-        // -> bulk transfer with the barrel's tank.
-        // Fluid validity for fills is handled internally by FluidTank.fill() via isFluidValid().
+        // generic fluid container transfer
         if (!this.isProcessing) {
             FluidStack before = this.fluidTank.getFluid().copy();
             if (FluidUtil.interactWithFluidHandler(player, hand, this.fluidTank)) {
@@ -391,7 +386,7 @@ public class PotStillBlockEntity extends BlockEntity implements IFluidColorProvi
     // returns a tag suitable for putting into an ItemStack under "BlockEntityTag"
     public CompoundTag saveToItemTag() {
         CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag); // allowed here because this is the BE class
+        this.saveAdditional(tag);
         return tag;
     }
 
@@ -401,7 +396,6 @@ public class PotStillBlockEntity extends BlockEntity implements IFluidColorProvi
         if (this.getBlockState().getValue(PotStillBlock.CLOCK)) return false;
         if (this.progress != 0) return false;
 
-        // If we got here, it's default/empty
         return true;
     }
 

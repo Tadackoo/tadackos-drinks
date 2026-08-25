@@ -8,12 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.tadacko.tadackosdrinks.client.guide.GuideBookScreen;
 
-/**
- * Item that opens the guide book GUI. The actual pages live in GuideBookScreen.PAGES
- * so the Table of Contents can jump to correct pages.
- *
- * Note: we only call client-only code when level.isClientSide is true.
- */
 public class GuideBookItem extends Item {
     public GuideBookItem(Properties pProperties) {
         super(pProperties);
@@ -27,8 +21,7 @@ public class GuideBookItem extends Item {
         // Client: open the GUI
         if (pLevel.isClientSide) {
             // fully-qualified client call to avoid accidental top-level client imports
-            net.minecraft.client.Minecraft.getInstance()
-                    .setScreen(new GuideBookScreen());
+            net.minecraft.client.Minecraft.getInstance().setScreen(new GuideBookScreen());
         }
 
         return InteractionResultHolder.sidedSuccess(stack, pLevel.isClientSide);

@@ -23,7 +23,6 @@ public class TrellisWireBlock extends Block {
     public static final IntegerProperty UNSUPPORTED = IntegerProperty.create("unsupported", 0, 2);
     // how many scheduled ticks without support before breaking
     private static final int UNSUPPORTED_THRESHOLD = 2;
-    // schedule delay between checks (in ticks)
     private static final int CHECK_DELAY = 1; // check every tick while unsupported
 
     public TrellisWireBlock(Properties pProperties) {
@@ -35,11 +34,8 @@ public class TrellisWireBlock extends Block {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        // Check East & West (east must face west, west must face east)
         boolean east = isConnectorFacing(level, pos.east(), Direction.WEST);
         boolean west = isConnectorFacing(level, pos.west(), Direction.EAST);
-
-        // Check North & South (north must face south, south must face north)
         boolean north = isConnectorFacing(level, pos.north(), Direction.SOUTH);
         boolean south = isConnectorFacing(level, pos.south(), Direction.NORTH);
 
@@ -53,7 +49,6 @@ public class TrellisWireBlock extends Block {
         super.neighborChanged(state, level, pos, changedBlock, fromPos, isMoving);
         if (level.isClientSide) return;
 
-        // schedule a survival check shortly after neighbor changed
         level.scheduleTick(pos, this, CHECK_DELAY);
     }
 
@@ -70,18 +65,6 @@ public class TrellisWireBlock extends Block {
                 return Block.box(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D);
         }
     }
-
-    /*@Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        // Only care about horizontal neighbor changes (wire connectivity is horizontal)
-        if (direction.getAxis().isHorizontal()) {
-            if (!canSurvive(state, level, pos)) {
-                return Blocks.AIR.defaultBlockState(); // break if sides invalid
-            }
-        }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
-    }*/
 
     @Override
     public boolean canBeReplaced(BlockState pState, BlockPlaceContext pUseContext) {
@@ -109,28 +92,25 @@ public class TrellisWireBlock extends Block {
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             BlockPos neighborPos = pos.relative(dir);
             BlockState neighborState = level.getBlockState(neighborPos);
-            if (neighborState.getBlock() instanceof TrellisBlock || neighborState.is(ModBlocks.GRAPE_CROP_RED.get()) ||
-                    neighborState.is(ModBlocks.GRAPE_CROP_WHITE.get()) || neighborState.is(ModBlocks.TRELLIS_WIRE.get()) ||
-                    neighborState.is(ModBlocks.GRAPE_WIRE_CROP_RED.get()) || neighborState.is(ModBlocks.GRAPE_WIRE_CROP_WHITE.get())) {
+            if (neighborState.getBlock() instanceof TrellisBlock || neighborState.getBlock() instanceof GrapeCropBlock ||
+                    neighborState.is(ModBlocks.TRELLIS_WIRE.get()) || neighborState.getBlock() instanceof GrapeWireCropBlock) {
                 return this.defaultBlockState().setValue(FACING, dir.getOpposite());
             }
         }
 
-        return this.defaultBlockState(); // fallback
+        return this.defaultBlockState();
     }
 
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
-        // check survival (use your existing canSurvive logic)
         boolean survives = this.canSurvive(state, level, pos);
 
         int unsupported = state.getValue(UNSUPPORTED);
 
         if (survives) {
-            // reset counter if it was non-zero
             if (unsupported != 0) {
                 BlockState reset = state.setValue(UNSUPPORTED, 0);
-                level.setBlock(pos, reset, 3);
+                level.setBlock(pos, reset, Block.UPDATE_ALL);
             }
             return;
         }
@@ -138,33 +118,28 @@ public class TrellisWireBlock extends Block {
         // still unsupported: increment counter
         int next = Math.min(UNSUPPORTED_THRESHOLD, unsupported + CHECK_DELAY);
         BlockState updated = state.setValue(UNSUPPORTED, next);
-        level.setBlock(pos, updated, 3);
+        level.setBlock(pos, updated, Block.UPDATE_ALL);
 
-        if (next >= UNSUPPORTED_THRESHOLD) {
-            // destroy and drop items
+        if (next == UNSUPPORTED_THRESHOLD) {
             level.destroyBlock(pos, true);
         } else {
-            // schedule another check
             level.scheduleTick(pos, this, CHECK_DELAY);
         }
     }
 
-    private boolean isConnectorFacing(BlockGetter world, BlockPos checkPos, Direction requiredFacing) {
-        BlockState s = world.getBlockState(checkPos);
+    public static boolean isConnectorFacing(BlockGetter world, BlockPos checkPos, Direction requiredFacing) {
+        BlockState state = world.getBlockState(checkPos);
 
-        // Always accept ground grape and plain trellis (they don't have FACING)
-        if (s.is(ModBlocks.GRAPE_CROP_RED.get()) || s.is(ModBlocks.GRAPE_CROP_WHITE.get()) || s.getBlock() instanceof TrellisBlock) {
+        if (state.getBlock() instanceof GrapeCropBlock || state.getBlock() instanceof TrellisBlock) {
             return true;
         }
 
-        // For wire-like blocks, require a FACING that points toward this block
-        if (s.is(ModBlocks.GRAPE_WIRE_CROP_RED.get()) || s.is(ModBlocks.GRAPE_WIRE_CROP_WHITE.get()) || s.is(ModBlocks.TRELLIS_WIRE.get())) {
-            if (s.hasProperty(GrapeWireCropBlock.FACING)) {
-                Direction neighborFacing = s.getValue(GrapeWireCropBlock.FACING);
-                return neighborFacing == requiredFacing || neighborFacing == requiredFacing.getOpposite();
-            }
-            // If the wire block doesn't have a FACING property, treat it as NOT a valid facing connector.
-            // (Change to `return true;` here if you want non-directional trellis_wire to count.)
+        if (state.hasProperty(TrellisWireBlock.FACING)) {
+            Direction neighborFacing = state.getValue(TrellisWireBlock.FACING);
+            return neighborFacing == requiredFacing || neighborFacing == requiredFacing.getOpposite();
+        } else if (state.hasProperty(GrapeWireCropBlock.FACING)) {
+            Direction neighborFacing = state.getValue(GrapeWireCropBlock.FACING);
+            return neighborFacing == requiredFacing || neighborFacing == requiredFacing.getOpposite();
         }
 
         return false;

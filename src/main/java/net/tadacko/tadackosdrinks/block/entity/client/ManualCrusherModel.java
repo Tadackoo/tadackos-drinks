@@ -42,7 +42,6 @@ public class ManualCrusherModel extends GeoModel<ManualCrusherBlockEntity> {
         } else if (state.getBlock() == ModBlocks.MANUAL_CRUSHER_WARPED.get()) {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_crusher_warped.png");
         }
-        // fall back to oak (or whatever default)
         return DEFAULT_TEXTURE;
     }
 

@@ -30,7 +30,6 @@ public class SavageryEffect extends MobEffect {
                 // Amplifier 1: 2.0x (100% bonus)
                 float damageMultiplier = 1.5f + (amplifier + 1) * savageryMultiplier;
 
-                // Set the new damage multiplier
                 event.setDamageModifier(damageMultiplier);
             }
         }

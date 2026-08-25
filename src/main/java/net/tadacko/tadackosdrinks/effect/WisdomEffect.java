@@ -40,6 +40,7 @@ public class WisdomEffect extends MobEffect {
                 float accumulated = fractionalXp.getOrDefault(playerId, 0f) + exactBonus;
 
                 int bonusXp = (int)accumulated;
+                // store leftover for next time
                 fractionalXp.put(playerId, accumulated - bonusXp);
 
                 // Add the bonus XP

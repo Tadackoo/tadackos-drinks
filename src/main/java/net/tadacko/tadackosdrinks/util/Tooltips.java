@@ -22,7 +22,6 @@ import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class Tooltips {
-
     // Built once, on first tooltip render (items are guaranteed registered by then).
     // Not built eagerly at class-load time to avoid touching item RegistryObjects before registration completes.
     private static Map<Item, List<Component>> TOOLTIP_MAP;
@@ -442,14 +441,12 @@ public class Tooltips {
         List<Component> tooltips = tooltipMap.get(stack.getItem());
         int insertIndex = 1;
 
-        // For the keg, show the same descriptor tags ("tooltip.tadackosdrinks.wheat", "tooltip.tadackosdrinks.hopped", "tooltip.tadackosdrinks.aged", etc.)
-        // as whatever item represents the fluid currently inside it, inserted after
-        // the "Contains: ..." line KegItem adds (rather than right under the name)
+        // For the keg, show the same descriptor tags as whatever item represents the fluid currently inside it,
+        // inserted after the "Contains: ..." line KegItem adds (rather than right under the name)
         if (stack.getItem() == ModItems.KEG.get()) {
             FluidStack fluid = KegItem.getFluidStack(stack);
             if (!fluid.isEmpty()) {
-                // Derive bucket item from fluid registry name:
-                // e.g. tadackosdrinks:wort_wheat_hopped -> tadackosdrinks:wort_wheat_hopped_bucket
+                // Derive bucket item from fluid registry name
                 ResourceLocation fluidId = ForgeRegistries.FLUIDS.getKey(fluid.getFluid());
                 if (fluidId != null) {
                     String path = fluidId.getPath().replace("_fluid", "");

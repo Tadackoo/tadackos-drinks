@@ -58,10 +58,8 @@ public class DrinkItem extends PlaceableDrinkwareItem {
             CompoundTag root = pLivingEntity.getPersistentData();
             CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);
 
-            // read stored BAC percent
             double currentBacPercent = persistent.contains(KEY_BAC_PERCENT) ? persistent.getDouble(KEY_BAC_PERCENT) : 0.0;
 
-            // read optional stored player weight and r
             double bodyWeightKg = BacUtils.DEFAULT_BODY_WEIGHT_KG;
             if (BacUtils.characterConfigAllowed) {
                 if (persistent.contains(BacUtils.KEY_BODY_WEIGHT_KG)) {
@@ -77,9 +75,7 @@ public class DrinkItem extends PlaceableDrinkwareItem {
                 }
             }
 
-            // compute ethanol grams and bac increase (percent)
-            double ethanol = BacUtils.ethanolGrams(this.abv, this.volumeL);
-            double bacIncreasePercent = BacUtils.bacIncreasePercentFromGrams(ethanol, bodyWeightKg, ratio);
+            double bacIncreasePercent = BacUtils.bacIncreasePercent(this.abv, this.volumeL, bodyWeightKg, ratio);
 
             currentBacPercent += bacIncreasePercent;
             if (currentBacPercent < 0.0) currentBacPercent = 0.0;
@@ -87,14 +83,12 @@ public class DrinkItem extends PlaceableDrinkwareItem {
 
             persistent.putDouble(KEY_BAC_PERCENT, currentBacPercent);
 
-            // compute amplifier and duration (segment ticks)
             int newAmp = BacUtils.bacToAmplifier(currentBacPercent);
             long segmentTicks = BacUtils.computeSegmentTicksForAmp(currentBacPercent, newAmp);
             int applyDuration = segmentTicks > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) segmentTicks;
 
             pLivingEntity.addEffect(new MobEffectInstance(ModEffects.INEBRIATION.get(), applyDuration, newAmp, false, true, true));
 
-            // update session NBT (max amp & hangover flag)
             CompoundTag session = persistent.contains(TAG_SESSION) ? persistent.getCompound(TAG_SESSION) : new CompoundTag();
             int recordedMax = session.getInt(KEY_MAX_AMP);
             if (newAmp > recordedMax) session.putInt(KEY_MAX_AMP, newAmp);
@@ -102,7 +96,6 @@ public class DrinkItem extends PlaceableDrinkwareItem {
             persistent.put(TAG_SESSION, session);
             root.put(TadackosDrinks.MOD_ID, persistent);
 
-            // debug
             //System.out.println(String.format("Drink: abv=%.3f vol=%.3fL => ethanol=%.3fg", this.abv, this.volumeL, ethanol));
             //System.out.println(String.format("BAC +%.5f => now %.5f%% ; amp=%d ; duration=%d ticks (%.1fs)", bacIncreasePercent, currentBacPercent,
             //        newAmp, applyDuration, applyDuration / 20.0));
@@ -113,16 +106,13 @@ public class DrinkItem extends PlaceableDrinkwareItem {
             }
         }
 
-        // return empty drinkware
         if (pStack.isEmpty()) {
             return new ItemStack(emptyDrinkware);
         } else {
             if (pLivingEntity instanceof Player && !((Player) pLivingEntity).getAbilities().instabuild) {
                 ItemStack itemstack = new ItemStack(emptyDrinkware);
                 Player player = (Player) pLivingEntity;
-                if (!player.getInventory().add(itemstack)) {
-                    player.drop(itemstack, false);
-                }
+                if (!player.getInventory().add(itemstack)) player.drop(itemstack, false);
             }
             return pStack;
         }

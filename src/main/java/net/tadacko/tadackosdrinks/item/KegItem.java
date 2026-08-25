@@ -52,8 +52,7 @@ public class KegItem extends Item {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ICapabilityProvider() {
-            private final LazyOptional<IFluidHandlerItem> handler =
-                    LazyOptional.of(() -> new FluidHandlerItemStack(stack, KegBlockEntity.CAPACITY));
+            private final LazyOptional<IFluidHandlerItem> handler = LazyOptional.of(() -> new FluidHandlerItemStack(stack, KegBlockEntity.CAPACITY));
 
             @NotNull
             @Override
@@ -73,15 +72,13 @@ public class KegItem extends Item {
         BlockState clickedState = level.getBlockState(clickedPos);
         ItemStack kegStack = context.getItemInHand();
 
-        // crouch -> place the keg down as a block, carrying over its stored fluid
+        // place
         if (player.isCrouching()) {
             BlockPos placePos = clickedState.canBeReplaced() ? clickedPos : clickedPos.relative(context.getClickedFace());
-            if (level.getBlockState(placePos).canBeReplaced()) {
-                return placeKeg(context, placePos);
-            }
+            if (level.getBlockState(placePos).canBeReplaced()) return placeKeg(context, placePos);
         }
 
-        // clicked on a placed drinkware block -> try exchanging fluid with whatever's stored in it
+        // drinkware transfer
         if (level.getBlockEntity(clickedPos) instanceof PlaceableDrinkwareBlockEntity jarBE) {
             Optional<IFluidHandlerItem> tank = kegStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve();
             if (tank.isPresent()) {
@@ -103,8 +100,7 @@ public class KegItem extends Item {
             }
         }
 
-        // Handle cauldron blocks — they expose no IFluidHandler capability so FluidUtil
-        // won't find them. Every cauldron is treated as a single 1000 mB unit, like a bucket.
+        // cauldron transfer
         Block clickedBlock = clickedState.getBlock();
         boolean isEmptyCauldron = clickedBlock == Blocks.CAULDRON;
         CauldronFluidRegistry.Entry cauldronEntry = CauldronFluidRegistry.getForBlock(clickedBlock);
@@ -119,7 +115,6 @@ public class KegItem extends Item {
                             : IFluidHandler.FluidAction.EXECUTE;
 
                     if (cauldronEntry != null) {
-                        // Filled cauldron -> drain its full amount into the keg and empty it
                         FluidStack toTransfer = new FluidStack(cauldronEntry.fluid(), cauldronEntry.amount());
                         if (kegHandler.get().fill(toTransfer, IFluidHandler.FluidAction.SIMULATE) >= cauldronEntry.amount()) {
                             kegHandler.get().fill(toTransfer, kegAction);
@@ -129,7 +124,6 @@ public class KegItem extends Item {
                             return InteractionResult.sidedSuccess(false);
                         }
                     } else {
-                        // Empty cauldron -> pour the keg's fluid in and fill the cauldron
                         FluidStack kegFluid = kegHandler.get()
                                 .drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
                         if (!kegFluid.isEmpty()) {
@@ -163,8 +157,7 @@ public class KegItem extends Item {
             }
         }
 
-        // otherwise, try to exchange fluid with whatever was clicked
-        // (fermenting barrels, other placed kegs, anything exposing IFluidHandler)
+        // generic transfer
         return FluidUtil.getFluidHandler(level, clickedPos, context.getClickedFace())
                 .map(blockHandler -> FluidUtil.interactWithFluidHandler(player, context.getHand(), blockHandler)
                         ? InteractionResult.sidedSuccess(level.isClientSide)
@@ -184,27 +177,21 @@ public class KegItem extends Item {
 
         if (!level.isClientSide && level.getBlockEntity(placePos) instanceof KegBlockEntity keg) {
             CompoundTag tag = stack.getTag();
-            if (tag != null && tag.contains(FluidHandlerItemStack.FLUID_NBT_KEY)) {
-                keg.loadFromItemTag(tag);
-            }
+            if (tag != null && tag.contains(FluidHandlerItemStack.FLUID_NBT_KEY)) keg.loadFromItemTag(tag);
         }
 
-        if (player != null && !player.getAbilities().instabuild) {
-            stack.shrink(1);
-        }
+        if (player != null && !player.getAbilities().instabuild) stack.shrink(1);
 
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     // Updates the block entity's stored item AND the block's VARIANT property so the
     // rendered model (fluid level/colour) matches the new contents.
-    private void updateDrinkwareBlock(Level level, BlockPos pos, BlockState state,
-                                      PlaceableDrinkwareBlockEntity jarBE, Item resultItem) {
+    private void updateDrinkwareBlock(Level level, BlockPos pos, BlockState state, PlaceableDrinkwareBlockEntity jarBE, Item resultItem) {
         jarBE.setStoredStack(new ItemStack(resultItem));
 
-        if (resultItem instanceof PlaceableDrinkwareItem drinkwareItem) {
+        if (resultItem instanceof PlaceableDrinkwareItem drinkwareItem)
             level.setBlock(pos, state.setValue(PlaceableDrinkwareBlock.VARIANT, drinkwareItem.getVariant()), 3);
-        }
     }
 
     @Override
@@ -235,12 +222,10 @@ public class KegItem extends Item {
         }
     }
 
-    // helpers also used by the item color handler (see below)
     public static FluidStack getFluidStack(ItemStack stack) {
         CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(FluidHandlerItemStack.FLUID_NBT_KEY)) {
+        if (tag != null && tag.contains(FluidHandlerItemStack.FLUID_NBT_KEY))
             return FluidStack.loadFluidStackFromNBT(tag.getCompound(FluidHandlerItemStack.FLUID_NBT_KEY));
-        }
         return FluidStack.EMPTY;
     }
 
@@ -250,9 +235,8 @@ public class KegItem extends Item {
 
     private static Component getFluidName(FluidStack fluidStack) {
         ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluidStack.getFluid());
-        if (id == null) {
-            return fluidStack.getDisplayName(); // fallback
-        }
+        // fallback
+        if (id == null) return fluidStack.getDisplayName();
         return Component.translatable("fluid." + id.getNamespace() + "." + id.getPath());
     }
 }

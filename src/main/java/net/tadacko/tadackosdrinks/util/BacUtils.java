@@ -27,17 +27,14 @@ public class BacUtils {
     public static final String KEY_BODY_WEIGHT_KG = "body_weight_kg";
     public static final String KEY_RATIO = "ratio";
 
-    // convert abv (0.05) and volume L (0.5) to grams ethanol
-    public static double ethanolGrams(double abv, double volumeL) {
+    private static double ethanolGrams(double abv, double volumeL) {
         return abv * volumeL * ETHANOL_DENSITY_G_PER_L;
     }
 
-    // compute BAC percent increase from grams ethanol, weight kg, r
-    public static double bacIncreasePercentFromGrams(double ethanolGrams, double bodyWeightKg, double r) {
-        return (ethanolGrams / (bodyWeightKg * 1000.0 * r)) * 100.0;
+    public static double bacIncreasePercent(double abv, double volumeL, double bodyWeightKg, double r) {
+        return (ethanolGrams(abv, volumeL) / (bodyWeightKg * 1000.0 * r)) * 100.0;
     }
 
-    // map percent to amplifier index
     public static int bacToAmplifier(double bacPercent) {
         for (int i = 0; i < BAC_THRESHOLDS.length; i++) {
             if (bacPercent <= BAC_THRESHOLDS[i]) return i;
@@ -52,18 +49,12 @@ public class BacUtils {
         double diff = currentBacPercent - lowerThreshold;
         if (diff <= 0.0) return 0L;
         double hours = diff / BACEliminationRatePercentPerHour;
-        // hours -> ticks: hours * 3600 sec/hour * 20 ticks/sec = hours * 72000
         double ticksDouble = hours * 72000.0;
         long ticks = (long) Math.ceil(ticksDouble);
         return Math.max(1L, ticks);
     }
 
     public static int computeEffectDurationTicks(double abv, double volumeL, LivingEntity player) {
-        // 1) grams of ethanol in this drink
-        double ethanolGrams = abv * volumeL * ETHANOL_DENSITY_G_PER_L;
-
-        // 2) convert grams -> BAC percent increase for one drink
-        // bacIncreasePercent = (grams / (bodyWeightKg * 1000 * r)) * 100
         CompoundTag root = player.getPersistentData();
         CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);
         double bodyWeightKg = DEFAULT_BODY_WEIGHT_KG;
@@ -80,22 +71,18 @@ public class BacUtils {
                 if (r > 0.0) ratio = r;
             }
         }
-        double bacIncreasePercent = (ethanolGrams / (bodyWeightKg * 1000.0 * ratio)) * 100.0;
 
-        // 3) time (hours) to eliminate that BAC increase (to 0) at given elimination rate
         // avoid divide-by-zero
         double hours;
         if (BACEliminationRatePercentPerHour <= 0.0) {
             hours = 0.0;
         } else {
-            hours = bacIncreasePercent / BACEliminationRatePercentPerHour;
+            hours = bacIncreasePercent(abv, volumeL, bodyWeightKg, ratio) / BACEliminationRatePercentPerHour;
         }
 
-        // 4) convert hours -> ticks: hours * 3600 sec/hr * 20 ticks/sec = hours * 72000
         double ticksDouble = hours * 72000.0;
         long ticksLong = (long) Math.ceil(ticksDouble);
 
-        // 5) clamp to int range and ensure at least 1 tick
         if (ticksLong < 1L) ticksLong = 1L;
         if (ticksLong > Integer.MAX_VALUE) ticksLong = Integer.MAX_VALUE;
 

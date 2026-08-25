@@ -140,10 +140,10 @@ public class ModBlocks {
             () -> new HopCropBlock(BlockBehaviour.Properties.copy(Blocks.SUGAR_CANE)));
     public static final RegistryObject<Block> GRAPE_CROP_RED = BLOCKS.register("grape_crop_red",
             () -> new GrapeCropBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_CARPET).strength(1f).sound(SoundType.WOOD).forceSolidOff(),
-                    ModItems.GRAPE_SEEDS_RED, ModItems.GRAPES_RED, ModBlocks.GRAPE_WIRE_CROP_RED));
+                    ModItems.GRAPE_SEEDS_RED, ModBlocks.GRAPE_WIRE_CROP_RED));
     public static final RegistryObject<Block> GRAPE_CROP_WHITE = BLOCKS.register("grape_crop_white",
             () -> new GrapeCropBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_CARPET).strength(1f).sound(SoundType.WOOD).forceSolidOff(),
-                    ModItems.GRAPE_SEEDS_WHITE, ModItems.GRAPES_WHITE, ModBlocks.GRAPE_WIRE_CROP_WHITE));
+                    ModItems.GRAPE_SEEDS_WHITE, ModBlocks.GRAPE_WIRE_CROP_WHITE));
     public static final RegistryObject<Block> GRAPE_WIRE_CROP_RED = BLOCKS.register("grape_wire_crop_red",
             () -> new GrapeWireCropBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_CARPET).strength(0.5f).sound(SoundType.AZALEA_LEAVES),
                     ModItems.GRAPES_RED, ModBlocks.GRAPE_WIRE_CROP_RED));

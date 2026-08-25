@@ -49,7 +49,6 @@ public class CharismaEffect extends MobEffect {
 
                     MerchantOffers offers = merchantMenu.getOffers();
 
-                    // Store original offers
                     MerchantOffers originalOffers = new MerchantOffers();
                     for (MerchantOffer offer : offers) {
                         originalOffers.add(new MerchantOffer(
@@ -65,7 +64,6 @@ public class CharismaEffect extends MobEffect {
                     }
                     originalOffersMap.put(player.getUUID(), originalOffers);
 
-                    // Apply Charisma discount
                     MerchantOffers newOffers = new MerchantOffers();
                     for (MerchantOffer offer : offers) {
                         int baseCost = offer.getBaseCostA().getCount();
@@ -77,7 +75,6 @@ public class CharismaEffect extends MobEffect {
                         //System.out.println("specialPriceDiff: " + specialPrice);
                         //System.out.println("Current final price: " + currentFinalPrice);
 
-                        // Apply Charisma to final price
                         int newFinalPrice = Math.max(1, (int)(currentFinalPrice * (1.0f - charismaDiscount)));
                         int newSpecialPrice = newFinalPrice - baseCost;
 
@@ -127,7 +124,7 @@ public class CharismaEffect extends MobEffect {
         @SubscribeEvent
         public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
             // This event only fires server-side, so only the server map needs cleanup.
-            serverOriginalOffersMap.remove(event.getEntity().getId());
+            serverOriginalOffersMap.remove(event.getEntity().getUUID());
         }
 
         private static Map<UUID, MerchantOffers> mapForSide(Player player) {

@@ -16,6 +16,7 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.tadacko.tadackosdrinks.TadackosDrinks;
+import net.tadacko.tadackosdrinks.block.GrapeCropBlock;
 import net.tadacko.tadackosdrinks.block.ModBlocks;
 import net.tadacko.tadackosdrinks.block.TrellisBlock;
 import net.tadacko.tadackosdrinks.item.RopeBlockItem;
@@ -27,7 +28,6 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CrosshairOverlay {
-
     @SubscribeEvent
     public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
@@ -36,11 +36,10 @@ public class CrosshairOverlay {
         Player player = mc.player;
         ItemStack heldItem = player.getMainHandItem();
 
-        // Determine which overlay mode is active
         boolean hasWire = heldItem.getItem() instanceof TrellisWireItem;
         boolean hasRope = heldItem.getItem() instanceof RopeBlockItem;
 
-        // If rope is in offhand
+        // offhand
         if (!hasWire && !hasRope) {
             heldItem = player.getOffhandItem();
             hasWire = heldItem.getItem() instanceof TrellisWireItem;
@@ -51,54 +50,42 @@ public class CrosshairOverlay {
         // Get what the player is looking at
         HitResult hitResult = mc.hitResult;
 
-        // Default to not viable (red)
         boolean isViable = false;
 
         if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHit = (BlockHitResult) hitResult;
-            BlockPos pos = blockHit.getBlockPos();
+            BlockPos clickedPos = blockHit.getBlockPos();
             Level level = mc.level;
-            BlockState clickedState = level.getBlockState(pos);
+            BlockState clickedState = level.getBlockState(clickedPos);
 
             if (hasWire) {
-                // Trellis-only validity
                 boolean isTrellis = clickedState.getBlock() instanceof TrellisBlock ||
-                        clickedState.is(ModBlocks.GRAPE_CROP_RED.get()) ||
-                        clickedState.is(ModBlocks.GRAPE_CROP_WHITE.get());
+                        clickedState.getBlock() instanceof GrapeCropBlock;
 
                 if (isTrellis) {
                     if (!TrellisWireClientState.hasFirstPos()) {
                         isViable = true; // selecting first is always viable
                     } else {
                         BlockPos firstPos = TrellisWireClientState.getFirstPos();
-                        isViable = isValidSecondPosition(level, player, firstPos, pos);
+                        isViable = isValidSecondPosition(level, player, firstPos, clickedPos);
                     }
                 }
 
             } else if (hasRope) {
-                // Mirror RopeBlockItem logic:
-                // 1) If the clicked block itself is a trellis/rope, try placing at clickedPos.below() first.
-                // 2) If that fails (blocked), fall back to the normal placement target: clickedPos.relative(face).
-                // 3) If the clicked block is not trellis/rope, just test the normal placement target.
-
                 Direction face = blockHit.getDirection();
-                BlockPos clicked = pos;
 
                 boolean ok;
 
-                // If clicked a trellis/rope block, attempt the special-case placement below it
                 if (clickedState.getBlock() instanceof TrellisBlock || clickedState.is(ModBlocks.ROPE.get())) {
-                    BlockPos belowPos = clicked.below();
+                    BlockPos belowPos = clickedPos.below();
                     if (canPlaceRopeHere(level, belowPos)) {
-                        ok = true; // success on the special-case (below the trellis/rope)
+                        ok = true;
                     } else {
-                        // if below was blocked, fall back to normal placement (same as item)
-                        BlockPos normalTarget = clicked.relative(face);
+                        BlockPos normalTarget = clickedPos.relative(face);
                         ok = canPlaceRopeHere(level, normalTarget);
                     }
                 } else {
-                    // Normal placement: the player clicked some other block, place at adjacent face
-                    BlockPos normalTarget = clicked.relative(face);
+                    BlockPos normalTarget = clickedPos.relative(face);
                     ok = canPlaceRopeHere(level, normalTarget);
                 }
 
@@ -106,41 +93,30 @@ public class CrosshairOverlay {
             }
         }
 
-        // Always render the overlay when holding the item (green if viable, red if not)
         renderCrosshairOverlay(event.getGuiGraphics().pose(), mc.getWindow().getGuiScaledWidth(),
                 mc.getWindow().getGuiScaledHeight(), isViable);
     }
 
     private static boolean isValidSecondPosition(Level level, Player player, BlockPos firstPos, BlockPos secondPos) {
         // Must be same Y
-        if (firstPos.getY() != secondPos.getY()) {
-            return false;
-        }
+        if (firstPos.getY() != secondPos.getY()) return false;
 
         // Must be aligned on X or Z (not diagonal)
         boolean sameX = firstPos.getX() == secondPos.getX();
         boolean sameZ = firstPos.getZ() == secondPos.getZ();
-        if (!(sameX ^ sameZ)) {
-            return false;
-        }
+        if (sameX == sameZ) return false;
 
-        // Check distance and count needed
         int distance = sameX ? Math.abs(firstPos.getZ() - secondPos.getZ()) : Math.abs(firstPos.getX() - secondPos.getX());
         int countNeeded = distance - 1;
 
-        if (countNeeded <= 0) {
-            return false;
-        }
+        if (countNeeded <= 0) return false;
 
-        // Check if player has enough wire
         if (!player.isCreative()) {
             int totalAvailable = countItemInPlayerInventory(player, player.getMainHandItem().getItem());
-            if (totalAvailable < countNeeded) {
-                return false;
-            }
+            if (totalAvailable < countNeeded) return false;
         }
 
-        // Build positions and check for obstacles
+        // Build positions
         List<BlockPos> positions = new ArrayList<>();
         if (sameX) {
             int minZ = Math.min(firstPos.getZ(), secondPos.getZ());
@@ -157,9 +133,7 @@ public class CrosshairOverlay {
         // Check for obstacles
         for (BlockPos wirePos : positions) {
             BlockState stateAt = level.getBlockState(wirePos);
-            if (!stateAt.isAir() && !stateAt.canBeReplaced()) {
-                return false;
-            }
+            if (!stateAt.isAir() && !stateAt.canBeReplaced()) return false;
         }
 
         return true;
@@ -170,8 +144,7 @@ public class CrosshairOverlay {
         BlockState aboveState = level.getBlockState(above);
         BlockState stateAtPos = level.getBlockState(pos);
 
-        boolean hasSupport = aboveState.getBlock() instanceof TrellisBlock ||
-                aboveState.is(ModBlocks.ROPE.get());
+        boolean hasSupport = aboveState.getBlock() instanceof TrellisBlock || aboveState.is(ModBlocks.ROPE.get());
 
         boolean canReplace = stateAtPos.isAir() || stateAtPos.canBeReplaced();
 
@@ -194,15 +167,12 @@ public class CrosshairOverlay {
         float cy = screenHeight / 2f;
 
         // sizes in screen pixels (floats for smoothness across resolutions)
-        float outerSize = 6f;    // distance from center to outer corner
+        float outerSize = 6f; // distance from center to outer corner
         float redOuterSize = outerSize - 2f; // shorten red lines by 2 pixels
-        float innerSize = 2f;     // distance from center to inner corner / tip
+        float innerSize = 2f; // distance from center to inner corner / tip
         float cornerThickness = 1f; // thickness of L-shape arms
-        float pixelSize = 1f;       // size of each "pixel" square for diagonal
-        float pixelSpacing = 1f;    // spacing between squares along diagonal
-
-        // If true, L-shapes are inverted (arms extend outward from the inner corner toward outer)
-        boolean invertL = true;
+        float pixelSize = 1f; // size of each "pixel" square for diagonal
+        float pixelSpacing = 1f; // spacing between squares along diagonal
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -221,89 +191,46 @@ public class CrosshairOverlay {
             // Draw green L-shapes in corners (two rectangles each)
             float r = 0f, g = 1f, b = 0f, a = 0.95f;
 
-            if (!invertL) {
-                // original inward L (arms toward center)
-                // Top-left L: horizontal arm then vertical arm
-                addRect(buffer, matrix,
-                        cx - outerSize, cy - outerSize,    // left, top
-                        cx - innerSize, cy - outerSize + cornerThickness, // right, top+thickness
-                        r, g, b, a); // horizontal arm
-                addRect(buffer, matrix,
-                        cx - outerSize, cy - outerSize,    // left, top
-                        cx - outerSize + cornerThickness, cy - innerSize, // left+thickness, bottom
-                        r, g, b, a); // vertical arm
+            // inverted L (arms extend outward from inner corner toward outer)
+            // Top-left: horizontal arm placed just above inner row, vertical arm placed just left of inner column
+            addRect(buffer, matrix,
+                    cx - outerSize, cy - innerSize - cornerThickness,    // left, top
+                    cx - innerSize, cy - innerSize, // right, bottom
+                    r, g, b, a); // horizontal arm
+            addRect(buffer, matrix,
+                    cx - innerSize - cornerThickness, cy - outerSize,    // left, top
+                    cx - innerSize, cy - innerSize, // right, bottom
+                    r, g, b, a); // vertical arm
 
-                // Top-right L
-                addRect(buffer, matrix,
-                        cx + innerSize, cy - outerSize,    // left
-                        cx + outerSize, cy - outerSize + cornerThickness, // right
-                        r, g, b, a);
-                addRect(buffer, matrix,
-                        cx + outerSize - cornerThickness, cy - outerSize,
-                        cx + outerSize, cy - innerSize,
-                        r, g, b, a);
+            // Top-right
+            addRect(buffer, matrix,
+                    cx + innerSize, cy - innerSize - cornerThickness,
+                    cx + outerSize, cy - innerSize,
+                    r, g, b, a);
+            addRect(buffer, matrix,
+                    cx + innerSize, cy - outerSize,
+                    cx + innerSize + cornerThickness, cy - innerSize,
+                    r, g, b, a);
 
-                // Bottom-left L
-                addRect(buffer, matrix,
-                        cx - outerSize, cy + outerSize - cornerThickness,
-                        cx - innerSize, cy + outerSize,
-                        r, g, b, a);
-                addRect(buffer, matrix,
-                        cx - outerSize, cy + innerSize,
-                        cx - outerSize + cornerThickness, cy + outerSize,
-                        r, g, b, a);
+            // Bottom-left
+            addRect(buffer, matrix,
+                    cx - outerSize, cy + innerSize,
+                    cx - innerSize, cy + innerSize + cornerThickness,
+                    r, g, b, a);
+            addRect(buffer, matrix,
+                    cx - innerSize - cornerThickness, cy + innerSize,
+                    cx - innerSize, cy + outerSize,
+                    r, g, b, a);
 
-                // Bottom-right L
-                addRect(buffer, matrix,
-                        cx + innerSize, cy + outerSize - cornerThickness,
-                        cx + outerSize, cy + outerSize,
-                        r, g, b, a);
-                addRect(buffer, matrix,
-                        cx + outerSize - cornerThickness, cy + innerSize,
-                        cx + outerSize, cy + outerSize,
-                        r, g, b, a);
-            } else {
-                // inverted L (arms extend outward from inner corner toward outer)
-                // Top-left: horizontal arm placed just above inner row, vertical arm placed just left of inner column
-                addRect(buffer, matrix,
-                        cx - outerSize, cy - innerSize - cornerThickness,    // left, top
-                        cx - innerSize, cy - innerSize, // right, bottom
-                        r, g, b, a); // horizontal arm
-                addRect(buffer, matrix,
-                        cx - innerSize - cornerThickness, cy - outerSize,    // left, top
-                        cx - innerSize, cy - innerSize, // right, bottom
-                        r, g, b, a); // vertical arm
-
-                // Top-right
-                addRect(buffer, matrix,
-                        cx + innerSize, cy - innerSize - cornerThickness,
-                        cx + outerSize, cy - innerSize,
-                        r, g, b, a);
-                addRect(buffer, matrix,
-                        cx + innerSize, cy - outerSize,
-                        cx + innerSize + cornerThickness, cy - innerSize,
-                        r, g, b, a);
-
-                // Bottom-left
-                addRect(buffer, matrix,
-                        cx - outerSize, cy + innerSize,
-                        cx - innerSize, cy + innerSize + cornerThickness,
-                        r, g, b, a);
-                addRect(buffer, matrix,
-                        cx - innerSize - cornerThickness, cy + innerSize,
-                        cx - innerSize, cy + outerSize,
-                        r, g, b, a);
-
-                // Bottom-right
-                addRect(buffer, matrix,
-                        cx + innerSize, cy + innerSize,
-                        cx + outerSize, cy + innerSize + cornerThickness,
-                        r, g, b, a);
-                addRect(buffer, matrix,
-                        cx + innerSize, cy + innerSize,
-                        cx + innerSize + cornerThickness, cy + outerSize,
-                        r, g, b, a);
-            }
+            // Bottom-right
+            addRect(buffer, matrix,
+                    cx + innerSize, cy + innerSize,
+                    cx + outerSize, cy + innerSize + cornerThickness,
+                    r, g, b, a);
+            addRect(buffer, matrix,
+                    cx + innerSize, cy + innerSize,
+                    cx + innerSize + cornerThickness, cy + outerSize,
+                    r, g, b, a);
         } else {
             // Draw red diagonal "pixel" lines: place axis-aligned squares along the diagonal
             float r = 1f, g = 0f, b = 0f, a = 0.95f;

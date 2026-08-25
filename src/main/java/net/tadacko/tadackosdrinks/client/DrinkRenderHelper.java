@@ -11,17 +11,12 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class DrinkRenderHelper {
-
-    /* ---------- shade constants (matches vanilla face shading) ---------- */
-
     public static final float SHADE_TOP    = 1.0f;
     public static final float SHADE_BOTTOM = 0.5f;
     public static final float SHADE_NORTH  = 0.8f;
     public static final float SHADE_SOUTH  = 0.8f;
     public static final float SHADE_EAST   = 0.6f;
     public static final float SHADE_WEST   = 0.6f;
-
-    /* ---------- cached resource locations ---------- */
 
     private static final Map<DrinkVariant, ResourceLocation> FLUID_TEXTURES =
             new EnumMap<>(DrinkVariant.class);
@@ -48,19 +43,16 @@ public class DrinkRenderHelper {
         FOAM_TEXTURES.put(DrinkVariant.CIDER, new ResourceLocation(TadackosDrinks.MOD_ID, "item/foam"));
     }
 
-    /* ---------- volume records ---------- */
-
-    public record Volume(float minX, float minY, float minZ,
-                         float maxX, float maxY, float maxZ) {}
+    public record Volume(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {}
 
     private static final Map<DrinkVariant, Volume> VOLUMES = new EnumMap<>(DrinkVariant.class);
 
     static {
-        Volume beer  = new Volume(6.5f, 0.5f, 6.5f, 9.5f, 5f,  9.5f);
-        Volume wine  = new Volume(6.5f, 4.5f, 6.5f, 9.5f, 6f,  9.5f);
-        Volume whisky = new Volume(7f, 0.5f, 7f, 9f, 1.5f,  9f);
-        Volume brandy = new Volume(6.5f, 2f, 6.5f, 9.5f, 2.5f,  9.5f);
-        Volume shot = new Volume(7.5f, 0.5f, 7.5f, 8.5f, 2f,  8.5f);
+        Volume beer = new Volume(6.5f, 0.5f, 6.5f, 9.5f, 5f, 9.5f);
+        Volume wine = new Volume(6.5f, 4.5f, 6.5f, 9.5f, 6f, 9.5f);
+        Volume whisky = new Volume(7f, 0.5f, 7f, 9f, 1.5f, 9f);
+        Volume brandy = new Volume(6.5f, 2f, 6.5f, 9.5f, 2.5f, 9.5f);
+        Volume shot = new Volume(7.5f, 0.5f, 7.5f, 8.5f, 2f, 8.5f);
 
         VOLUMES.put(DrinkVariant.BEER,         beer);
         VOLUMES.put(DrinkVariant.CIDER,        beer);
@@ -78,8 +70,6 @@ public class DrinkRenderHelper {
         // empty variants intentionally omitted — getVolume returns null for them
     }
 
-    /* ---------- public accessors ---------- */
-
     /** Returns null for empty/no-fluid variants. */
     public static ResourceLocation getFluidTexture(DrinkVariant variant) {
         return FLUID_TEXTURES.get(variant);
@@ -95,11 +85,8 @@ public class DrinkRenderHelper {
         return VOLUMES.get(variant);
     }
 
-    /* ---------- fluid rendering ---------- */
-
     /**
      * Renders the fluid box for the given volume using the provided sprite.
-     * Call this after pushing and transforming the PoseStack as needed.
      */
     public static void renderFluid(VertexConsumer vc, PoseStack.Pose p,
                                    TextureAtlasSprite sprite, Volume vol,
@@ -122,11 +109,8 @@ public class DrinkRenderHelper {
         quadVertical  (vc, p, sprite, x2, z2, x2, z1, y1, y2,  1,  0,  0, r, g, b, a, light, overlay);
     }
 
-    /* ---------- foam rendering ---------- */
-
     /**
      * Renders the beer/cider foam geometry using the provided sprite.
-     * Call this after pushing and transforming the PoseStack as needed.
      */
     public static void renderFoam(VertexConsumer vc, PoseStack.Pose p,
                                   TextureAtlasSprite s, int light, int overlay) {
@@ -138,8 +122,6 @@ public class DrinkRenderHelper {
         renderBox(vc, p, s, 6f,   5f,   7f,   6.5f, 6f,   9f,   r, g, b, a, light, overlay); // left spill
         renderBox(vc, p, s, 9.5f, 5f,   7f,   10f,  6f,   9f,   r, g, b, a, light, overlay); // right spill
     }
-
-    /* ---------- box helper ---------- */
 
     public static void renderBox(VertexConsumer vc, PoseStack.Pose p, TextureAtlasSprite s,
                                  float fromX, float fromY, float fromZ,
@@ -156,8 +138,6 @@ public class DrinkRenderHelper {
         quadVertical  (vc, p, s, x1, z1, x1, z2, y1, y2, -1,  0,  0, r*SHADE_WEST,   g*SHADE_WEST,   b*SHADE_WEST,   a, light, overlay);
         quadVertical  (vc, p, s, x2, z2, x2, z1, y1, y2,  1,  0,  0, r*SHADE_EAST,   g*SHADE_EAST,   b*SHADE_EAST,   a, light, overlay);
     }
-
-    /* ---------- quad primitives ---------- */
 
     public static void quadHorizontal(
             VertexConsumer vc, PoseStack.Pose p, TextureAtlasSprite s,

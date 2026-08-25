@@ -30,10 +30,7 @@ public class ModConfiguredFeatures {
         BlockState maxAgeMinusOne = ModBlocks.AGAVE.get().defaultBlockState().setValue(AgaveBlock.AGE, AgaveBlock.MAX_AGE - 1);
 
         WeightedStateProvider agaveProvider = new WeightedStateProvider(
-                SimpleWeightedRandomList.<BlockState>builder()
-                        .add(maxAge, 1)
-                        .add(maxAgeMinusOne, 1)
-                        .build());
+                SimpleWeightedRandomList.<BlockState>builder().add(maxAge, 1).add(maxAgeMinusOne, 1).build());
 
         register(context, AGAVE_KEY, Feature.FLOWER, new RandomPatchConfiguration(12, 6, 2,
                 PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(agaveProvider))));

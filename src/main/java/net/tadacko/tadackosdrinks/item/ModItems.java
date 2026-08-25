@@ -16,8 +16,7 @@ import net.tadacko.tadackosdrinks.effect.ModEffects;
 import net.tadacko.tadackosdrinks.util.BacUtils;
 
 public class ModItems {
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, TadackosDrinks.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TadackosDrinks.MOD_ID);
 
     public static final RegistryObject<Item> GUIDE_BOOK = ITEMS.register("guide_book",
             () -> new GuideBookItem(new Item.Properties()));

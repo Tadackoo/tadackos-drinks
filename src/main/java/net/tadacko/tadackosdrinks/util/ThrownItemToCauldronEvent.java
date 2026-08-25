@@ -33,9 +33,7 @@ import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ThrownItemToCauldronEvent {
-
     // Keyed by (dimension, BlockPos) to prevent cross-dimension state contamination.
-    // e.g. Overworld (0,64,0) and Nether (0,64,0) are different cauldrons with the same BlockPos.
     private static final Map<ResourceKey<Level>, Map<BlockPos, Integer>> hopsCount = new HashMap<>();
     private static final Map<ResourceKey<Level>, Map<BlockPos, Integer>> juniperCount = new HashMap<>();
     private static final Set<ItemEntity> trackedItems = new HashSet<>();
@@ -50,8 +48,7 @@ public class ThrownItemToCauldronEvent {
 
     // Generic ingredient inventory for water cauldrons: per (dimension, pos), how many of each
     // relevant item have been added so far. Lets recipes share ingredients regardless of the
-    // order they're added in (e.g. seed-first-then-potato or potato-first-then-seed both work),
-    // since completion is checked against the accumulated inventory after every addition.
+    // order they're added in, since completion is checked against the accumulated inventory after every addition.
     private static final Map<ResourceKey<Level>, Map<BlockPos, Map<Item, Integer>>> waterCauldronInventory = new HashMap<>();
 
     /** A water-cauldron recipe: exact item->amount requirements, and the resulting cauldron block. */
@@ -66,14 +63,13 @@ public class ThrownItemToCauldronEvent {
     private static List<WaterCauldronRecipe> getWaterCauldronRecipes() {
         if (waterCauldronRecipes == null) {
             waterCauldronRecipes = List.of(
-                    // Mash potato: 4 potato_crushed + 1 crushed seed of either grain (either counts).
                     new WaterCauldronRecipe(
                             Map.of(ModItems.POTATO_CRUSHED.get(), 4, ModItems.WHEAT_SEEDS_CRUSHED.get(), 1),
                             ModFluids.MASH_POTATO.cauldron().get()),
                     new WaterCauldronRecipe(
                             Map.of(ModItems.POTATO_CRUSHED.get(), 4, ModItems.BARLEY_SEEDS_CRUSHED.get(), 1),
                             ModFluids.MASH_POTATO.cauldron().get()),
-                    // Plain wort: 8 crushed seeds of a single grain type.
+
                     new WaterCauldronRecipe(
                             Map.of(ModItems.WHEAT_SEEDS_CRUSHED.get(), 16),
                             ModFluids.WORT_WHEAT.cauldron().get()),
@@ -141,7 +137,7 @@ public class ThrownItemToCauldronEvent {
                 }
             }
             if (satisfied) {
-                level.setBlock(pos, recipe.result().defaultBlockState(), 3);
+                level.setBlock(pos, recipe.result().defaultBlockState(), Block.UPDATE_ALL);
                 posMap.remove(pos);
                 return;
             }
@@ -199,7 +195,7 @@ public class ThrownItemToCauldronEvent {
         if (toConsume <= 0) return 0;
         int newTotal = existing + toConsume;
         if (newTotal >= required) {
-            level.setBlock(pos, resultBlock.defaultBlockState(), 3);
+            level.setBlock(pos, resultBlock.defaultBlockState(), Block.UPDATE_ALL);
             counter.remove(pos);
         } else {
             counter.put(pos, newTotal);
@@ -231,7 +227,7 @@ public class ThrownItemToCauldronEvent {
 
     /** Converts a completed syrup cauldron into an empty cauldron and drops the results. */
     private static void completeSyrup(Level level, BlockPos pos) {
-        level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3);
+        level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), Block.UPDATE_ALL);
         spawnItem(level, pos, Items.SUGAR, 6);
         spawnItem(level, pos, ModItems.MOLASSES_SUGARCANE.get(), 1);
     }
@@ -239,7 +235,7 @@ public class ThrownItemToCauldronEvent {
     @SubscribeEvent
     public static void onItemSpawn(EntityJoinLevelEvent event) {
         if (!throwIngredientCauldron) return;
-        if (event.getLevel().isClientSide) return; // Server-side only; avoids populating the set on the client
+        if (event.getLevel().isClientSide) return;
         if (event.getEntity() instanceof ItemEntity itemEntity) {
             Item item = itemEntity.getItem().getItem();
             if (item == ModItems.BARLEY_SEEDS_CRUSHED.get() ||
@@ -283,8 +279,7 @@ public class ThrownItemToCauldronEvent {
 
             if (state.is(Blocks.WATER_CAULDRON)) {
                 // Any ingredient shared by the wort/mash-potato recipes (crushed seeds, potato_crushed).
-                // Order-independent: completion is checked against the accumulated inventory after
-                // every addition, so seed-then-potato and potato-then-seed both work.
+                // Order-independent: completion is checked against the accumulated inventory after every addition
                 if (isWaterCauldronIngredient(item)) {
                     int consumed = addToWaterCauldronInventory(level, pos, item, count);
                     if (consumed > 0) {
@@ -293,34 +288,30 @@ public class ThrownItemToCauldronEvent {
                         if (remaining > 0) spawnItem(level, pos, item, remaining);
                         tryCompleteWaterCauldronRecipe(level, pos);
                     }
-                    // consumed == 0 means every recipe using this item is already fully supplied;
-                    // leave the extra item entity alone instead of consuming it for nothing.
+                    // consumed == 0 means every recipe using this item is already fully supplied
                     continue;
                 }
 
                 // Honey bottle -> diluted honey cauldron (thrown)
                 if (item == Items.HONEY_BOTTLE) {
-                    level.setBlock(pos, ModFluids.DILUTED_HONEY.cauldron().get().defaultBlockState(), 3);
+                    level.setBlock(pos, ModFluids.DILUTED_HONEY.cauldron().get().defaultBlockState(), Block.UPDATE_ALL);
                     entity.discard(); iterator.remove();
-                    // Drop empty glass bottle
                     spawnItem(level, pos, Items.GLASS_BOTTLE, 1);
                     continue;
                 }
 
                 // Molasses -> diluted molasses cauldron (thrown)
                 if (item == ModItems.MOLASSES_SUGARCANE.get()) {
-                    level.setBlock(pos, ModFluids.DILUTED_MOLASSES_SUGARCANE.cauldron().get().defaultBlockState(), 3);
+                    level.setBlock(pos, ModFluids.DILUTED_MOLASSES_SUGARCANE.cauldron().get().defaultBlockState(), Block.UPDATE_ALL);
                     entity.discard(); iterator.remove();
-                    // Drop empty glass bottle
                     spawnItem(level, pos, Items.GLASS_BOTTLE, 1);
                     continue;
                 }
             } else {
-                // Sugar + glass bottle -> empty cauldron, dropping molasses (thrown)
+                // Sugar + glass bottle + sugarcane syrup -> empty cauldron, dropping molasses (thrown)
                 if (state.is(ModFluids.SYRUP_SUGARCANE.cauldron().get())) {
                     int syrupFlags = getSyrupState(level, pos);
-                    // Only accept the ingredient if its flag isn't already set; otherwise leave the
-                    // item entity alone (it stays tracked/on the ground) instead of consuming extras.
+                    // Only accept the ingredient if its flag isn't already set; otherwise leave the item entity alone
                     if (item == Items.SUGAR && (syrupFlags & SUGAR_FLAG) == 0) {
                         entity.discard(); iterator.remove();
                         int remaining = count - 1;
@@ -337,7 +328,7 @@ public class ThrownItemToCauldronEvent {
                     }
                 }
 
-                // Wort -> hopped wort (only check non-water-cauldron blocks to avoid needless map lookup)
+                // Hops + wort -> hopped wort (thrown)
                 if (item == ModItems.HOPS.get()) {
                     Block hoppedTarget = getUnhoppedToHopped().get(state.getBlock());
                     if (hoppedTarget != null) {
@@ -349,6 +340,7 @@ public class ThrownItemToCauldronEvent {
                     }
                 }
 
+                // juniper berries + spirit -> spiced spirit (thrown)
                 if (item == ModItems.JUNIPER_BERRIES.get()) {
                     Block spicedTarget = getUnspicedToSpiced().get(state.getBlock());
                     if (spicedTarget != null) {
@@ -396,12 +388,11 @@ public class ThrownItemToCauldronEvent {
             if (item == Items.HONEY_BOTTLE) {
                 if (!creative) {
                     stack.shrink(1);
-                    // Give empty bottle back
                     if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) {
                         player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
                     }
                 }
-                level.setBlock(pos, ModFluids.DILUTED_HONEY.cauldron().get().defaultBlockState(), 3);
+                level.setBlock(pos, ModFluids.DILUTED_HONEY.cauldron().get().defaultBlockState(), Block.UPDATE_ALL);
                 event.setCancellationResult(InteractionResult.SUCCESS);
                 event.setCanceled(true);
                 return;
@@ -411,19 +402,18 @@ public class ThrownItemToCauldronEvent {
             if (item == ModItems.MOLASSES_SUGARCANE.get()) {
                 if (!creative) {
                     stack.shrink(1);
-                    // Give empty bottle back
                     if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) {
                         player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
                     }
                 }
-                level.setBlock(pos, ModFluids.DILUTED_MOLASSES_SUGARCANE.cauldron().get().defaultBlockState(), 3);
+                level.setBlock(pos, ModFluids.DILUTED_MOLASSES_SUGARCANE.cauldron().get().defaultBlockState(), Block.UPDATE_ALL);
                 event.setCancellationResult(InteractionResult.SUCCESS);
                 event.setCanceled(true);
                 return;
             }
         }
 
-        // Sugar + glass bottle -> empty cauldron, dropping molasses (right click)
+        // Sugar + glass bottle + sugarcane syrup -> empty cauldron, dropping molasses (right click)
         Block syrupCauldronBlock = ModFluids.SYRUP_SUGARCANE.cauldron().get();
         if (state.is(syrupCauldronBlock)) {
             int syrupFlags = getSyrupState(level, pos);
@@ -445,7 +435,7 @@ public class ThrownItemToCauldronEvent {
             }
         }
 
-        // Wort -> hopped wort by right-click with hops
+        // Hops + wort -> hopped wort (right click)
         if (item == ModItems.HOPS.get()) {
             Block hoppedTarget = getUnhoppedToHopped().get(state.getBlock());
             if (hoppedTarget != null) {
@@ -458,6 +448,7 @@ public class ThrownItemToCauldronEvent {
             }
         }
 
+        // juniper berries + spirit -> spiced spirit (right click)
         if (item == ModItems.JUNIPER_BERRIES.get()) {
             Block spicedTarget = getUnspicedToSpiced().get(state.getBlock());
             if (spicedTarget != null) {
@@ -486,7 +477,7 @@ public class ThrownItemToCauldronEvent {
     /**
      * Clears stale counter entries when a cauldron block is broken.
      * Without this, a new cauldron placed at the same position would inherit partial brewing progress.
-     * NOTE: Cauldrons replaced without breaking (e.g. emptied by bucket) do not trigger this. Don't worry about it...
+     * NOTE: Cauldrons replaced without breaking (e.g. emptied by bucket) do not trigger this. - Don't worry about it...
      */
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {

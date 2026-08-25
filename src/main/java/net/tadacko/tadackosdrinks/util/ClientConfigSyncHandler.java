@@ -11,11 +11,8 @@ import net.tadacko.tadackosdrinks.network.SyncPlayerConfigPacket;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientConfigSyncHandler {
-
     @SubscribeEvent
     public static void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
-        ModNetwork.CHANNEL.sendToServer(
-                new SyncPlayerConfigPacket(ModCommonConfigs.BODY_WEIGHT.get(), ModCommonConfigs.RATIO.get())
-        );
+        ModNetwork.CHANNEL.sendToServer(new SyncPlayerConfigPacket(ModCommonConfigs.BODY_WEIGHT.get(), ModCommonConfigs.RATIO.get()));
     }
 }

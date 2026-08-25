@@ -26,11 +26,9 @@ public class JuniperFeature extends Feature<NoneFeatureConfiguration> {
 
         // ground/light check + target space must be empty, same rule the block itself uses
         BlockState defaultState = juniper.defaultBlockState();
-        if (!defaultState.canSurvive(level, pos) || !level.getBlockState(pos).canBeReplaced()) {
-            return false;
-        }
+        if (!defaultState.canSurvive(level, pos) || !level.getBlockState(pos).canBeReplaced()) return false;
 
-        int age = random.nextInt(JuniperBlock.MAX_AGE); // 0 (inclusive) .. MAX_AGE-1 (inclusive)
+        int age = random.nextInt(JuniperBlock.MAX_AGE); // 0..MAX_AGE-1
         juniper.growColumn(level, pos, age);
         return true;
     }

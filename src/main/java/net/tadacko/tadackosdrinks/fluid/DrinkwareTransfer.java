@@ -31,8 +31,8 @@ public final class DrinkwareTransfer {
         return Optional.of(entry.fullItem());
     }
 
-    // If this item is a known "full" drinkware and the tank has room for its fluid
-    // (and either is empty or already holds the same fluid), fills the tank and
+    // If this item is a known "full" drinkware, the tank has room for its fluid
+    // and either is empty or already holds the same fluid, fills the tank and
     // returns the matching "empty" item.
     public static Optional<Item> tryEmpty(IFluidHandler tank, ItemStack drinkware) {
         if (drinkware.isEmpty()) return Optional.empty();

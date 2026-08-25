@@ -72,17 +72,15 @@ public class JuniperBlock extends BushBlock implements BonemealableBlock {
             return InteractionResult.PASS;
         } else if (maxAge) {
             if (!pLevel.isClientSide) {
-                int j = 2 + pLevel.random.nextInt(2);
+                int j = 2 + pLevel.random.nextInt(2); // 50% split 2 or 3
                 ItemStack drop = new ItemStack(ModItems.JUNIPER_BERRIES.get(), j);
 
-                // try to give to player, otherwise spawn as an entity
                 if (!pPlayer.addItem(drop)) {
-                    ItemEntity itemEntity = new ItemEntity(pLevel,
-                            pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, drop);
+                    ItemEntity itemEntity = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, drop);
                     pLevel.addFreshEntity(itemEntity);
                 }
 
-                // drop age of the WHOLE column by one; height stays the same (age 3 and 4 are both 3-tall)
+                // drop age of the whole column by one
                 BlockPos basePos = getBasePos(pLevel, pPos);
                 growColumn(pLevel, basePos, MAX_AGE - 1);
             }
@@ -100,10 +98,7 @@ public class JuniperBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
-        if (pState.getValue(PART) == JuniperPart.BOTTOM) {
-            return super.canSurvive(pState, pLevel, pPos);
-        }
-        // middle/top segments require another juniper block directly below them
+        if (pState.getValue(PART) == JuniperPart.BOTTOM) return super.canSurvive(pState, pLevel, pPos);
         return pLevel.getBlockState(pPos.below()).is(this);
     }
 
@@ -121,9 +116,6 @@ public class JuniperBlock extends BushBlock implements BonemealableBlock {
         growColumn(pLevel, basePos, newAge);
     }
 
-    /**
-     * Height (in blocks) of the plant at a given age: 1 block for age 0-1, 2 blocks at age 2, 3 blocks at age 3-4.
-     */
     private static int heightForAge(int age) {
         if (age <= 1) return 1;
         if (age == 2) return 2;
@@ -138,16 +130,11 @@ public class JuniperBlock extends BushBlock implements BonemealableBlock {
         };
     }
 
-    /**
-     * Walks down from pPos through juniper blocks until it finds the BOTTOM segment.
-     */
     private static BlockPos getBasePos(BlockGetter pLevel, BlockPos pPos) {
         BlockPos.MutableBlockPos mutable = pPos.mutable();
         while (true) {
             BlockState state = pLevel.getBlockState(mutable);
-            if (!(state.getBlock() instanceof JuniperBlock) || state.getValue(PART) == JuniperPart.BOTTOM) {
-                break;
-            }
+            if (!(state.getBlock() instanceof JuniperBlock) || state.getValue(PART) == JuniperPart.BOTTOM) break;
             mutable.move(Direction.DOWN);
         }
         return mutable.immutable();
@@ -178,8 +165,7 @@ public class JuniperBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        // pNewState.getBlock() != this means the segment was actually removed (not a growth/part update
-        // where it stays a JuniperBlock, just with a different AGE/PART value).
+        // pNewState.getBlock() != this means the segment was actually removed, not just modified
         if (!pLevel.isClientSide && pNewState.getBlock() != this) {
             destroyColumnExcept(pLevel, pPos, pState);
         }

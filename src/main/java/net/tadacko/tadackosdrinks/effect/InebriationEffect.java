@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InebriationEffect extends MobEffect {
-    // tuning constants - fallback defaults, overridden by config values
+    // fallback defaults, overridden by config values
     public static double stumbleStrength = 0.02; // horizontal speed component (blocks/tick)
     public static double stumbleDampFactor = 0.8; // keep some of previous velocity
     public static int stumbleChangeMinTicks = 5; // shorter -> more frequent direction changes
@@ -28,10 +28,8 @@ public class InebriationEffect extends MobEffect {
     private static final double STUMBLE_OFFSET_ANGLE_MAX = Math.PI * stumbleDirectionChangeMax; // max offset when choosing new direction (~162°)
     public static double stumbleSharpTurnChance = 0.2; // chance to force a very sharp turn (reverse-ish)
     public static double stumbleJitterStrength = 0.05; // per-tick random angular jitter (radians)
-
     public static int hangoverBaseDuration = 24000; // 600s
 
-    // session keys stored on entity persistent data
     private static final String SESSION_TAG = "inebriation_session";
     private static final String KEY_MAX_AMP = "max_amp";
     private static final String KEY_HANGOVER_PENDING = "hangover_pending";
@@ -103,6 +101,7 @@ public class InebriationEffect extends MobEffect {
             applyOrRefreshHidden(entity, ModEffects.MILD_NAUSEA.get(), -1, 1, KEY_MILD_NAUSEA);
             applyOrRefreshHidden(entity, MobEffects.MOVEMENT_SLOWDOWN, -1, 0, KEY_SLOW);
         } else if (amplifier == 4) {
+            // remove when upgrading
             removeHiddenIfRecorded(entity, ModEffects.MILD_NAUSEA.get(), KEY_MILD_NAUSEA);
 
             applyOrRefreshHidden(entity, MobEffects.UNLUCK, -1, 1, KEY_UNLUCK);
@@ -115,12 +114,8 @@ public class InebriationEffect extends MobEffect {
         }
         applyOrRefreshHidden(entity, ModEffects.CAMARADERIE.get(), -1, 0, KEY_CAMARADERIE);
 
-        // stumbling
-        if (amplifier == 3 || amplifier == 4) {
-            initStumble(entity);
-        }
+        if (amplifier == 3 || amplifier == 4) initStumble(entity);
 
-        // --- SESSION TRACKING (highest amp reached) ---
         CompoundTag root = entity.getPersistentData();
         CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);
         CompoundTag session = persistent.contains(SESSION_TAG) ? persistent.getCompound(SESSION_TAG) : new CompoundTag();
@@ -144,9 +139,7 @@ public class InebriationEffect extends MobEffect {
                 // If the inebriation effect is STILL present on the entity, do nothing.
                 // This covers amplifier changes where the effect is removed then re-applied:
                 // we avoid removing the hidden secondaries in that case to prevent flicker.
-                if (entity.getEffect(this) != null) {
-                    return; // effect still present -> skip removals
-                }
+                if (entity.getEffect(this) != null) return;
 
                 // effect truly gone -> safely remove only the hidden effects we applied
                 removeHiddenIfRecorded(entity, MobEffects.LUCK, KEY_LUCK);
@@ -160,7 +153,6 @@ public class InebriationEffect extends MobEffect {
                 removeHiddenIfRecorded(entity, MobEffects.POISON, KEY_POISON);
                 removeHiddenIfRecorded(entity, ModEffects.CAMARADERIE.get(), KEY_CAMARADERIE);
 
-                // remove stored stumble state
                 STUMBLE_STATES.remove(entity.getUUID());
 
                 CompoundTag root = entity.getPersistentData();
@@ -170,14 +162,11 @@ public class InebriationEffect extends MobEffect {
                 if (session.getBoolean(KEY_HANGOVER_PENDING)) {
                     int recordedMax = session.getInt(KEY_MAX_AMP);
                     int hangoverDuration = -1;
-                    if (hangoverBaseDuration != -1) {
-                        hangoverDuration = hangoverBaseDuration * (recordedMax - 1);
-                    }
+                    if (hangoverBaseDuration != -1) hangoverDuration = hangoverBaseDuration * (recordedMax - 1);
                     int ampForEffect = Math.max(0, recordedMax - 2);
 
-                    // apply hangover effect
-                    entity.addEffect(new MobEffectInstance(ModEffects.HANGOVER.get(), hangoverDuration, ampForEffect,
-                            false, true, true));
+                    entity.addEffect(new MobEffectInstance(ModEffects.HANGOVER.get(), hangoverDuration, ampForEffect, false, true,
+                            true));
                 }
 
                 // clear session entirely
@@ -274,17 +263,14 @@ public class InebriationEffect extends MobEffect {
 
 
     /** Apply a hidden effect only if missing or amplifier differs. Records application in session NBT. */
-    private void applyOrRefreshHidden(LivingEntity entity, MobEffect effectType,
-                                      int duration, int amp, String sessionKey) {
+    private void applyOrRefreshHidden(LivingEntity entity, MobEffect effectType, int duration, int amp, String sessionKey) {
         MobEffectInstance existing = entity.getEffect(effectType);
         boolean needsApply = existing == null || existing.getAmplifier() != amp;
 
         if (needsApply) {
-            // hidden: ambient=false, showParticles=false, showIcon=false
             entity.addEffect(new MobEffectInstance(effectType, duration, amp, false, false, false));
         }
 
-        // record that we applied/maintain this effect
         CompoundTag root = entity.getPersistentData();
         CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);
         CompoundTag session = persistent.contains(SESSION_TAG) ? persistent.getCompound(SESSION_TAG) : new CompoundTag();
@@ -301,7 +287,6 @@ public class InebriationEffect extends MobEffect {
         CompoundTag session = persistent.getCompound(SESSION_TAG);
         if (!session.contains(sessionKey) || !session.getBoolean(sessionKey)) return;
 
-        // remove and clear flag
         entity.removeEffect(effectType);
         session.remove(sessionKey);
         root.put(TadackosDrinks.MOD_ID, persistent);

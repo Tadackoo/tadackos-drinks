@@ -12,8 +12,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.PacketDistributor;
+import net.tadacko.tadackosdrinks.TadackosDrinks;
 import net.tadacko.tadackosdrinks.block.ModBlocks;
 import net.tadacko.tadackosdrinks.block.TrellisBlock;
 import net.tadacko.tadackosdrinks.block.TrellisWireBlock;
@@ -37,7 +39,6 @@ public class TrellisWireItem extends Item {
 
         if (player == null) return InteractionResult.FAIL;
 
-        // must click a trellis as the first/second block
         BlockState clickedState = level.getBlockState(pos);
         if (!(clickedState.getBlock() instanceof TrellisBlock) && !clickedState.is(ModBlocks.GRAPE_CROP_RED.get()) &&
                 !clickedState.is(ModBlocks.GRAPE_CROP_WHITE.get())) {
@@ -45,18 +46,14 @@ public class TrellisWireItem extends Item {
             return InteractionResult.FAIL;
         }
 
-        // If we're on the client, don't modify persistent data or place blocks — server is authoritative.
-        // Return SUCCESS so client shows correct hand animation but the actual logic runs server-side only.
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        }
+        if (level.isClientSide) return InteractionResult.SUCCESS; // Return SUCCESS so client shows correct hand animation
 
-        // From here on, we are guaranteed to be on the server side.
-        CompoundTag pdata = player.getPersistentData();
-        String TAG_FIRST = "TrellisWireFirstPos";
+        CompoundTag root = player.getPersistentData();
+        CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);
+        String KEY_FIRST = "trellis_wire_fist_pos";
         final Runnable clearFirst = () -> {
-            if (pdata.contains(TAG_FIRST)) {
-                pdata.remove(TAG_FIRST);
+            if (persistent.contains(KEY_FIRST)) {
+                persistent.remove(KEY_FIRST);
                 if (player instanceof ServerPlayer sp) {
                     ModNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> sp),
                             new SetTrellisFirstPacket(0L, false)); // pos value ignored when has==false
@@ -64,9 +61,9 @@ public class TrellisWireItem extends Item {
             }
         };
 
-        // If no first pos stored -> store this as first selection on the player (server-side only)
-        if (!pdata.contains(TAG_FIRST)) {
-            pdata.putLong(TAG_FIRST, pos.asLong());
+        if (!persistent.contains(KEY_FIRST)) {
+            persistent.putLong(KEY_FIRST, pos.asLong());
+            root.put(TadackosDrinks.MOD_ID, persistent);
             // send client packet to update overlay cache
             if (player instanceof ServerPlayer sp) {
                 ModNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> sp),
@@ -76,26 +73,22 @@ public class TrellisWireItem extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        // We have a first pos -> attempt to place between first and this pos
-        BlockPos firstPos = BlockPos.of(pdata.getLong(TAG_FIRST));
+        BlockPos firstPos = BlockPos.of(persistent.getLong(KEY_FIRST));
 
-        // 1) Must be same Y
         if (firstPos.getY() != pos.getY()) {
             clearFirst.run();
             player.displayClientMessage(Component.translatable("message.tadackosdrinks.trellis_wire_fail_height"), true);
             return InteractionResult.FAIL;
         }
 
-        // 2) Must be aligned on X or Z (not diagonal) — exactly one axis must match
         boolean sameX = firstPos.getX() == pos.getX();
         boolean sameZ = firstPos.getZ() == pos.getZ();
-        if (!(sameX ^ sameZ)) {
+        if (sameX == sameZ) {
             clearFirst.run();
             player.displayClientMessage(Component.translatable("message.tadackosdrinks.trellis_wire_fail_aligned"), true);
             return InteractionResult.FAIL;
         }
 
-        // 3) Compute number of wire blocks needed (spaces between)
         int distance = sameX ? Math.abs(firstPos.getZ() - pos.getZ()) : Math.abs(firstPos.getX() - pos.getX());
         int countNeeded = distance - 1; // exclude the trellis blocks themselves
 
@@ -105,8 +98,7 @@ public class TrellisWireItem extends Item {
             return InteractionResult.FAIL;
         }
 
-        // NEW: Count total available of this wire item across the player's inventory and offhand
-        Item targetItem = this; // this TrellisWireItem instance
+        Item targetItem = this;
         int totalAvailable = countItemInPlayerInventory(player, targetItem);
 
         if (!player.isCreative() && totalAvailable < countNeeded) {
@@ -115,21 +107,19 @@ public class TrellisWireItem extends Item {
             return InteractionResult.FAIL;
         }
 
-        // 5) Build the list of positions between them
         List<BlockPos> positions = new ArrayList<>();
-        if (sameX) { // Z changes
+        if (sameX) {
             int minZ = Math.min(firstPos.getZ(), pos.getZ());
             for (int i = 1; i <= countNeeded; i++) {
                 positions.add(new BlockPos(pos.getX(), pos.getY(), minZ + i));
             }
-        } else { // sameZ -> X changes
+        } else {
             int minX = Math.min(firstPos.getX(), pos.getX());
             for (int i = 1; i <= countNeeded; i++) {
                 positions.add(new BlockPos(minX + i, pos.getY(), pos.getZ()));
             }
         }
 
-        // 6) Check for obstacles (replaceable or air)
         for (BlockPos wirePos : positions) {
             BlockState stateAt = level.getBlockState(wirePos);
             if (!stateAt.isAir() && !stateAt.canBeReplaced()) {
@@ -139,38 +129,27 @@ public class TrellisWireItem extends Item {
             }
         }
 
-        // 7) Place wires (set facing depending on line direction)
-        Direction facingForPlaced = sameX ? Direction.NORTH : Direction.EAST; // wires face north for Z-lines, east for X-lines
+        Direction facingForPlaced = sameX ? Direction.NORTH : Direction.EAST;
         for (BlockPos wirePos : positions) {
             BlockState wireState = ModBlocks.TRELLIS_WIRE.get().defaultBlockState()
                     .setValue(TrellisWireBlock.FACING, facingForPlaced);
-            level.setBlock(wirePos, wireState, 3);
+            level.setBlock(wirePos, wireState, Block.UPDATE_ALL);
             // notify neighbors so trellises update immediately
             level.updateNeighborsAt(wirePos, ModBlocks.TRELLIS_WIRE.get());
         }
 
-        // NEW: Consume items from player's inventory (unless creative)
-        if (!player.isCreative()) {
-            consumeItemFromPlayerInventory(player, targetItem, positions.size());
-        }
+        if (!player.isCreative()) consumeItemFromPlayerInventory(player, targetItem, positions.size());
 
-        // 9) clear stored first pos and success message
         clearFirst.run();
         player.displayClientMessage(Component.translatable("message.tadackosdrinks.trellis_wire_success_placed", positions.size()), true);
         return InteractionResult.SUCCESS;
     }
 
-    /* --------------------
-    Helper methods below
-    -------------------- */
-
     private int countItemInPlayerInventory(Player player, Item target) {
         int count = 0;
-        // main inventory
         for (ItemStack s : player.getInventory().items) {
             if (!s.isEmpty() && s.getItem() == target) count += s.getCount();
         }
-        // offhand
         for (ItemStack s : player.getInventory().offhand) {
             if (!s.isEmpty() && s.getItem() == target) count += s.getCount();
         }
@@ -180,7 +159,6 @@ public class TrellisWireItem extends Item {
     private void consumeItemFromPlayerInventory(Player player, Item target, int amount) {
         int remaining = amount;
 
-        // Consume from main inventory first (slots 0..)
         NonNullList<ItemStack> items = player.getInventory().items;
         for (int i = 0; i < items.size() && remaining > 0; i++) {
             ItemStack s = items.get(i);
@@ -193,7 +171,6 @@ public class TrellisWireItem extends Item {
             }
         }
 
-        // Then consume from offhand if still needed
         NonNullList<ItemStack> offhand = player.getInventory().offhand;
         for (int i = 0; i < offhand.size() && remaining > 0; i++) {
             ItemStack s = offhand.get(i);

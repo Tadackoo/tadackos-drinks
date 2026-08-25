@@ -42,7 +42,6 @@ public class ManualPressModel extends GeoModel<ManualPressBlockEntity> {
         } else if (state.getBlock() == ModBlocks.MANUAL_PRESS_WARPED.get()) {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_press_warped.png");
         }
-        // fall back to oak (or whatever default)
         return DEFAULT_TEXTURE;
     }
 
