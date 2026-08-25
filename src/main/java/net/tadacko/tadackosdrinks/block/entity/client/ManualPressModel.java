@@ -37,6 +37,10 @@ public class ManualPressModel extends GeoModel<ManualPressBlockEntity> {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_press_dark_oak.png");
         } else if (state.getBlock() == ModBlocks.MANUAL_PRESS_MANGROVE.get()) {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_press_mangrove.png");
+        } else if (state.getBlock() == ModBlocks.MANUAL_PRESS_CHERRY.get()) {
+            return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_press_cherry.png");
+        } else if (state.getBlock() == ModBlocks.MANUAL_PRESS_BAMBOO.get()) {
+            return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_press_bamboo.png");
         } else if (state.getBlock() == ModBlocks.MANUAL_PRESS_CRIMSON.get()) {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_press_crimson.png");
         } else if (state.getBlock() == ModBlocks.MANUAL_PRESS_WARPED.get()) {

@@ -37,6 +37,10 @@ public class ManualCrusherModel extends GeoModel<ManualCrusherBlockEntity> {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_crusher_dark_oak.png");
         } else if (state.getBlock() == ModBlocks.MANUAL_CRUSHER_MANGROVE.get()) {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_crusher_mangrove.png");
+        } else if (state.getBlock() == ModBlocks.MANUAL_CRUSHER_CHERRY.get()) {
+            return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_crusher_cherry.png");
+        } else if (state.getBlock() == ModBlocks.MANUAL_CRUSHER_BAMBOO.get()) {
+            return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_crusher_bamboo.png");
         } else if (state.getBlock() == ModBlocks.MANUAL_CRUSHER_CRIMSON.get()) {
             return new ResourceLocation(TadackosDrinks.MOD_ID, "textures/block/manual_crusher_crimson.png");
         } else if (state.getBlock() == ModBlocks.MANUAL_CRUSHER_WARPED.get()) {
