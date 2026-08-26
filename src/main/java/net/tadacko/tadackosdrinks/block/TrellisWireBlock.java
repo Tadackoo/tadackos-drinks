@@ -134,10 +134,10 @@ public class TrellisWireBlock extends Block {
             return true;
         }
 
-        if (state.hasProperty(TrellisWireBlock.FACING)) {
+        if (state.getBlock() instanceof TrellisWireBlock) {
             Direction neighborFacing = state.getValue(TrellisWireBlock.FACING);
             return neighborFacing == requiredFacing || neighborFacing == requiredFacing.getOpposite();
-        } else if (state.hasProperty(GrapeWireCropBlock.FACING)) {
+        } else if (state.getBlock() instanceof GrapeWireCropBlock) {
             Direction neighborFacing = state.getValue(GrapeWireCropBlock.FACING);
             return neighborFacing == requiredFacing || neighborFacing == requiredFacing.getOpposite();
         }

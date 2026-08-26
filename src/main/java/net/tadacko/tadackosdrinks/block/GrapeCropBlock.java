@@ -21,8 +21,6 @@ import net.minecraftforge.common.IPlantable;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import static net.tadacko.tadackosdrinks.block.TrellisBlock.getWireProp;
-
 public class GrapeCropBlock extends CropBlock {
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
     public static final IntegerProperty VARIANT = IntegerProperty.create("variant", 0, 10);
@@ -272,18 +270,18 @@ public class GrapeCropBlock extends CropBlock {
     public static BlockState updateWireConnections(BlockState state, LevelAccessor level, BlockPos pos) {
         BlockState updated = state;
         for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BooleanProperty wireProp = getWireProp(dir);
+            BooleanProperty wireProp = TrellisBlock.getWireProp(dir);
             BlockPos checkPos = pos.relative(dir);
             BlockState neighborState = level.getBlockState(checkPos);
             boolean hasWire = false;
 
             // Accept facing toward this block OR away from this block
-            if (neighborState.hasProperty(TrellisWireBlock.FACING)) {
+            if (neighborState.getBlock() instanceof TrellisWireBlock) {
                 Direction neighborFacing = neighborState.getValue(TrellisWireBlock.FACING);
                 if (neighborFacing == dir.getOpposite() || neighborFacing == dir) {
                     hasWire = true;
                 }
-            } else if (neighborState.hasProperty(GrapeWireCropBlock.FACING)) {
+            } else if (neighborState.getBlock() instanceof GrapeWireCropBlock) {
                 Direction neighborFacing = neighborState.getValue(GrapeWireCropBlock.FACING);
                 if (neighborFacing == dir.getOpposite() || neighborFacing == dir) {
                     hasWire = true;
@@ -300,10 +298,10 @@ public class GrapeCropBlock extends CropBlock {
     private boolean canGroundSpreadToWire(LevelAccessor level, BlockPos wirePos, Direction dir) {
         BlockState state = level.getBlockState(wirePos);
 
-        if (state.hasProperty(TrellisWireBlock.FACING)) {
+        if (state.getBlock() instanceof TrellisWireBlock) {
             Direction neighborFacing = state.getValue(TrellisWireBlock.FACING);
             return neighborFacing == dir || neighborFacing == dir.getOpposite();
-        } else if (state.hasProperty(GrapeWireCropBlock.FACING)) {
+        } else if (state.getBlock() instanceof GrapeWireCropBlock) {
             Direction neighborFacing = state.getValue(GrapeWireCropBlock.FACING);
             return neighborFacing == dir || neighborFacing == dir.getOpposite();
         }
