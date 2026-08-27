@@ -41,4 +41,4 @@ Crops: Barley, Hops, Grapes, Juniper, Agave
 ![Screenshot of equipment blocks and crops](.github/assets/equipment-and-crops.png)
 ![Screenshot of drinks](.github/assets/drinks.png)
 ![Screenshot of all wood variants of blocks that have them](.github/assets/wood-variants.png)
-![Screenshot of all wood variants of blocks that have them](.github/assets/book-beer-page.png)
+![Screenshot of the Guide Book Beer page](.github/assets/book-beer-page.png)
