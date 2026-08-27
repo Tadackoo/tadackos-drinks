@@ -939,7 +939,9 @@ final class BackgroundDecoratedPage implements GuidePage {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1f, 1f, 1f, icon.alpha());
+        RenderSystem.disableDepthTest();
         graphics.blit(0, 0, 0, 18, 18, sprite);
+        RenderSystem.enableDepthTest();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
         graphics.pose().popPose();
@@ -960,7 +962,9 @@ final class BackgroundDecoratedPage implements GuidePage {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1f, 1f, 1f, icon.alpha());
+        RenderSystem.disableDepthTest();
         graphics.blit(0, 0, 0, icon.size(), icon.size(), sprite);
+        RenderSystem.enableDepthTest();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
         graphics.pose().popPose();

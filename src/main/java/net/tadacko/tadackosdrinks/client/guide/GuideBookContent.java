@@ -220,7 +220,7 @@ public final class GuideBookContent {
                 ))); // 13
 
         pages.add(BackgroundDecoratedPage.wrap(
-                new TablePage("", t("p13.body"),
+                new TablePage(t("p13.title"), t("p13.body"),
                         List.of(
                                 List.of(t("p13.table.1.1"), t("p13.table.1.2")),
                                 List.of(t("p13.table.2.1"), t("p13.table.2.2")),
