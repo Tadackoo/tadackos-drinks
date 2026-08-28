@@ -1,3 +1,6 @@
+[![Modrinth](https://img.shields.io/modrinth/dt/bDMTLPGY?logo=modrinth&color=#00AF5C)](https://modrinth.com/mod/tadackos-drinks)
+[![CurseForge](https://img.shields.io/curseforge/dt/1670856?logo=curseforge&color=%23F16436)](https://www.curseforge.com/minecraft/mc-mods/tadackos-drinks)
+
 ## AI disclosure
 
 About 80% of the code is AI generated, everything else (models, textures, text, etc.) is made by me. This project is mainly a learning experience so I am slowly transitioning to writing most of the code myself as I learn.
