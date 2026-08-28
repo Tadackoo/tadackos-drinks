@@ -1,5 +1,5 @@
-[![Modrinth](https://img.shields.io/modrinth/dt/bDMTLPGY?logo=modrinth&color=#00AF5C)](https://modrinth.com/mod/tadackos-drinks)
-[![CurseForge](https://img.shields.io/curseforge/dt/1670856?logo=curseforge&color=%23F16436)](https://www.curseforge.com/minecraft/mc-mods/tadackos-drinks)
+[![Modrinth](https://img.shields.io/modrinth/dt/bDMTLPGY?logo=modrinth&color=00AF5C)](https://modrinth.com/mod/tadackos-drinks)
+[![CurseForge](https://img.shields.io/curseforge/dt/1670856?logo=curseforge&color=F16436)](https://www.curseforge.com/minecraft/mc-mods/tadackos-drinks)
 
 ## AI disclosure
 
