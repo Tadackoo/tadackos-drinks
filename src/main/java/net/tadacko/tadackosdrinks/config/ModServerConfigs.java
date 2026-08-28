@@ -14,7 +14,7 @@ public class ModServerConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.ConfigValue<Float> CHARISMA_MULTIPLIER;
+    public static final ForgeConfigSpec.DoubleValue CHARISMA_MULTIPLIER;
     public static final ForgeConfigSpec.IntValue MOLASSES_STACK_SIZE;
     public static final ForgeConfigSpec.IntValue KEG_STACK_SIZE;
     public static final ForgeConfigSpec.IntValue GLASS_STACK_SIZE;
@@ -24,7 +24,7 @@ public class ModServerConfigs {
         BUILDER.comment("These will only work for the world this file belongs to\nCommon configs are located at minecraft/config/tadackosdrinks-common.toml")
                 .define("_serverReadMe", "");
         CHARISMA_MULTIPLIER = BUILDER.comment("How much the Charisma effect discounts Villager prices per level (default 0.1)")
-                .define("charismaMultiplier", 0.1f); // negative allowed, reverses effect
+                .defineInRange("charismaMultiplier", 0.1, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
         MOLASSES_STACK_SIZE = BUILDER.comment("How much Sugarcane Molasses stacks to (default 16)")
                 .defineInRange("molassesStackSize", 16, 1, 64);
         KEG_STACK_SIZE = BUILDER.comment("How much Kegs stack to (default 1)")
@@ -42,7 +42,7 @@ public class ModServerConfigs {
     public static void onConfigLoad(ModConfigEvent event) {
         if (event.getConfig().getSpec() == SPEC) {
             // can't be in common, used in client code, would cause desync
-            CharismaEffect.CharismaEventHandler.charismaMultiplier = CHARISMA_MULTIPLIER.get();
+            CharismaEffect.CharismaEventHandler.charismaMultiplier = CHARISMA_MULTIPLIER.get().floatValue();
             ModItems.molassesStackSize = MOLASSES_STACK_SIZE.get();
             ModItems.kegStackSize = KEG_STACK_SIZE.get();
             ModItems.glassStackSize = GLASS_STACK_SIZE.get();
