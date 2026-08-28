@@ -1,14 +1,14 @@
 {
   "multipart": [
-    { "when": { "part": "bottom", "clock": false, "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom" } },
-    { "when": { "part": "bottom", "clock": false, "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 90 } },
-    { "when": { "part": "bottom", "clock": false, "facing": "south" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 180 } },
-    { "when": { "part": "bottom", "clock": false, "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 270 } },
+    { "when": { "part": "bottom", "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom" } },
+    { "when": { "part": "bottom", "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 90 } },
+    { "when": { "part": "bottom", "facing": "south" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 180 } },
+    { "when": { "part": "bottom", "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom", "y": 270 } },
 
-    { "when": { "part": "bottom", "clock": true, "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked" } },
-    { "when": { "part": "bottom", "clock": true, "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked", "y": 90 } },
-    { "when": { "part": "bottom", "clock": true, "facing": "south" }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked", "y": 180 } },
-    { "when": { "part": "bottom", "clock": true, "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/column_still_bottom_clocked", "y": 270 } },
+    { "when": { "part": "bottom", "clock": true, "facing": "north" }, "apply": { "model": "tadackosdrinks:block/still_clock" } },
+    { "when": { "part": "bottom", "clock": true, "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/still_clock", "y": 90 } },
+    { "when": { "part": "bottom", "clock": true, "facing": "south" }, "apply": { "model": "tadackosdrinks:block/still_clock", "y": 180 } },
+    { "when": { "part": "bottom", "clock": true, "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/still_clock", "y": 270 } },
 
     { "when": { "part": "middle", "facing": "north" }, "apply": { "model": "tadackosdrinks:block/column_still" } },
     { "when": { "part": "middle", "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/column_still", "y": 90 } },

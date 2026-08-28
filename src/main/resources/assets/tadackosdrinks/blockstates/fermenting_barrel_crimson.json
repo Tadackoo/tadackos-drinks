@@ -1,28 +1,28 @@
 {
-  "variants": {
-    "state=open,facing=north": {"model": "tadackosdrinks:block/fermenting_barrel_crimson"},
-    "state=open,facing=south": {"model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 180},
-    "state=open,facing=west":  {"model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 270},
-    "state=open,facing=east":  {"model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 90},
+  "multipart": [
+    { "when": { "facing": "north" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_crimson" } },
+    { "when": { "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 90 } },
+    { "when": { "facing": "south" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 180 } },
+    { "when": { "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_crimson", "y": 270 } },
 
-    "state=closed,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson"},
-    "state=closed,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 180},
-    "state=closed,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 270},
-    "state=closed,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 90},
+    { "when": { "state": "closed", "facing": "north" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson" } },
+    { "when": { "state": "closed", "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson", "y": 90 } },
+    { "when": { "state": "closed", "facing": "south" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson", "y": 180 } },
+    { "when": { "state": "closed", "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson", "y": 270 } },
 
-    "state=closed,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson"},
-    "state=closed,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 180},
-    "state=closed,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 270},
-    "state=closed,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 90},
+    { "when": { "state": "closed", "clock": true, "facing": "north" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock" } },
+    { "when": { "state": "closed", "clock": true, "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock", "y": 90 } },
+    { "when": { "state": "closed", "clock": true, "facing": "south" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock", "y": 180 } },
+    { "when": { "state": "closed", "clock": true, "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock", "y": 270 } },
 
-    "state=yeast,facing=north,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson"},
-    "state=yeast,facing=south,clock=false": {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 180},
-    "state=yeast,facing=west,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 270},
-    "state=yeast,facing=east,clock=false":  {"model": "tadackosdrinks:block/fermenting_barrel_closed_crimson", "y": 90},
+    { "when": { "state": "yeast", "facing": "north" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson" } },
+    { "when": { "state": "yeast", "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson", "y": 90 } },
+    { "when": { "state": "yeast", "facing": "south" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson", "y": 180 } },
+    { "when": { "state": "yeast", "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_lid_crimson", "y": 270 } },
 
-    "state=yeast,facing=north,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson"},
-    "state=yeast,facing=south,clock=true": {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 180},
-    "state=yeast,facing=west,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 270},
-    "state=yeast,facing=east,clock=true":  {"model": "tadackosdrinks:block/fermenting_barrel_clocked_crimson", "y": 90}
-  }
+    { "when": { "state": "yeast", "clock": true, "facing": "north" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock" } },
+    { "when": { "state": "yeast", "clock": true, "facing": "east"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock", "y": 90 } },
+    { "when": { "state": "yeast", "clock": true, "facing": "south" }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock", "y": 180 } },
+    { "when": { "state": "yeast", "clock": true, "facing": "west"  }, "apply": { "model": "tadackosdrinks:block/fermenting_barrel_clock", "y": 270 } }
+  ]
 }

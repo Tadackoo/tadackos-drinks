@@ -1,0 +1,6 @@
+{
+	"parent": "tadackosdrinks:block/fermenting_barrel_lid",
+	"textures": {
+		"texture": "tadackosdrinks:block/birch_planks_barrel"
+	}
+}
