@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -54,8 +55,7 @@ public class TadackosDrinks
 {
     public static final String MOD_ID = "tadackosdrinks";
 
-    public TadackosDrinks()
-    {
+    public TadackosDrinks() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModCreativeModeTab.register(modEventBus);
@@ -91,8 +91,7 @@ public class TadackosDrinks
         MinecraftForge.EVENT_BUS.addListener(InebriationEffect::onEntityLeave);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(WortCauldronInteraction::bootstrap);
 
         DrinkwareFluidRegistry.register(ModFluids.BEER_WHEAT.source().get(), ModItems.BEER_GLASS_EMPTY.get(), ModItems.BEER_WHEAT_GLASS.get(), 500);
@@ -155,6 +154,29 @@ public class TadackosDrinks
         for (ModFluids.FluidEntry entry : ModFluids.ALL_FLUIDS) {
             CauldronFluidRegistry.register(entry.cauldron().get(), entry.source().get(), 1000);
         }
+
+        event.enqueueWork(() -> {
+            ComposterBlock.COMPOSTABLES.put(ModItems.WHEAT_SEEDS_MALTED.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.WHEAT_SEEDS_CRUSHED.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.BARLEY_SEEDS.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.BARLEY_SEEDS_MALTED.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.BARLEY_SEEDS_CRUSHED.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.BARLEY.get(), 0.65f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.HOP_SEEDS.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.HOPS.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.GRAPE_SEEDS_RED.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.GRAPE_SEEDS_WHITE.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.GRAPES_RED.get(), 0.5f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.GRAPES_WHITE.get(), 0.5f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.SUGAR_CANE_CRUSHED.get(), 0.5f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.POTATO_CRUSHED.get(), 0.85f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.JUNIPER_BERRIES.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.AGAVE_SHOOT.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.AGAVE_PINA.get(), 0.5f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.AGAVE_PINA_BAKED.get(), 0.5f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.AGAVE_PINA_CRUSHED.get(), 0.3f);
+            ComposterBlock.COMPOSTABLES.put(ModItems.YEAST.get(), 0.65f);
+        });
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
