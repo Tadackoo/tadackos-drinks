@@ -41,7 +41,9 @@ Crops: Barley, Hops, Grapes, Juniper, Agave
 
 ## Screenshots
 
-![Screenshot of equipment blocks and crops](.github/assets/equipment-and-crops.png)
-![Screenshot of drinks](.github/assets/drinks.png)
-![Screenshot of all wood variants of blocks that have them](.github/assets/wood-variants.png)
-![Screenshot of the Guide Book Beer page](.github/assets/book-beer-page.png)
+<p align="center">
+  <img alt="Screenshot of equipment blocks and crops" src="https://github.com/Tadackoo/tadackos-drinks/blob/master/.github/assets/equipment-and-crops.png?raw=true" width="49%"/>
+  <img alt= "Screenshot of drinks" src="https://github.com/Tadackoo/tadackos-drinks/blob/master/.github/assets/drinks.png?raw=true" width="49%"/>
+  <img alt="Screenshot of all wood variants of blocks that have them" src="https://github.com/Tadackoo/tadackos-drinks/blob/master/.github/assets/wood-variants.png?raw=true" width="49%"/>
+  <img alt="Screenshot of the Guide Book Beer page" src="https://github.com/Tadackoo/tadackos-drinks/blob/master/.github/assets/book-beer-page.png?raw=true" width="49%"/>
+</p>
