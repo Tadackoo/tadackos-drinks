@@ -35,6 +35,29 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "tadackosdrinks:hops"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "tadackosdrinks:hop_crop",
+          "properties": {
+            "age": "3"
+          }
+        },
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.5
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:apply_bonus",
