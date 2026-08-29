@@ -68,9 +68,7 @@ public class HopCropBlock extends CropBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pState.getValue(AGE) < getMaxAge()) {
-            return InteractionResult.PASS;
-        }
+        if (pState.getValue(AGE) < getMaxAge()) return InteractionResult.PASS;
 
         if (!pLevel.isClientSide) {
             int j = 1 + pLevel.random.nextInt(2); // 50% split 1 or 2
@@ -80,7 +78,7 @@ public class HopCropBlock extends CropBlock {
                 ItemEntity itemEntity = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, drop);
                 pLevel.addFreshEntity(itemEntity);
             }
-            pLevel.setBlock(pPos, this.getStateForAge(MAX_AGE - 1), 2);
+            pLevel.setBlock(pPos, this.getStateForAge(getMaxAge() - 1), 2);
         }
         return InteractionResult.sidedSuccess(pLevel.isClientSide);
     }
@@ -117,9 +115,7 @@ public class HopCropBlock extends CropBlock {
     public void growCrops(Level pLevel, BlockPos pPos, BlockState pState) {
         int nextAge = this.getAge(pState) + this.getBonemealAgeIncrease(pLevel);
         int maxAge = this.getMaxAge();
-        if (nextAge > maxAge) {
-            nextAge = maxAge;
-        }
+        if (nextAge > maxAge) nextAge = maxAge;
 
         if (this.getAge(pState) >= SPREAD_AGE && pLevel.getBlockState(pPos.above()).is(ModBlocks.ROPE.get())) {
             pLevel.setBlock(pPos.above(), this.getStateForAge(0), 2);

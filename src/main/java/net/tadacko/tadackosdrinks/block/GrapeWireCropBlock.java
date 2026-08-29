@@ -80,48 +80,38 @@ public class GrapeWireCropBlock extends Block implements BonemealableBlock {
             return;
         }
 
-        if (age == 0 || age == 1) {
-            if (random.nextInt(SPREAD_TIME) != 0) return;
+        if (random.nextInt(SPREAD_TIME) != 0) return;
 
-            Direction facing = state.getValue(FACING);
-            Direction dir1 = facing;
-            Direction dir2 = facing.getOpposite();
+        Direction facing = state.getValue(FACING);
+        Direction dir1 = facing;
+        Direction dir2 = facing.getOpposite();
 
-            for (Direction dir : new Direction[]{dir1, dir2}) {
-                BlockPos target = pos.relative(dir);
-                if (world.getBlockState(target).is(ModBlocks.TRELLIS_WIRE.get())) {
-                    // place child without doing support checks here; the child will validate itself
-                    BlockState child = this.sameVariantWire.get().defaultBlockState()
-                            .setValue(AGE, 0)
-                            .setValue(FACING, facing);
-                    world.setBlock(target, child, Block.UPDATE_ALL);
-                }
+        for (Direction dir : new Direction[]{dir1, dir2}) {
+            BlockPos target = pos.relative(dir);
+            if (world.getBlockState(target).is(ModBlocks.TRELLIS_WIRE.get())) {
+                // place child without doing support checks here; the child will validate itself
+                BlockState child = this.sameVariantWire.get().defaultBlockState()
+                        .setValue(AGE, 0)
+                        .setValue(FACING, facing);
+                world.setBlock(target, child, Block.UPDATE_ALL);
             }
         }
     }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) return InteractionResult.SUCCESS;
-        if (player.getItemInHand(hand).is(Items.BONE_MEAL)) return InteractionResult.PASS;
+        if (state.getValue(AGE) < 1) return InteractionResult.PASS;
 
-        int age = state.getValue(AGE);
-        if (age == 1) {
+        if (!level.isClientSide) {
             ItemStack grapesStack = new ItemStack(this.grapeItem.get(), 4);
 
-            boolean added = player.addItem(grapesStack);
-            if (!added) {
+            if (!player.addItem(grapesStack)) {
                 ItemEntity ent = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, grapesStack);
                 level.addFreshEntity(ent);
             }
-
-            BlockState newState = state.setValue(AGE, 0);
-            level.setBlock(pos, newState, Block.UPDATE_ALL);
-
-            return InteractionResult.CONSUME;
+            level.setBlock(pos, state.setValue(AGE, 0), Block.UPDATE_ALL);
         }
-
-        return InteractionResult.PASS;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Nullable
@@ -190,12 +180,6 @@ public class GrapeWireCropBlock extends Block implements BonemealableBlock {
         int age = state.getValue(AGE);
         Direction facing = state.getValue(FACING);
 
-        if (age == 0) {
-            BlockState grown = state.setValue(AGE, 1);
-            world.setBlock(pos, grown, Block.UPDATE_ALL);
-            return;
-        }
-
         for (Direction dir : new Direction[]{facing, facing.getOpposite()}) {
             BlockPos target = pos.relative(dir);
             if (world.getBlockState(target).is(ModBlocks.TRELLIS_WIRE.get())) {
@@ -203,8 +187,11 @@ public class GrapeWireCropBlock extends Block implements BonemealableBlock {
                         .setValue(AGE, 0)
                         .setValue(FACING, facing);
                 world.setBlock(target, child, Block.UPDATE_ALL);
+                return;
             }
         }
+
+        if (age == 0) world.setBlock(pos, state.setValue(AGE, 1), Block.UPDATE_ALL);
     }
 
     // onRemove + defer replacement to make it work in creative and drop stuff in survival

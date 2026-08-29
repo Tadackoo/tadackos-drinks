@@ -163,7 +163,7 @@ public class GrapeCropBlock extends CropBlock {
 
         if (currentAge >= 1 && pRandom.nextInt(SPREAD_TIME) == 0) attemptSideSpread(pLevel, pPos);
 
-        if (currentAge == MAX_AGE) {
+        if (currentAge == getMaxAge()) {
             if (pLevel.getBlockState(pPos.above()).getBlock() instanceof TrellisBlock) {
                 // Preserve VARIANT when spawning above
                 BlockState newState = this.defaultBlockState()
@@ -184,7 +184,7 @@ public class GrapeCropBlock extends CropBlock {
     public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState, boolean pIsClient) {
         int age = getAge(pState);
 
-        if (age < MAX_AGE) return true;
+        if (age == 0 || age == getMaxAge() - 1) return true;
 
         boolean canSpreadUp = pLevel.getBlockState(pPos.above()).getBlock() instanceof TrellisBlock;
         boolean canSpreadSideways = false;
@@ -204,11 +204,11 @@ public class GrapeCropBlock extends CropBlock {
     public void growCrops(Level pLevel, BlockPos pPos, BlockState pState) {
         int currentAge = this.getAge(pState);
         int nextAge = currentAge + this.getBonemealAgeIncrease(pLevel);
-        if (nextAge > MAX_AGE) nextAge = MAX_AGE;
+        if (nextAge > getMaxAge()) nextAge = getMaxAge();
 
         if (currentAge >= 1) attemptSideSpread(pLevel, pPos);
 
-        if (currentAge == MAX_AGE) {
+        if (currentAge == getMaxAge()) {
             if (pLevel.getBlockState(pPos.above()).getBlock() instanceof TrellisBlock) {
                 // Preserve VARIANT when spawning above
                 BlockState newState = this.defaultBlockState()
@@ -293,16 +293,11 @@ public class GrapeCropBlock extends CropBlock {
         return updated;
     }
 
-    // Helper that decides whether we can spread from ground crop at `pos` into a given wire at `wirePos`.
-    // Uses same policy as GrapeWireCropBlock.canSpreadToWire but also ensures there's a TrellisWire block to replace.
     private boolean canGroundSpreadToWire(LevelAccessor level, BlockPos wirePos, Direction dir) {
         BlockState state = level.getBlockState(wirePos);
 
         if (state.getBlock() instanceof TrellisWireBlock) {
             Direction neighborFacing = state.getValue(TrellisWireBlock.FACING);
-            return neighborFacing == dir || neighborFacing == dir.getOpposite();
-        } else if (state.getBlock() instanceof GrapeWireCropBlock) {
-            Direction neighborFacing = state.getValue(GrapeWireCropBlock.FACING);
             return neighborFacing == dir || neighborFacing == dir.getOpposite();
         }
 
