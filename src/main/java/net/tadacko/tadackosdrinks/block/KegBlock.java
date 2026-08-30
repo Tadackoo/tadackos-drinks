@@ -97,9 +97,7 @@ public class KegBlock extends Block implements EntityBlock {
     public static void pickUpKeg(Level level, BlockPos pos, KegBlockEntity keg, Player player) {
         ItemStack kegItem = buildKegItemStack(keg);
 
-        if (!player.getInventory().add(kegItem)) {
-            player.drop(kegItem, false);
-        }
+        if (!player.getInventory().add(kegItem)) player.drop(kegItem, false);
 
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         level.playSound(null, pos, SoundEvents.METAL_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -109,9 +107,7 @@ public class KegBlock extends Block implements EntityBlock {
         ItemStack kegItem = new ItemStack(ModItems.KEG.get());
 
         CompoundTag fluidTag = keg.saveToItemTag();
-        if (!fluidTag.isEmpty()) {
-            kegItem.getOrCreateTag().merge(fluidTag);
-        }
+        if (!fluidTag.isEmpty()) kegItem.getOrCreateTag().merge(fluidTag);
 
         return kegItem;
     }
@@ -126,31 +122,24 @@ public class KegBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
-        return false;
-    }
+    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) { return false; }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.HORIZONTAL_FACING);
-    }
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(BlockStateProperties.HORIZONTAL_FACING); }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
-    }
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) { return SHAPE; }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
-    }
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) { return SHAPE; }
 
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        if (!level.isClientSide && !player.getAbilities().instabuild
-                && level.getBlockEntity(pos) instanceof KegBlockEntity keg) {
+        if (!level.isClientSide && !player.getAbilities().instabuild && level.getBlockEntity(pos) instanceof KegBlockEntity keg)
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), buildKegItemStack(keg));
-        }
         super.playerWillDestroy(level, pos, state, player);
     }
+
+    @Override
+    public Item asItem() { return ModItems.KEG.get(); }
 }

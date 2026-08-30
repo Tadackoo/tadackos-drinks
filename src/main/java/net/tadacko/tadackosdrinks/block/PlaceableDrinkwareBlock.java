@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -18,17 +19,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.tadacko.tadackosdrinks.block.entity.PlaceableDrinkwareBlockEntity;
+import net.tadacko.tadackosdrinks.item.ModItems;
 
 public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
     public static final EnumProperty<DrinkVariant> VARIANT = EnumProperty.create("variant", DrinkVariant.class);
-
-    private static final VoxelShape SHAPE = Block.box(
-            4.0D, 0.0D, 4.0D,
-            12.0D, 8.0D, 12.0D
-    );
+    private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
 
     public PlaceableDrinkwareBlock(Properties properties) {
         super(properties);
@@ -44,23 +43,20 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new PlaceableDrinkwareBlockEntity(pos, state);
-    }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new PlaceableDrinkwareBlockEntity(pos, state); }
 
     // called from DrinkwareInteractionHandler to make it work when stuff in offhand
     public boolean tryPickup(Level level, BlockPos pos, Player player) {
-        BlockEntity be = level.getBlockEntity(pos);
-        if (!(be instanceof PlaceableDrinkwareBlockEntity jarBE)) return false;
+        if (!(level.getBlockEntity(pos) instanceof PlaceableDrinkwareBlockEntity drinkBE)) return false;
 
-        ItemStack stored = jarBE.getStoredStack();
+        ItemStack stored = drinkBE.getStoredStack();
         if (stored.isEmpty()) return false;
 
         ItemStack give = stored.copy();
         give.setCount(1);
         if (!player.getInventory().add(give)) player.drop(give, false);
 
-        jarBE.setStoredStack(ItemStack.EMPTY);
+        drinkBE.setStoredStack(ItemStack.EMPTY);
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         level.playSound(null, pos, SoundEvents.METAL_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
         return true;
@@ -69,9 +65,8 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!player.getAbilities().instabuild) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof PlaceableDrinkwareBlockEntity jarBE) {
-                ItemStack stored = jarBE.getStoredStack();
+            if (level.getBlockEntity(pos) instanceof PlaceableDrinkwareBlockEntity drinkBE) {
+                ItemStack stored = drinkBE.getStoredStack();
                 if (!stored.isEmpty()) Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stored);
             }
         }
@@ -79,9 +74,7 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
-        return false;
-    }
+    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) { return false; }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -89,12 +82,16 @@ public class PlaceableDrinkwareBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
-    }
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) { return SHAPE; }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) { return SHAPE; }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        if (!(level.getBlockEntity(pos) instanceof PlaceableDrinkwareBlockEntity drinkBE)) return ItemStack.EMPTY;
+        ItemStack stored = drinkBE.getStoredStack();
+        if (stored.isEmpty()) return ItemStack.EMPTY;
+        return stored.copy();
     }
 }

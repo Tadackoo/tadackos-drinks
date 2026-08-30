@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.tadacko.tadackosdrinks.item.ModItems;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -64,9 +65,7 @@ public class GrapeWireCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AGE, FACING, UNSUPPORTED);
-    }
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(AGE, FACING, UNSUPPORTED); }
 
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
@@ -132,10 +131,7 @@ public class GrapeWireCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean isRandomlyTicking(BlockState state) {
-        // Always tick, because grapes can spread even when mature
-        return true;
-    }
+    public boolean isRandomlyTicking(BlockState state) { return true; }
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
@@ -171,9 +167,7 @@ public class GrapeWireCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean isBonemealSuccess(Level world, RandomSource rand, BlockPos pos, BlockState state) {
-        return true;
-    }
+    public boolean isBonemealSuccess(Level world, RandomSource rand, BlockPos pos, BlockState state) { return true; }
 
     @Override
     public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state) {
@@ -232,6 +226,9 @@ public class GrapeWireCropBlock extends Block implements BonemealableBlock {
             level.scheduleTick(pos, this, CHECK_DELAY);
         }
     }
+
+    @Override
+    public Item asItem() { return grapeItem == ModItems.GRAPES_RED ? ModItems.GRAPE_SEEDS_RED.get() : ModItems.GRAPE_SEEDS_WHITE.get(); }
 
     private boolean isLineConnectedToGround(LevelAccessor level, BlockPos startPos, Direction.Axis axis) {
         // Check the whole contiguous line of grape-wire-crops along `axis`

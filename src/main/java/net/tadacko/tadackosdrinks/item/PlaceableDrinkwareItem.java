@@ -53,12 +53,10 @@ public class PlaceableDrinkwareItem extends Item {
         level.playSound(null, placePos, SoundEvents.METAL_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
 
         // store the item in the block entity
-        if (!level.isClientSide) {
-            if (level.getBlockEntity(placePos) instanceof PlaceableDrinkwareBlockEntity be) {
-                ItemStack copy = context.getItemInHand().copy();
-                copy.setCount(1);
-                be.setStoredStack(copy);
-            }
+        if (level.getBlockEntity(placePos) instanceof PlaceableDrinkwareBlockEntity be) {
+            ItemStack copy = context.getItemInHand().copy();
+            copy.setCount(1);
+            be.setStoredStack(copy);
         }
 
         if (!context.getPlayer().getAbilities().instabuild) context.getItemInHand().shrink(1);
