@@ -39,7 +39,7 @@ public class ColumnStillRenderer implements BlockEntityRenderer<ColumnStillBlock
     private static final float SURFACE_FAR_MIN_Z = 4f / 16f;
     private static final float SURFACE_FAR_MAX_Z = 12f / 16f;
 
-    private static final ResourceLocation GLASS_TEXTURE = new ResourceLocation("minecraft", "block/light_blue_stained_glass");
+    private static final ResourceLocation GLASS_TEXTURE = new ResourceLocation("block/light_blue_stained_glass");
 
     public ColumnStillRenderer(BlockEntityRendererProvider.Context context) {}
 
@@ -110,8 +110,8 @@ public class ColumnStillRenderer implements BlockEntityRenderer<ColumnStillBlock
             // Rotate the segment's local geometry to match block facing (coords above are defined for SOUTH)
             poseStack.translate(0.5f, 0f, 0.5f);
             switch (facing) {
-                case SOUTH -> poseStack.mulPose(Axis.YP.rotationDegrees(0f));
-                case NORTH -> poseStack.mulPose(Axis.YP.rotationDegrees(180f));
+                case SOUTH -> poseStack.mulPose(Axis.YP.rotationDegrees(180f));
+                case NORTH -> poseStack.mulPose(Axis.YP.rotationDegrees(0f));
                 case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(-90f));
                 case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(90f));
             }

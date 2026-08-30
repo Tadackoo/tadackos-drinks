@@ -75,9 +75,7 @@ public class ColumnStillBlock extends BaseEntityBlock {
 
         if (level.getBlockState(pos.above()).is(this)) {
             Player player = pContext.getPlayer();
-            if (!level.isClientSide && player != null) {
-                player.displayClientMessage(Component.translatable("message.tadackosdrinks.column_still_place_fail_bottom"), true);
-            }
+            if (!level.isClientSide && player != null) player.displayClientMessage(Component.translatable("message.tadackosdrinks.column_still_place_fail_bottom"), true);
             return null;
         }
 
@@ -88,9 +86,7 @@ public class ColumnStillBlock extends BaseEntityBlock {
 
             if (belowSegment + 1 >= MAX_HEIGHT) {
                 Player player = pContext.getPlayer();
-                if (!level.isClientSide && player != null) {
-                    player.displayClientMessage(Component.translatable("message.tadackosdrinks.column_still_place_fail_height"), true);
-                }
+                if (!level.isClientSide && player != null) player.displayClientMessage(Component.translatable("message.tadackosdrinks.column_still_place_fail_height"), true);
                 return null;
             }
 
@@ -110,14 +106,10 @@ public class ColumnStillBlock extends BaseEntityBlock {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        if (level.getBlockState(pos.above()).is(this)) {
-            return false;
-        }
+        if (level.getBlockState(pos.above()).is(this)) return false;
 
         BlockState below = level.getBlockState(pos.below());
-        if (below.is(this)) {
-            return below.getValue(SEGMENT) + 1 < MAX_HEIGHT;
-        }
+        if (below.is(this)) return below.getValue(SEGMENT) + 1 < MAX_HEIGHT;
         return true;
     }
 
@@ -131,9 +123,7 @@ public class ColumnStillBlock extends BaseEntityBlock {
         if (!level.getBlockState(anyPos).is(ModBlocks.COLUMN_STILL.get())) return;
 
         BlockPos bottomPos = anyPos;
-        while (level.getBlockState(bottomPos.below()).is(ModBlocks.COLUMN_STILL.get())) {
-            bottomPos = bottomPos.below();
-        }
+        while (level.getBlockState(bottomPos.below()).is(ModBlocks.COLUMN_STILL.get())) bottomPos = bottomPos.below();
 
         int height = 0;
         while (height < MAX_HEIGHT && level.getBlockState(bottomPos.above(height)).is(ModBlocks.COLUMN_STILL.get())) {
@@ -175,9 +165,7 @@ public class ColumnStillBlock extends BaseEntityBlock {
                     .setValue(CLOCK, i == 0 && current.getValue(CLOCK))
                     .setValue(PART, part);
 
-            if (!updated.equals(current)) {
-                level.setBlock(pos, updated, Block.UPDATE_ALL);
-            }
+            if (!updated.equals(current)) level.setBlock(pos, updated, Block.UPDATE_ALL);
         }
 
         syncBlockEntities(level, bottomPos);
@@ -189,33 +177,28 @@ public class ColumnStillBlock extends BaseEntityBlock {
      * got removed and a segment above it became the new bottom), its data is migrated across.
      */
     private static void syncBlockEntities(Level level, BlockPos bottomPos) {
-        if (!(level.getBlockEntity(bottomPos) instanceof ColumnStillBlockEntity)) {
+        if (!(level.getBlockEntity(bottomPos) instanceof ColumnStillBlockEntity))
             level.setBlockEntity(new ColumnStillBlockEntity(bottomPos, level.getBlockState(bottomPos)));
-        }
     }
 
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
-        if (!level.isClientSide) {
-            refreshColumn(level, pos);
-        }
+        if (!level.isClientSide) refreshColumn(level, pos);
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos,
-                                Block block, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
-        if (!level.isClientSide) {
-            refreshColumn(level, pos);
-        }
+        if (!level.isClientSide) refreshColumn(level, pos);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
-                                 Player player, InteractionHand hand, BlockHitResult result) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+        ItemStack held = player.getItemInHand(hand);
+        if (held.getItem() == ModBlocks.COLUMN_STILL.get().asItem()) return InteractionResult.PASS;
+
         if (!level.isClientSide) {
-            ItemStack held = player.getItemInHand(hand);
             int segment = state.getValue(SEGMENT);
             BlockPos bottomPos = pos.below(segment);
             BlockState bottomState = level.getBlockState(bottomPos);
@@ -225,11 +208,8 @@ public class ColumnStillBlock extends BaseEntityBlock {
 
                 if (!player.isCreative()) {
                     ItemStack clockStack = new ItemStack(Items.CLOCK);
-                    boolean added = player.getInventory().add(clockStack);
-                    if (!added) {
-                        ItemEntity drop = new ItemEntity(level,
-                                pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
-                                clockStack);
+                    if (!player.getInventory().add(clockStack)) {
+                        ItemEntity drop = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, clockStack);
                         level.addFreshEntity(drop);
                     }
                 }
@@ -246,9 +226,7 @@ public class ColumnStillBlock extends BaseEntityBlock {
             // Fluid / GUI interaction always routes to the master (bottom) block entity
             BlockEntity be = level.getBlockEntity(bottomPos);
             if (be instanceof ColumnStillBlockEntity master) {
-                if (master.handleRightClick(player, hand)) {
-                    return InteractionResult.SUCCESS;
-                }
+                if (master.handleRightClick(player, hand)) return InteractionResult.SUCCESS;
             }
         }
 
