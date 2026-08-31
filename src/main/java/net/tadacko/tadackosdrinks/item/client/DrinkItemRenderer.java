@@ -16,6 +16,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.tadacko.tadackosdrinks.block.DrinkVariant;
+import net.tadacko.tadackosdrinks.block.entity.client.FermentingBarrelRenderer;
+import net.tadacko.tadackosdrinks.block.entity.client.PlaceableDrinkwareRenderer;
 import net.tadacko.tadackosdrinks.client.DrinkRenderHelper;
 import net.tadacko.tadackosdrinks.client.DrinkRenderHelper.Volume;
 import net.tadacko.tadackosdrinks.item.ModItems;
@@ -38,7 +40,7 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
     public DrinkItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) { super(dispatcher, modelSet); }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource buffers, int light, int overlay) {
+    public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
         if (!(stack.getItem() instanceof PlaceableDrinkwareItem drinkItem)) return;
 
         DrinkVariant variant = drinkItem.getVariant();
@@ -53,7 +55,7 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
         poseStack.translate(0.5f, 0.5f, 0.5f);
 
         // Render the base empty glass — renderStatic applies transforms internally
-        mc.getItemRenderer().renderStatic(emptyStack, ctx, light, overlay, poseStack, buffers, mc.level, 0);
+        mc.getItemRenderer().renderStatic(emptyStack, ctx, light, overlay, poseStack, bufferSource, mc.level, 0);
 
         // Apply the same transforms for fluid/foam so they align with the glass
         emptyModel.getTransforms().getTransform(ctx).apply(false, poseStack);
@@ -64,14 +66,15 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
         Volume vol = DrinkRenderHelper.getVolume(variant);
         if (fluidTex != null && vol != null) {
             TextureAtlasSprite fluidSprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidTex);
-            VertexConsumer vc = buffers.getBuffer(RenderType.translucent());
-            DrinkRenderHelper.renderFluid(vc, poseStack.last(), fluidSprite, vol, light, overlay);
+            VertexConsumer consumer = FermentingBarrelRenderer.fluidTranslucent ? bufferSource.getBuffer(RenderType.translucent()) :
+                    bufferSource.getBuffer(RenderType.solid());
+            DrinkRenderHelper.renderFluid(consumer, poseStack.last(), fluidSprite, vol, light, overlay);
 
             // Render foam if applicable
             ResourceLocation foamTex = DrinkRenderHelper.getFoamTexture(variant);
             if (foamTex != null) {
                 TextureAtlasSprite foamSprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(foamTex);
-                DrinkRenderHelper.renderFoam(vc, poseStack.last(), foamSprite, light, overlay);
+                DrinkRenderHelper.renderFoam(consumer, poseStack.last(), foamSprite, light, overlay);
             }
         }
 

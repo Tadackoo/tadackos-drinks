@@ -37,9 +37,14 @@ public class ModNetwork {
                 SetTrellisFirstPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
-        CHANNEL.registerMessage(id++, SyncPlayerConfigPacket.class,
-                SyncPlayerConfigPacket::encode,
-                SyncPlayerConfigPacket::decode,
-                SyncPlayerConfigPacket::handle);
+        CHANNEL.registerMessage(id++, SyncCharacterConfigPacket.class,
+                SyncCharacterConfigPacket::encode,
+                SyncCharacterConfigPacket::decode,
+                SyncCharacterConfigPacket::handle);
+
+        CHANNEL.registerMessage(id++, SyncABVConfigPacket.class,
+                SyncABVConfigPacket::encode,
+                SyncABVConfigPacket::decode,
+                SyncABVConfigPacket::handle);
     }
 }

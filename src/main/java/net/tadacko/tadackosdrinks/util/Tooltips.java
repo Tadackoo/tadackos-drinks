@@ -27,6 +27,22 @@ public class Tooltips {
     // Not built eagerly at class-load time to avoid touching item RegistryObjects before registration completes.
     public static Map<Item, List<Component>> TOOLTIP_MAP;
 
+    // fallback defaults, overridden by config values
+    public static double ABVBeer = 0.05;
+    public static double ABVWine = 0.12;
+    public static double ABVCider = 0.05;
+    public static double ABVMead = 0.12;
+    public static double ABVSpiritLow = 0.3;
+    public static double ABVSpiritMid = 0.6;
+    public static double ABVSpiritHigh = 0.8;
+    public static double ABVSpiritMax = 0.95;
+    public static double ABVWhisky = 0.4;
+    public static double ABVBrandy = 0.4;
+    public static double ABVRum = 0.4;
+    public static double ABVVodka = 0.4;
+    public static double ABVGin = 0.4;
+    public static double ABVTequila = 0.4;
+
     private static Map<Item, List<Component>> getTooltipMap() {
         if (TOOLTIP_MAP == null) {
             TOOLTIP_MAP = Map.<Item, List<Component>>ofEntries(
@@ -40,153 +56,153 @@ public class Tooltips {
                     Map.entry(ModItems.INEBRIATION_ICON.get(), List.of(Component.translatable(
                             "tooltip.tadackosdrinks.advancement_icon"))),
 
-                    Map.entry(ModItems.BEER_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModItems.BEER_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModItems.BEER_WHEAT_HOPPED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModItems.BEER_WHEAT_HOPPED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW),
                             Component.translatable("tooltip.tadackosdrinks.hopped").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModItems.BEER_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModItems.BEER_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModItems.BEER_BARLEY_HOPPED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModItems.BEER_BARLEY_HOPPED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD),
                             Component.translatable("tooltip.tadackosdrinks.hopped").withStyle(ChatFormatting.DARK_GREEN))),
 
-                    Map.entry(ModItems.WINE_RED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_RED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.red").withStyle(ChatFormatting.DARK_RED))),
-                    Map.entry(ModItems.WINE_RED_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_RED_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.red").withStyle(ChatFormatting.DARK_RED),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModItems.WINE_ROSE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_ROSE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.rose").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModItems.WINE_ROSE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_ROSE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.rose").withStyle(ChatFormatting.LIGHT_PURPLE),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModItems.WINE_ORANGE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_ORANGE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.orange").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModItems.WINE_ORANGE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_ORANGE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.orange").withStyle(ChatFormatting.GOLD),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModItems.WINE_WHITE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_WHITE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.white").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModItems.WINE_WHITE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModItems.WINE_WHITE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.white").withStyle(ChatFormatting.YELLOW),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModItems.CIDER_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVCider * 100))
+                    Map.entry(ModItems.CIDER_GLASS.get(), List.of(Component.literal(String.valueOf(ABVCider * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY))),
-                    Map.entry(ModItems.CIDER_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVCider * 100))
+                    Map.entry(ModItems.CIDER_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVCider * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModItems.MEAD_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVMead * 100))
+                    Map.entry(ModItems.MEAD_GLASS.get(), List.of(Component.literal(String.valueOf(ABVMead * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY))),
-                    Map.entry(ModItems.MEAD_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVMead * 100))
+                    Map.entry(ModItems.MEAD_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVMead * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModItems.WHISKY_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWhisky * 100))
+                    Map.entry(ModItems.WHISKY_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWhisky * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModItems.WHISKY_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWhisky * 100))
+                    Map.entry(ModItems.WHISKY_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(ABVWhisky * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
 
-                    Map.entry(ModItems.BRANDY_GRAPE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBrandy * 100))
+                    Map.entry(ModItems.BRANDY_GRAPE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVBrandy * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModItems.BRANDY_APPLE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBrandy * 100))
+                    Map.entry(ModItems.BRANDY_APPLE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVBrandy * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
 
-                    Map.entry(ModItems.RUM_JUICE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModItems.RUM_JUICE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN),
                             Component.translatable("tooltip.tadackosdrinks.light").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModItems.RUM_JUICE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModItems.RUM_JUICE_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN),
                             Component.translatable("tooltip.tadackosdrinks.dark").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModItems.RUM_MOLASSES_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModItems.RUM_MOLASSES_GLASS.get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN),
                             Component.translatable("tooltip.tadackosdrinks.light").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModItems.RUM_MOLASSES_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModItems.RUM_MOLASSES_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN),
                             Component.translatable("tooltip.tadackosdrinks.dark").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModItems.VODKA_GRAPE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_GRAPE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModItems.VODKA_APPLE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_APPLE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModItems.VODKA_HONEY_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_HONEY_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModItems.VODKA_SUGARCANE_JUICE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_SUGARCANE_JUICE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModItems.VODKA_SUGARCANE_MOLASSES_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_SUGARCANE_MOLASSES_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModItems.VODKA_POTATO_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_POTATO_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModItems.VODKA_AGAVE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_AGAVE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModItems.VODKA_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModItems.VODKA_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModItems.VODKA_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
 
-                    Map.entry(ModItems.GIN_GRAPE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_GRAPE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModItems.GIN_APPLE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_APPLE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModItems.GIN_HONEY_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_HONEY_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModItems.GIN_SUGARCANE_JUICE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_SUGARCANE_JUICE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModItems.GIN_SUGARCANE_MOLASSES_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_SUGARCANE_MOLASSES_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModItems.GIN_POTATO_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_POTATO_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModItems.GIN_AGAVE_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_AGAVE_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModItems.GIN_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_WHEAT_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModItems.GIN_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModItems.GIN_BARLEY_GLASS.get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
 
-                    Map.entry(ModItems.TEQUILA_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVTequila * 100))
+                    Map.entry(ModItems.TEQUILA_GLASS.get(), List.of(Component.literal(String.valueOf(ABVTequila * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.blanco").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModItems.TEQUILA_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVTequila * 100))
+                    Map.entry(ModItems.TEQUILA_AGED_GLASS.get(), List.of(Component.literal(String.valueOf(ABVTequila * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.anejo").withStyle(ChatFormatting.DARK_AQUA))),
 
@@ -207,382 +223,382 @@ public class Tooltips {
                             Component.translatable("tooltip.tadackosdrinks.boiled").withStyle(ChatFormatting.AQUA),
                             Component.translatable("tooltip.tadackosdrinks.hopped").withStyle(ChatFormatting.DARK_GREEN))),
 
-                    Map.entry(ModFluids.WASH_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModFluids.WASH_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.WASH_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModFluids.WASH_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.BEER_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModFluids.BEER_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.BEER_BARLEY_HOPPED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModFluids.BEER_BARLEY_HOPPED.bucket().get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD),
                             Component.translatable("tooltip.tadackosdrinks.hopped").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModFluids.BEER_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModFluids.BEER_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.BEER_WHEAT_HOPPED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModFluids.BEER_WHEAT_HOPPED.bucket().get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW),
                             Component.translatable("tooltip.tadackosdrinks.hopped").withStyle(ChatFormatting.DARK_GREEN))),
 
                     Map.entry(ModFluids.MUST_RED.bucket().get(), List.of(Component.translatable("tooltip.tadackosdrinks.red").withStyle(ChatFormatting.DARK_RED))),
-                    Map.entry(ModFluids.MUST_RED_FERMENTED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.MUST_RED_FERMENTED.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.red").withStyle(ChatFormatting.DARK_RED))),
                     Map.entry(ModFluids.JUICE_GRAPE_ROSE.bucket().get(), List.of(Component.translatable("tooltip.tadackosdrinks.rose").withStyle(ChatFormatting.LIGHT_PURPLE))),
                     Map.entry(ModFluids.MUST_WHITE.bucket().get(), List.of(Component.translatable("tooltip.tadackosdrinks.white").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.MUST_WHITE_FERMENTED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.MUST_WHITE_FERMENTED.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.white").withStyle(ChatFormatting.YELLOW))),
                     Map.entry(ModFluids.JUICE_GRAPE_WHITE.bucket().get(), List.of(Component.translatable("tooltip.tadackosdrinks.white").withStyle(ChatFormatting.YELLOW))),
 
-                    Map.entry(ModFluids.WINE_RED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_RED.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.red").withStyle(ChatFormatting.DARK_RED))),
-                    Map.entry(ModFluids.WINE_RED_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_RED_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.red").withStyle(ChatFormatting.DARK_RED),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModFluids.WINE_ROSE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_ROSE.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.rose").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.WINE_ROSE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_ROSE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.rose").withStyle(ChatFormatting.LIGHT_PURPLE),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModFluids.WINE_ORANGE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_ORANGE.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.orange").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.WINE_ORANGE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_ORANGE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.orange").withStyle(ChatFormatting.GOLD),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModFluids.WINE_WHITE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_WHITE.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.white").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.WINE_WHITE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WINE_WHITE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.white").withStyle(ChatFormatting.YELLOW),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModFluids.CIDER.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVCider * 100))
+                    Map.entry(ModFluids.CIDER.bucket().get(), List.of(Component.literal(String.valueOf(ABVCider * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY))),
-                    Map.entry(ModFluids.CIDER_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVCider * 100))
+                    Map.entry(ModFluids.CIDER_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVCider * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModFluids.MEAD.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVMead * 100))
+                    Map.entry(ModFluids.MEAD.bucket().get(), List.of(Component.literal(String.valueOf(ABVMead * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY))),
-                    Map.entry(ModFluids.MEAD_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVMead * 100))
+                    Map.entry(ModFluids.MEAD_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVMead * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.aged").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModFluids.SPIRIT_WHEAT_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_WHEAT_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.SPIRIT_WHEAT_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_WHEAT_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.SPIRIT_WHEAT_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.SPIRIT_WHEAT_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.SPIRIT_BARLEY_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_BARLEY_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.SPIRIT_BARLEY_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_BARLEY_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.SPIRIT_BARLEY_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.SPIRIT_BARLEY_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.SPIRIT_GRAPE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_GRAPE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_GRAPE_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_GRAPE_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_GRAPE_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.SPIRIT_GRAPE_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_APPLE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_APPLE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.SPIRIT_APPLE_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_APPLE_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.SPIRIT_APPLE_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.SPIRIT_APPLE_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.SPIRIT_HONEY_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_HONEY_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_HONEY_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_HONEY_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_HONEY_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.SPIRIT_HONEY_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_SUGARCANE_JUICE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_SUGARCANE_JUICE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModFluids.SPIRIT_SUGARCANE_JUICE_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_SUGARCANE_JUICE_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModFluids.SPIRIT_SUGARCANE_MOLASSES_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_SUGARCANE_MOLASSES_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModFluids.SPIRIT_SUGARCANE_MOLASSES_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_SUGARCANE_MOLASSES_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModFluids.SPIRIT_POTATO_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_POTATO_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModFluids.SPIRIT_POTATO_MID.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_POTATO_MID.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModFluids.SPIRIT_POTATO_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.SPIRIT_POTATO_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModFluids.SPIRIT_AGAVE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritLow * 100))
+                    Map.entry(ModFluids.SPIRIT_AGAVE_LOW.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritLow * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.SPIRIT_AGAVE_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.SPIRIT_AGAVE_HIGH.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
 
-                    Map.entry(ModFluids.CONCENTRATED_WHISKY_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_WHISKY_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.WHISKY_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWhisky * 100))
+                    Map.entry(ModFluids.WHISKY_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVWhisky * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.CONCENTRATED_WHISKY_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_WHISKY_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.WHISKY_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWhisky * 100))
+                    Map.entry(ModFluids.WHISKY_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVWhisky * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
 
-                    Map.entry(ModFluids.CONCENTRATED_BRANDY_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_BRANDY_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.BRANDY_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBrandy * 100))
+                    Map.entry(ModFluids.BRANDY_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(ABVBrandy * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.CONCENTRATED_BRANDY_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_BRANDY_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.BRANDY_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBrandy * 100))
+                    Map.entry(ModFluids.BRANDY_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(ABVBrandy * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
 
-                    Map.entry(ModFluids.WASH_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WASH_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModFluids.WASH_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WASH_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
 
-                    Map.entry(ModFluids.CONCENTRATED_RUM_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_RUM_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN),
                             Component.translatable("tooltip.tadackosdrinks.light").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.RUM_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModFluids.RUM_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN),
                             Component.translatable("tooltip.tadackosdrinks.light").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.CONCENTRATED_RUM_JUICE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_RUM_JUICE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN),
                             Component.translatable("tooltip.tadackosdrinks.dark").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModFluids.RUM_JUICE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModFluids.RUM_JUICE_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN),
                             Component.translatable("tooltip.tadackosdrinks.dark").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModFluids.CONCENTRATED_RUM_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_RUM_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN),
                             Component.translatable("tooltip.tadackosdrinks.light").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.RUM_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModFluids.RUM_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN),
                             Component.translatable("tooltip.tadackosdrinks.light").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.CONCENTRATED_RUM_MOLASSES_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_RUM_MOLASSES_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN),
                             Component.translatable("tooltip.tadackosdrinks.dark").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModFluids.RUM_MOLASSES_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVRum * 100))
+                    Map.entry(ModFluids.RUM_MOLASSES_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVRum * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN),
                             Component.translatable("tooltip.tadackosdrinks.dark").withStyle(ChatFormatting.DARK_AQUA))),
 
-                    Map.entry(ModFluids.WASH_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVWine * 100))
+                    Map.entry(ModFluids.WASH_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(ABVWine * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
 
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.VODKA_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.VODKA_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.VODKA_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModFluids.VODKA_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModFluids.VODKA_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModFluids.VODKA_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.VODKA_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.VODKA_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.CONCENTRATED_VODKA_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMax * 100))
+                    Map.entry(ModFluids.CONCENTRATED_VODKA_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMax * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.VODKA_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVVodka * 100))
+                    Map.entry(ModFluids.VODKA_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVVodka * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
 
-                    Map.entry(ModFluids.SPIRIT_GRAPE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_GRAPE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.GIN_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_GRAPE.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.grape").withStyle(ChatFormatting.DARK_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_APPLE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_APPLE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.GIN_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_APPLE.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.apple").withStyle(ChatFormatting.RED))),
-                    Map.entry(ModFluids.SPIRIT_HONEY_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_HONEY_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.GIN_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_HONEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.honey").withStyle(ChatFormatting.LIGHT_PURPLE))),
-                    Map.entry(ModFluids.SPIRIT_SUGARCANE_JUICE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_SUGARCANE_JUICE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModFluids.GIN_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_SUGARCANE_JUICE.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_juice").withStyle(ChatFormatting.GREEN))),
-                    Map.entry(ModFluids.SPIRIT_SUGARCANE_MOLASSES_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_SUGARCANE_MOLASSES_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModFluids.GIN_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_SUGARCANE_MOLASSES.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.sugarcane_molasses").withStyle(ChatFormatting.DARK_GREEN))),
-                    Map.entry(ModFluids.SPIRIT_POTATO_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_POTATO_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModFluids.GIN_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_POTATO.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.potato").withStyle(ChatFormatting.DARK_BLUE))),
-                    Map.entry(ModFluids.SPIRIT_AGAVE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_AGAVE_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.GIN_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.SPIRIT_WHEAT_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_WHEAT_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.GIN_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_WHEAT.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.wheat").withStyle(ChatFormatting.YELLOW))),
-                    Map.entry(ModFluids.SPIRIT_BARLEY_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.SPIRIT_BARLEY_MID_SPICED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD),
                             Component.translatable("tooltip.tadackosdrinks.spiced").withStyle(ChatFormatting.BLUE))),
-                    Map.entry(ModFluids.CONCENTRATED_GIN_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritHigh * 100))
+                    Map.entry(ModFluids.CONCENTRATED_GIN_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritHigh * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
-                    Map.entry(ModFluids.GIN_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVGin * 100))
+                    Map.entry(ModFluids.GIN_BARLEY.bucket().get(), List.of(Component.literal(String.valueOf(ABVGin * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.barley").withStyle(ChatFormatting.GOLD))),
 
-                    Map.entry(ModFluids.WASH_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVBeer * 100))
+                    Map.entry(ModFluids.WASH_AGAVE.bucket().get(), List.of(Component.literal(String.valueOf(ABVBeer * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.agave").withStyle(ChatFormatting.AQUA))),
 
-                    Map.entry(ModFluids.CONCENTRATED_TEQUILA.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.CONCENTRATED_TEQUILA.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.blanco").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.TEQUILA.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVTequila * 100))
+                    Map.entry(ModFluids.TEQUILA.bucket().get(), List.of(Component.literal(String.valueOf(ABVTequila * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.blanco").withStyle(ChatFormatting.AQUA))),
-                    Map.entry(ModFluids.CONCENTRATED_TEQUILA_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVSpiritMid * 100))
+                    Map.entry(ModFluids.CONCENTRATED_TEQUILA_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVSpiritMid * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.anejo").withStyle(ChatFormatting.DARK_AQUA))),
-                    Map.entry(ModFluids.TEQUILA_AGED.bucket().get(), List.of(Component.literal(String.valueOf(DrinkItem.ABVTequila * 100))
+                    Map.entry(ModFluids.TEQUILA_AGED.bucket().get(), List.of(Component.literal(String.valueOf(ABVTequila * 100))
                                     .append(Component.translatable("tooltip.tadackosdrinks.abv")).withStyle(ChatFormatting.GRAY),
                             Component.translatable("tooltip.tadackosdrinks.anejo").withStyle(ChatFormatting.DARK_AQUA)))
             );
@@ -617,8 +633,26 @@ public class Tooltips {
             }
         }
 
-        if (tooltips != null) {
-            event.getToolTip().addAll(insertIndex, tooltips); // Ensures all tooltips are added correctly
-        }
+        if (tooltips != null) event.getToolTip().addAll(insertIndex, tooltips); // Ensures all tooltips are added correctly
+    }
+
+    public static void setABVValues(double beer, double wine, double cider, double mead, double spiritLow, double spiritMid, double spiritHigh,
+                                    double spiritMax, double whisky, double brandy, double rum, double vodka, double gin, double tequila) {
+        ABVBeer = beer;
+        ABVWine = wine;
+        ABVCider = cider;
+        ABVMead = mead;
+        ABVSpiritLow = spiritLow;
+        ABVSpiritMid = spiritMid;
+        ABVSpiritHigh = spiritHigh;
+        ABVSpiritMax = spiritMax;
+        ABVWhisky = whisky;
+        ABVBrandy = brandy;
+        ABVRum = rum;
+        ABVVodka = vodka;
+        ABVGin = gin;
+        ABVTequila = tequila;
+
+        TOOLTIP_MAP = null; // clear cache
     }
 }

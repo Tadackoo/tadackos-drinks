@@ -2,6 +2,7 @@ package net.tadacko.tadackosdrinks.block.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -30,7 +31,7 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
     }
 
     private void renderFluid(ManualPressBlockEntity blockEntity, float partialTick, PoseStack poseStack,
-                             MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+                             MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         FluidStack fluidStack = blockEntity.getFluidTank().getFluid();
 
         if (fluidStack.isEmpty()) {
@@ -39,7 +40,7 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
 
         Fluid fluid = fluidStack.getFluid();
         IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(fluid);
-        TextureAtlasSprite sprite = net.minecraft.client.Minecraft.getInstance()
+        TextureAtlasSprite sprite = Minecraft.getInstance()
                 .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                 .apply(fluidTypeExtensions.getStillTexture());
 
@@ -61,13 +62,14 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
         float minY = 2f / 16f;
         float maxY = minY + (4f / 16f) * squishFactor; // Height decreases as it's squished
 
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.translucent());
+        VertexConsumer consumer = FermentingBarrelRenderer.fluidTranslucent ? bufferSource.getBuffer(RenderType.translucent()) :
+                bufferSource.getBuffer(RenderType.solid());
         Matrix4f matrix = poseStack.last().pose();
 
         // Render side faces of the fluid cube
         if (maxY > 0.001f) {
             // North face - reversed vertex order
-            renderQuad(vertexConsumer, matrix,
+            renderQuad(consumer, matrix,
                     minX, maxY, minZ,
                     maxX, maxY, minZ,
                     maxX, minY, minZ,
@@ -75,7 +77,7 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
                     sprite, red, green, blue, alpha, combinedLight, 0, 0, -1);
 
             // South face - reversed vertex order
-            renderQuad(vertexConsumer, matrix,
+            renderQuad(consumer, matrix,
                     maxX, maxY, maxZ,
                     minX, maxY, maxZ,
                     minX, minY, maxZ,
@@ -83,7 +85,7 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
                     sprite, red, green, blue, alpha, combinedLight, 0, 0, 1);
 
             // West face - reversed vertex order
-            renderQuad(vertexConsumer, matrix,
+            renderQuad(consumer, matrix,
                     minX, maxY, maxZ,
                     minX, maxY, minZ,
                     minX, minY, minZ,
@@ -91,7 +93,7 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
                     sprite, red, green, blue, alpha, combinedLight, -1, 0, 0);
 
             // East face - reversed vertex order
-            renderQuad(vertexConsumer, matrix,
+            renderQuad(consumer, matrix,
                     maxX, maxY, minZ,
                     maxX, maxY, maxZ,
                     maxX, minY, maxZ,

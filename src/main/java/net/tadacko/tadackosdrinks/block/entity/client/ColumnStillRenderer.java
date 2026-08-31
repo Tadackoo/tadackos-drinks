@@ -118,21 +118,10 @@ public class ColumnStillRenderer implements BlockEntityRenderer<ColumnStillBlock
             poseStack.translate(-0.5f, 0f, -0.5f);
 
             PoseStack.Pose pose = poseStack.last();
-            VertexConsumer glassConsumer = bufferSource.getBuffer(RenderType.translucent());
-
-            if (showLower) {
-                renderGlassQuad(glassConsumer, pose, glassSprite,
-                        WINDOW_MIN_X, LOWER_WINDOW_MIN_Y, WINDOW_MAX_X, LOWER_WINDOW_MAX_Y, WINDOW_Z,
-                        combinedLight, combinedOverlay);
-            }
-            if (showUpper) {
-                renderGlassQuad(glassConsumer, pose, glassSprite,
-                        WINDOW_MIN_X, UPPER_WINDOW_MIN_Y, WINDOW_MAX_X, UPPER_WINDOW_MAX_Y, WINDOW_Z,
-                        combinedLight, combinedOverlay);
-            }
 
             if (fluidSprite != null) {
-                VertexConsumer fluidConsumer = bufferSource.getBuffer(RenderType.translucent());
+                VertexConsumer fluidConsumer = FermentingBarrelRenderer.fluidTranslucent ? bufferSource.getBuffer(RenderType.translucent()) :
+                        bufferSource.getBuffer(RenderType.solid());
 
                 if (showLower) {
                     renderFluidForWindow(fluidConsumer, pose, fluidSprite,
@@ -144,6 +133,19 @@ public class ColumnStillRenderer implements BlockEntityRenderer<ColumnStillBlock
                             UPPER_WINDOW_MIN_Y, UPPER_WINDOW_MAX_Y, pct,
                             fr, fg, fb, fa, combinedLight, combinedOverlay);
                 }
+            }
+
+            VertexConsumer glassConsumer = bufferSource.getBuffer(RenderType.translucent());
+
+            if (showLower) {
+                renderGlassQuad(glassConsumer, pose, glassSprite,
+                        WINDOW_MIN_X, LOWER_WINDOW_MIN_Y, WINDOW_MAX_X, LOWER_WINDOW_MAX_Y, WINDOW_Z,
+                        combinedLight, combinedOverlay);
+            }
+            if (showUpper) {
+                renderGlassQuad(glassConsumer, pose, glassSprite,
+                        WINDOW_MIN_X, UPPER_WINDOW_MIN_Y, WINDOW_MAX_X, UPPER_WINDOW_MAX_Y, WINDOW_Z,
+                        combinedLight, combinedOverlay);
             }
 
             poseStack.popPose();

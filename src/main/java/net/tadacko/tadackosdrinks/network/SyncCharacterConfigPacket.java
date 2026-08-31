@@ -11,25 +11,25 @@ import java.util.function.Supplier;
  * Sent client -> server on login to sync the player's locally-configured
  * body weight / ratio into their server-side persistent data.
  */
-public class SyncPlayerConfigPacket {
+public class SyncCharacterConfigPacket {
     private final double bodyWeightKg;
     private final double ratio;
 
-    public SyncPlayerConfigPacket(double bodyWeightKg, double ratio) {
+    public SyncCharacterConfigPacket(double bodyWeightKg, double ratio) {
         this.bodyWeightKg = bodyWeightKg;
         this.ratio = ratio;
     }
 
-    public static void encode(SyncPlayerConfigPacket packet, FriendlyByteBuf buf) {
+    public static void encode(SyncCharacterConfigPacket packet, FriendlyByteBuf buf) {
         buf.writeDouble(packet.bodyWeightKg);
         buf.writeDouble(packet.ratio);
     }
 
-    public static SyncPlayerConfigPacket decode(FriendlyByteBuf buf) {
-        return new SyncPlayerConfigPacket(buf.readDouble(), buf.readDouble());
+    public static SyncCharacterConfigPacket decode(FriendlyByteBuf buf) {
+        return new SyncCharacterConfigPacket(buf.readDouble(), buf.readDouble());
     }
 
-    public static void handle(SyncPlayerConfigPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
+    public static void handle(SyncCharacterConfigPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
         NetworkEvent.Context ctx = ctxSupplier.get();
         ctx.enqueueWork(() -> {
             ServerPlayer sender = ctx.getSender(); // identity comes from the connection, not the packet

@@ -4,11 +4,18 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import net.tadacko.tadackosdrinks.TadackosDrinks;
 import net.tadacko.tadackosdrinks.block.FermentingBarrelBlock;
+import net.tadacko.tadackosdrinks.block.entity.client.FermentingBarrelRenderer;
+import net.tadacko.tadackosdrinks.block.entity.client.PlaceableDrinkwareRenderer;
 import net.tadacko.tadackosdrinks.effect.*;
 import net.tadacko.tadackosdrinks.item.DrinkItem;
 import net.tadacko.tadackosdrinks.item.TequilaDrinkItem;
+import net.tadacko.tadackosdrinks.network.ModNetwork;
+import net.tadacko.tadackosdrinks.network.SyncABVConfigPacket;
+import net.tadacko.tadackosdrinks.network.SyncCharacterConfigPacket;
 import net.tadacko.tadackosdrinks.util.BacUtils;
 import net.tadacko.tadackosdrinks.util.ThrownItemToCauldronEvent;
 import net.tadacko.tadackosdrinks.util.Tooltips;
@@ -21,6 +28,9 @@ public class ModCommonConfigs {
 
     public static final ForgeConfigSpec.DoubleValue BODY_WEIGHT;
     public static final ForgeConfigSpec.DoubleValue RATIO;
+
+    public static final ForgeConfigSpec.BooleanValue FLUID_TRANSLUCENT;
+    public static final ForgeConfigSpec.BooleanValue DRINK_TRANSLUCENT;
 
     public static final ForgeConfigSpec.BooleanValue CHARACTER_CONFIG_ALLOWED;
     public static final ForgeConfigSpec.BooleanValue DRINK_SECONDARY_EFFECTS;
@@ -77,6 +87,15 @@ public class ModCommonConfigs {
                 .defineInRange("bodyWeight", 70, 0, Double.MAX_VALUE);
         RATIO = BUILDER.comment("Your character's alcohol distribution ratio, used for BAC calculation, higher = more tolerance (default 0.7)")
                 .defineInRange("ratio", 0.7, 0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("Client");
+        BUILDER.comment("These will work in both singleplayer and multiplayer but only show up for you (cosmetic only)\nThey will work across all worlds")
+                .define("_clientReadMe", "");
+        FLUID_TRANSLUCENT = BUILDER.comment("Enable translucent rendering of fluid inside equipment blocks (default true)")
+                .define("fluidTranslucent", true);
+        DRINK_TRANSLUCENT = BUILDER.comment("Enable translucent rendering of drink fluid (default true)")
+                .define("drinkTranslucent", true);
         BUILDER.pop();
 
         BUILDER.push("Generic");
@@ -190,6 +209,9 @@ public class ModCommonConfigs {
     @SubscribeEvent
     public static void onConfigLoad(ModConfigEvent event) {
         if (event.getConfig().getSpec() == SPEC) {
+            // client side only, don't wanna make a separate client config
+            FermentingBarrelRenderer.fluidTranslucent = FLUID_TRANSLUCENT.get();
+            PlaceableDrinkwareRenderer.drinkTranslucent = DRINK_TRANSLUCENT.get();
             // none of these are used in any client side code, they're in common to work across all singleplayer worlds
             BacUtils.characterConfigAllowed = CHARACTER_CONFIG_ALLOWED.get();
             DrinkItem.drinkSecondaryEffects = DRINK_SECONDARY_EFFECTS.get();
@@ -213,7 +235,7 @@ public class ModCommonConfigs {
             DrinkItem.ABVVodka = ABV_VODKA.get();
             DrinkItem.ABVGin = ABV_GIN.get();
             DrinkItem.ABVTequila = ABV_TEQUILA.get();
-            Tooltips.TOOLTIP_MAP = null; // clear cache
+            if (ServerLifecycleHooks.getCurrentServer() != null) ModNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(), createSyncPacket());
             BacUtils.inebriation1Threshold = INEBRIATION_1_THRESHOLD.get();
             BacUtils.inebriation2Threshold = INEBRIATION_2_THRESHOLD.get();
             BacUtils.inebriation3Threshold = INEBRIATION_3_THRESHOLD.get();
@@ -241,5 +263,11 @@ public class ModCommonConfigs {
             SavageryEffect.SavageryEventHandler.savageryMultiplier = SAVAGERY_MULTIPLIER.get().floatValue();
             TequilaDrinkItem.tequilaDurationMultiplier = TEQUILA_DURATION_MULTIPLIER.get();
         }
+    }
+
+    public static SyncABVConfigPacket createSyncPacket() {
+        return new SyncABVConfigPacket(ABV_BEER.get(), ABV_WINE.get(), ABV_CIDER.get(), ABV_MEAD.get(), ABV_SPIRIT_LOW.get(), ABV_SPIRIT_MID.get(),
+                ABV_SPIRIT_HIGH.get(), ABV_SPIRIT_MAX.get(), ABV_WHISKY.get(), ABV_BRANDY.get(), ABV_RUM.get(), ABV_VODKA.get(), ABV_GIN.get(),
+                ABV_TEQUILA.get());
     }
 }

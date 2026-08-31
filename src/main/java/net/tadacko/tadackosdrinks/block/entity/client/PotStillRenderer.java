@@ -59,7 +59,8 @@ public class PotStillRenderer implements BlockEntityRenderer<PotStillBlockEntity
 
         // --- SINGLE FLUID QUAD ---
         if (!fluid.isEmpty()) {
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
+            VertexConsumer consumer = FermentingBarrelRenderer.fluidTranslucent ? bufferSource.getBuffer(RenderType.translucent()) :
+                    bufferSource.getBuffer(RenderType.solid());
 
             FermentingBarrelRenderer.renderFluidQuad(consumer, poseStack.last(), sprite,
                     3/16f, fluidHeight, 3/16f,

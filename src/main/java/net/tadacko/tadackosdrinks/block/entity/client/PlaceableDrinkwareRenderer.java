@@ -16,13 +16,13 @@ import net.tadacko.tadackosdrinks.block.entity.PlaceableDrinkwareBlockEntity;
 import net.tadacko.tadackosdrinks.client.DrinkRenderHelper;
 import net.tadacko.tadackosdrinks.client.DrinkRenderHelper.Volume;
 
-public class PlaceableDrinkwareRenderer
-        implements BlockEntityRenderer<PlaceableDrinkwareBlockEntity> {
+public class PlaceableDrinkwareRenderer implements BlockEntityRenderer<PlaceableDrinkwareBlockEntity> {
+    public static boolean drinkTranslucent = true;
 
     public PlaceableDrinkwareRenderer(BlockEntityRendererProvider.Context ctx) {}
 
     @Override
-    public void render(PlaceableDrinkwareBlockEntity be, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int light, int overlay) {
+    public void render(PlaceableDrinkwareBlockEntity be, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
         DrinkVariant variant = be.getBlockState().getValue(PlaceableDrinkwareBlock.VARIANT);
 
         Volume vol = DrinkRenderHelper.getVolume(variant);
@@ -35,8 +35,9 @@ public class PlaceableDrinkwareRenderer
                 .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                 .apply(fluidTex);
 
-        VertexConsumer vc = buffers.getBuffer(RenderType.translucent());
-        DrinkRenderHelper.renderFluid(vc, poseStack.last(), fluidSprite, vol, light, overlay);
+        VertexConsumer consumer = FermentingBarrelRenderer.fluidTranslucent ? bufferSource.getBuffer(RenderType.translucent()) :
+                bufferSource.getBuffer(RenderType.solid());
+        DrinkRenderHelper.renderFluid(consumer, poseStack.last(), fluidSprite, vol, light, overlay);
 
         // Render foam if applicable
         ResourceLocation foamTex = DrinkRenderHelper.getFoamTexture(variant);
@@ -44,7 +45,7 @@ public class PlaceableDrinkwareRenderer
             TextureAtlasSprite foamSprite = Minecraft.getInstance()
                     .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                     .apply(foamTex);
-            DrinkRenderHelper.renderFoam(vc, poseStack.last(), foamSprite, light, overlay);
+            DrinkRenderHelper.renderFoam(consumer, poseStack.last(), foamSprite, light, overlay);
         }
     }
 }

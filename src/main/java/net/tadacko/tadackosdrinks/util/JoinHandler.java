@@ -7,18 +7,24 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.network.PacketDistributor;
 import net.tadacko.tadackosdrinks.TadackosDrinks;
+import net.tadacko.tadackosdrinks.config.ModCommonConfigs;
 import net.tadacko.tadackosdrinks.item.ModItems;
+import net.tadacko.tadackosdrinks.network.ModNetwork;
+import net.tadacko.tadackosdrinks.network.SyncABVConfigPacket;
 
 /** Gives the guide book to players on first login. */
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Bus.FORGE)
-public class FirstJoinHandler {
+public class JoinHandler {
     private static final String GOT_BOOK_KEY = "got_guide_book";
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
         // PlayerLoggedInEvent is always server side
+        ModNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), ModCommonConfigs.createSyncPacket());
+
         CompoundTag root = serverPlayer.getPersistentData();
         CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);
 

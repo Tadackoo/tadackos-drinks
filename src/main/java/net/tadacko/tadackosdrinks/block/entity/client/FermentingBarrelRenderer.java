@@ -25,6 +25,8 @@ public class FermentingBarrelRenderer implements BlockEntityRenderer<FermentingB
     private static final float MAX_HEIGHT = 14f / 16f; // Top liquid level
     private static final int MAX_FLUID = 1000;
 
+    public static boolean fluidTranslucent = true; // fallback default, overridden by config value
+
     public FermentingBarrelRenderer(BlockEntityRendererProvider.Context context) {
     }
 
@@ -63,7 +65,8 @@ public class FermentingBarrelRenderer implements BlockEntityRenderer<FermentingB
         poseStack.pushPose();
 
         if (!fluid.isEmpty()) {
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
+            VertexConsumer consumer = fluidTranslucent ? bufferSource.getBuffer(RenderType.translucent()) :
+                    bufferSource.getBuffer(RenderType.solid());
             PoseStack.Pose pose = poseStack.last();
 
             // Render only the top surface of the fluid at calculated height
