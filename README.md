@@ -15,7 +15,7 @@ Tadacko's Drinks is a Forge mod mainly focusing on semi-realistic implementation
 
 ## Features
 
-All processes, recipes and effects documented in the form of an in-game Guide Book. All drinks apply an Inebriation effect, its intensity and duration determined by the player's blood alcohol content. BAC is calculated via Widmark's formula using the ABV and volume of the drink, body weight and alcohol distribution ratio of the player's character (each player can set their own in the config if allowed by server) and alcohol elimination rate (set to 10x real rate by default).
+All processes, recipes and effects documented in the form of an in-game Guide Book. All drinks apply an Inebriation effect, its intensity and duration determined by the player's blood alcohol content. BAC is calculated via [Widmark's formula](https://en.wikipedia.org/wiki/Blood_alcohol_content#By_intake) using the ABV and volume of the drink, body weight and alcohol distribution ratio of the player's character (each player can set their own in the config if allowed by server) and alcohol elimination rate (set to 10x real rate by default).
 
 Drink types and their secondary effects:
 
@@ -47,3 +47,7 @@ Crops: Barley, Hops, Grapes, Juniper, Agave
   <img alt="Screenshot of all wood variants of blocks that have them" src="https://github.com/Tadackoo/tadackos-drinks/blob/master/.github/assets/wood-variants.png?raw=true" width="49%"/>
   <img alt="Screenshot of the Guide Book Beer page" src="https://github.com/Tadackoo/tadackos-drinks/blob/master/.github/assets/book-beer-page.png?raw=true" width="49%"/>
 </p>
+
+## Development
+
+This mod is in active development so it is likely there are bugs that I have not come across in testing yet so if you encounter any please report them to either GitHub issues or CurseForge comments. If you have any ideas for new features or changes definitely send them my way too. I'm planning on updating to newer versions of Minecraft as well as maybe other mod loaders and a full AI-less rewrite at some point if I have the time and motivation.
