@@ -12,7 +12,6 @@ import net.tadacko.tadackosdrinks.TadackosDrinks;
 import net.tadacko.tadackosdrinks.config.ModCommonConfigs;
 import net.tadacko.tadackosdrinks.item.ModItems;
 import net.tadacko.tadackosdrinks.network.ModNetwork;
-import net.tadacko.tadackosdrinks.network.SyncABVConfigPacket;
 
 /** Gives the guide book to players on first login. */
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Bus.FORGE)

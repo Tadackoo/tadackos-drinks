@@ -42,9 +42,9 @@ public class ModNetwork {
                 SyncCharacterConfigPacket::decode,
                 SyncCharacterConfigPacket::handle);
 
-        CHANNEL.registerMessage(id++, SyncABVConfigPacket.class,
-                SyncABVConfigPacket::encode,
-                SyncABVConfigPacket::decode,
-                SyncABVConfigPacket::handle);
+        CHANNEL.registerMessage(id++, SyncConfigPacket.class,
+                SyncConfigPacket::encode,
+                SyncConfigPacket::decode,
+                SyncConfigPacket::handle);
     }
 }

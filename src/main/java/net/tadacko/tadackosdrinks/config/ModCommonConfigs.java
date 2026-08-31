@@ -14,9 +14,11 @@ import net.tadacko.tadackosdrinks.effect.*;
 import net.tadacko.tadackosdrinks.item.DrinkItem;
 import net.tadacko.tadackosdrinks.item.TequilaDrinkItem;
 import net.tadacko.tadackosdrinks.network.ModNetwork;
-import net.tadacko.tadackosdrinks.network.SyncABVConfigPacket;
-import net.tadacko.tadackosdrinks.network.SyncCharacterConfigPacket;
-import net.tadacko.tadackosdrinks.util.*;
+import net.tadacko.tadackosdrinks.network.SyncConfigPacket;
+import net.tadacko.tadackosdrinks.util.BacUtils;
+import net.tadacko.tadackosdrinks.util.JoinHandler;
+import net.tadacko.tadackosdrinks.util.ThrownItemToCauldronEvent;
+import net.tadacko.tadackosdrinks.util.WaterInteractionHandler;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCommonConfigs {
@@ -36,6 +38,10 @@ public class ModCommonConfigs {
     public static final ForgeConfigSpec.BooleanValue THROW_MALTING;
     public static final ForgeConfigSpec.BooleanValue FIRST_LOGIN_BOOK;
     public static final ForgeConfigSpec.DoubleValue BAC_ELIMINATION_RATE;
+    public static final ForgeConfigSpec.IntValue STACK_SIZE_MOLASSES;
+    public static final ForgeConfigSpec.IntValue STACK_SIZE_KEG;
+    public static final ForgeConfigSpec.IntValue STACK_SIZE_GLASS;
+    public static final ForgeConfigSpec.IntValue STACK_SIZE_DRINK;
     public static final ForgeConfigSpec.DoubleValue ABV_BEER;
     public static final ForgeConfigSpec.DoubleValue ABV_WINE;
     public static final ForgeConfigSpec.DoubleValue ABV_CIDER;
@@ -74,31 +80,14 @@ public class ModCommonConfigs {
     public static final ForgeConfigSpec.DoubleValue PIRACY_1_NOTHING_CHANCE;
     public static final ForgeConfigSpec.DoubleValue PIRACY_1_GOLD_CHANCE;
     public static final ForgeConfigSpec.DoubleValue PIRACY_1_EMERALD_CHANCE;
+    public static final ForgeConfigSpec.DoubleValue CHARISMA_MULTIPLIER;
     public static final ForgeConfigSpec.DoubleValue SAVAGERY_MULTIPLIER;
     public static final ForgeConfigSpec.DoubleValue TEQUILA_DURATION_MULTIPLIER;
 
     static {
-        BUILDER.push("Character");
-        BUILDER.comment("These will work in both singleplayer and multiplayer for your player only\nThey will only work when characterConfigAllowed is " +
-                "set to true on the server\nThey will work across all worlds").define("_characterReadMe", "");
-        BODY_WEIGHT = BUILDER.comment("Your character's body weight in kilograms, used for BAC calculation, higher = more tolerance (default 70)")
-                .defineInRange("bodyWeight", 70, 0, Double.MAX_VALUE);
-        RATIO = BUILDER.comment("Your character's alcohol distribution ratio, used for BAC calculation, higher = more tolerance (default 0.7)")
-                .defineInRange("ratio", 0.7, 0, Double.MAX_VALUE);
-        BUILDER.pop();
-
-        BUILDER.push("Client");
-        BUILDER.comment("These will work in both singleplayer and multiplayer but only show up for you (cosmetic only)\nThey will work across all worlds")
-                .define("_clientReadMe", "");
-        FLUID_TRANSLUCENT = BUILDER.comment("Enable translucent rendering of fluid inside equipment blocks (default true)")
-                .define("fluidTranslucent", true);
-        DRINK_TRANSLUCENT = BUILDER.comment("Enable translucent rendering of drink fluid (default true)")
-                .define("drinkTranslucent", true);
-        BUILDER.pop();
-
         BUILDER.push("Generic");
-        BUILDER.comment("These will only work in singleplayer or when edited in a server's files\nThey will work across all singleplayer worlds\n" +
-                "Server configs are located at minecraft/saves/worldname/serverconfig/tadackosdrinks-server.toml").define("_genericReadMe", "");
+        BUILDER.comment("These will only work in singleplayer or when edited in a server's files\nThey will work across all singleplayer worlds")
+                .define("_genericReadMe", "");
         CHARACTER_CONFIG_ALLOWED = BUILDER.comment("Allow players to change their body weight and alcohol distribution ratio (default true)")
                 .define("characterConfigAllowed", true);
         DRINK_SECONDARY_EFFECTS = BUILDER.comment("Enable secondary effects of drinks (Inebriation is the main effect) (default true)")
@@ -113,6 +102,14 @@ public class ModCommonConfigs {
                 .define("firstLoginBook", true);
         BAC_ELIMINATION_RATE = BUILDER.comment("BAC elimination rate in percent per hour (default 0.15)")
                 .defineInRange("BACEliminationRate", 0.15, 0, Double.MAX_VALUE);
+        STACK_SIZE_MOLASSES = BUILDER.comment("How much Sugarcane Molasses stacks to (default 16)")
+                .defineInRange("stackSizeMolasses", 16, 1, 64);
+        STACK_SIZE_KEG = BUILDER.comment("How much Kegs stack to (default 1)")
+                .defineInRange("stackSizeKeg", 1, 1, 64);
+        STACK_SIZE_GLASS = BUILDER.comment("How much empty Glasses stack to (default 16)")
+                .defineInRange("stackSizeGlass", 16, 1, 64);
+        STACK_SIZE_DRINK = BUILDER.comment("How much Drinks stack to (default 1)")
+                .defineInRange("stackSizeDrink", 1, 1, 64);
         BUILDER.push("Drinks");
         ABV_BEER = BUILDER.comment("Alcohol by volume of Beer in decimal (default 0.05)")
                 .defineInRange("ABVBeer", 0.05, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
@@ -195,11 +192,31 @@ public class ModCommonConfigs {
                 .defineInRange("piracy1GoldChance", 50, 0.0, 100.0);
         PIRACY_1_EMERALD_CHANCE = BUILDER.comment("Chance for Emerald (default 15)")
                 .defineInRange("piracy1EmeraldChance", 15, 0.0, 100.0);
+        CHARISMA_MULTIPLIER = BUILDER.comment("How much the Charisma effect discounts Villager prices per level (default 0.1)")
+                .defineInRange("charismaMultiplier", 0.1, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
         SAVAGERY_MULTIPLIER = BUILDER.comment("How much the Savagery effect increases critical hit damage per level (default 0.25)")
                 .defineInRange("savageryMultiplier", 0.25, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
         TEQUILA_DURATION_MULTIPLIER = BUILDER.comment("How much of its base duration Tequila distributes per level (default 2)")
                 .defineInRange("tequilaDurationMultiplier", 2, 0, Double.MAX_VALUE);
         BUILDER.pop();
+        BUILDER.pop();
+
+        BUILDER.push("Character");
+        BUILDER.comment("These will work in both singleplayer and multiplayer for your player only\nThey will only work when characterConfigAllowed is " +
+                "set to true on the server\nThey will work across all worlds").define("_characterReadMe", "");
+        BODY_WEIGHT = BUILDER.comment("Your character's body weight in kilograms, used for BAC calculation, higher = more tolerance (default 70)")
+                .defineInRange("bodyWeight", 70, 0, Double.MAX_VALUE);
+        RATIO = BUILDER.comment("Your character's alcohol distribution ratio, used for BAC calculation, higher = more tolerance (default 0.7)")
+                .defineInRange("ratio", 0.7, 0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("Client");
+        BUILDER.comment("These will work in both singleplayer and multiplayer but only show up for you (cosmetic only)\nThey will work across all worlds")
+                .define("_clientReadMe", "");
+        FLUID_TRANSLUCENT = BUILDER.comment("Enable translucent rendering of fluid inside equipment blocks (default true)")
+                .define("fluidTranslucent", true);
+        DRINK_TRANSLUCENT = BUILDER.comment("Enable translucent rendering of drink fluid (default true)")
+                .define("drinkTranslucent", true);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
@@ -236,7 +253,6 @@ public class ModCommonConfigs {
             DrinkItem.ABVVodka = ABV_VODKA.get();
             DrinkItem.ABVGin = ABV_GIN.get();
             DrinkItem.ABVTequila = ABV_TEQUILA.get();
-            if (ServerLifecycleHooks.getCurrentServer() != null) ModNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(), createSyncPacket());
             BacUtils.inebriation1Threshold = INEBRIATION_1_THRESHOLD.get();
             BacUtils.inebriation2Threshold = INEBRIATION_2_THRESHOLD.get();
             BacUtils.inebriation3Threshold = INEBRIATION_3_THRESHOLD.get();
@@ -263,12 +279,15 @@ public class ModCommonConfigs {
             PiracyEffect.PiracyEventHandler.piracy1EmeraldChance = PIRACY_1_EMERALD_CHANCE.get().floatValue();
             SavageryEffect.SavageryEventHandler.savageryMultiplier = SAVAGERY_MULTIPLIER.get().floatValue();
             TequilaDrinkItem.tequilaDurationMultiplier = TEQUILA_DURATION_MULTIPLIER.get();
+            // server side only stuff, here for reasons in comments above
+            if (ServerLifecycleHooks.getCurrentServer() != null) ModNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(), createSyncPacket());
         }
     }
 
-    public static SyncABVConfigPacket createSyncPacket() {
-        return new SyncABVConfigPacket(ABV_BEER.get(), ABV_WINE.get(), ABV_CIDER.get(), ABV_MEAD.get(), ABV_SPIRIT_LOW.get(), ABV_SPIRIT_MID.get(),
+    public static SyncConfigPacket createSyncPacket() {
+        return new SyncConfigPacket(ABV_BEER.get(), ABV_WINE.get(), ABV_CIDER.get(), ABV_MEAD.get(), ABV_SPIRIT_LOW.get(), ABV_SPIRIT_MID.get(),
                 ABV_SPIRIT_HIGH.get(), ABV_SPIRIT_MAX.get(), ABV_WHISKY.get(), ABV_BRANDY.get(), ABV_RUM.get(), ABV_VODKA.get(), ABV_GIN.get(),
-                ABV_TEQUILA.get());
+                ABV_TEQUILA.get(), CHARISMA_MULTIPLIER.get().floatValue(), STACK_SIZE_MOLASSES.get(), STACK_SIZE_KEG.get(), STACK_SIZE_GLASS.get(),
+                STACK_SIZE_DRINK.get());
     }
 }

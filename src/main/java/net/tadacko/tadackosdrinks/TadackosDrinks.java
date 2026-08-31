@@ -24,9 +24,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.tadacko.tadackosdrinks.block.ModBlocks;
 import net.tadacko.tadackosdrinks.block.entity.ModBlockEntities;
 import net.tadacko.tadackosdrinks.block.entity.client.*;
-import net.tadacko.tadackosdrinks.client.CrosshairOverlay;
 import net.tadacko.tadackosdrinks.config.ModCommonConfigs;
-import net.tadacko.tadackosdrinks.config.ModServerConfigs;
 import net.tadacko.tadackosdrinks.effect.InebriationEffect;
 import net.tadacko.tadackosdrinks.effect.ModEffects;
 import net.tadacko.tadackosdrinks.fluid.CauldronFluidRegistry;
@@ -39,7 +37,6 @@ import net.tadacko.tadackosdrinks.loot.ModLootModifiers;
 import net.tadacko.tadackosdrinks.network.ModNetwork;
 import net.tadacko.tadackosdrinks.recipe.ModRecipeSerializers;
 import net.tadacko.tadackosdrinks.util.IFluidColorProvider;
-import net.tadacko.tadackosdrinks.util.WaterInteractionHandler;
 import net.tadacko.tadackosdrinks.util.WortCauldronInteraction;
 import net.tadacko.tadackosdrinks.worldgen.feature.ModFeatures;
 import software.bernie.geckolib.GeckoLib;
@@ -81,7 +78,6 @@ public class TadackosDrinks
         GeckoLib.initialize();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModCommonConfigs.SPEC, "tadackosdrinks-common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ModServerConfigs.SPEC, "tadackosdrinks-server.toml");
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::addCreative);
