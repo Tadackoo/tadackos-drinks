@@ -19,11 +19,15 @@ import net.tadacko.tadackosdrinks.network.SyncABVConfigPacket;
 public class JoinHandler {
     private static final String GOT_BOOK_KEY = "got_guide_book";
 
+    public static boolean firstLoginBook = true;
+
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
         // PlayerLoggedInEvent is always server side
         ModNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), ModCommonConfigs.createSyncPacket());
+
+        if (!firstLoginBook) return;
 
         CompoundTag root = serverPlayer.getPersistentData();
         CompoundTag persistent = root.getCompound(TadackosDrinks.MOD_ID);

@@ -16,10 +16,7 @@ import net.tadacko.tadackosdrinks.item.TequilaDrinkItem;
 import net.tadacko.tadackosdrinks.network.ModNetwork;
 import net.tadacko.tadackosdrinks.network.SyncABVConfigPacket;
 import net.tadacko.tadackosdrinks.network.SyncCharacterConfigPacket;
-import net.tadacko.tadackosdrinks.util.BacUtils;
-import net.tadacko.tadackosdrinks.util.ThrownItemToCauldronEvent;
-import net.tadacko.tadackosdrinks.util.Tooltips;
-import net.tadacko.tadackosdrinks.util.WaterInteractionHandler;
+import net.tadacko.tadackosdrinks.util.*;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCommonConfigs {
@@ -37,6 +34,7 @@ public class ModCommonConfigs {
     public static final ForgeConfigSpec.BooleanValue THROW_INGREDIENT_CAULDRON;
     public static final ForgeConfigSpec.BooleanValue THROW_INGREDIENT_BARREL;
     public static final ForgeConfigSpec.BooleanValue THROW_MALTING;
+    public static final ForgeConfigSpec.BooleanValue FIRST_LOGIN_BOOK;
     public static final ForgeConfigSpec.DoubleValue BAC_ELIMINATION_RATE;
     public static final ForgeConfigSpec.DoubleValue ABV_BEER;
     public static final ForgeConfigSpec.DoubleValue ABV_WINE;
@@ -111,6 +109,8 @@ public class ModCommonConfigs {
                 .define("throwIngredientBarrel", false);
         THROW_MALTING = BUILDER.comment("Enable throwing/dropping (Q) to malt Seeds (default false)")
                 .define("throwMalting", false);
+        FIRST_LOGIN_BOOK = BUILDER.comment("Give players the Guide Book on their first login (default true)")
+                .define("firstLoginBook", true);
         BAC_ELIMINATION_RATE = BUILDER.comment("BAC elimination rate in percent per hour (default 0.15)")
                 .defineInRange("BACEliminationRate", 0.15, 0, Double.MAX_VALUE);
         BUILDER.push("Drinks");
@@ -220,6 +220,7 @@ public class ModCommonConfigs {
             if (!ThrownItemToCauldronEvent.throwIngredientCauldron) ThrownItemToCauldronEvent.clearTracked();
             WaterInteractionHandler.throwMalting = THROW_MALTING.get();
             if (!WaterInteractionHandler.throwMalting) WaterInteractionHandler.clearTracked();
+            JoinHandler.firstLoginBook = FIRST_LOGIN_BOOK.get();
             BacUtils.BACEliminationRatePercentPerHour = BAC_ELIMINATION_RATE.get();
             DrinkItem.ABVBeer = ABV_BEER.get();
             DrinkItem.ABVWine = ABV_WINE.get();
