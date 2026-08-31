@@ -238,28 +238,51 @@ class Flowchart {
         final List<ItemStack> icons;
         final List<BlockState> blockStates;
         final int offsetX, offsetY, size, intervalSeconds;
+        final List<String> timeLabels;
 
         SubIcon(List<ItemStack> icons, List<BlockState> blockStates, int offsetX, int offsetY, int size, int intervalSeconds) {
+            this(icons, blockStates, offsetX, offsetY, size, intervalSeconds, (List<String>) null);
+        }
+
+        SubIcon(List<ItemStack> icons, List<BlockState> blockStates, int offsetX, int offsetY, int size, int intervalSeconds, String timeLabel) {
+            this(icons, blockStates, offsetX, offsetY, size, intervalSeconds, timeLabel == null ? null : List.of(timeLabel));
+        }
+
+        SubIcon(List<ItemStack> icons, List<BlockState> blockStates, int offsetX, int offsetY, int size, int intervalSeconds, List<String> timeLabels) {
             this.icons = icons;
             this.blockStates = blockStates;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.size = size;
             this.intervalSeconds = intervalSeconds;
+            this.timeLabels = timeLabels;
+        }
+
+        private int currentCycleIndex() {
+            int size = (icons != null && !icons.isEmpty()) ? icons.size() : (blockStates != null && !blockStates.isEmpty() ? blockStates.size() : 0);
+            if (size <= 1) return 0;
+            long epochSec = System.currentTimeMillis() / 1000L;
+            return (int) ((epochSec / Math.max(1, intervalSeconds)) % size);
         }
 
         ItemStack getCurrentIcon() {
             if (icons == null || icons.isEmpty()) return ItemStack.EMPTY;
             if (icons.size() == 1) return icons.get(0);
-            long epochSec = System.currentTimeMillis() / 1000L;
-            return icons.get((int) ((epochSec / Math.max(1, intervalSeconds)) % icons.size()));
+            return icons.get(currentCycleIndex());
         }
 
         BlockState getCurrentBlockState() {
             if (blockStates == null || blockStates.isEmpty()) return null;
             if (blockStates.size() == 1) return blockStates.get(0);
-            long epochSec = System.currentTimeMillis() / 1000L;
-            return blockStates.get((int) ((epochSec / Math.max(1, intervalSeconds)) % blockStates.size()));
+            return blockStates.get(currentCycleIndex());
+        }
+
+        /** Constant if timeLabels has 1 entry, otherwise follows the same cycling index as the icon/blockState. */
+        String getCurrentTimeLabel() {
+            if (timeLabels == null || timeLabels.isEmpty()) return null;
+            if (timeLabels.size() == 1) return timeLabels.get(0);
+            int idx = currentCycleIndex();
+            return idx < timeLabels.size() ? timeLabels.get(idx) : null;
         }
     }
 }
@@ -313,9 +336,9 @@ class FlowchartPage implements GuidePage {
             int drawX = centerX - n.size / 2, drawY = centerY - n.size / 2;
 
             if (n.shape == Flowchart.FlowNode.Shape.CIRCLE)
-                GuideGeometry.drawFilledCircle(graphics, drawX, drawY, n.size, 0xFFF9EED0 /*0xFFDDDDDD*/);
+                GuideGeometry.drawFilledCircle(graphics, drawX, drawY, n.size, 0xFFF6EBCB /*0xFFDDDDDD*/);
             else
-                graphics.fill(RenderType.guiOverlay(), drawX, drawY, drawX + n.size, drawY + n.size, 0xFFF9EED0 /*0xFFDDDDDD*/);
+                graphics.fill(RenderType.guiOverlay(), drawX, drawY, drawX + n.size, drawY + n.size, 0xFFF6EBCB /*0xFFDDDDDD*/);
 
             if (n.borderStyle == Flowchart.FlowNode.BorderStyle.FULL) {
                 if (n.shape == Flowchart.FlowNode.Shape.CIRCLE)
@@ -334,11 +357,18 @@ class FlowchartPage implements GuidePage {
                 int subY = centerY + sub.offsetY - sub.size / 2;
                 ItemStack stack = sub.getCurrentIcon();
                 BlockState bs = sub.getCurrentBlockState();
+                int iconBoxSize = -1; // -1 = nothing drawn, skip the label
                 if (!stack.isEmpty()) {
                     graphics.renderItem(stack, subX, subY);
                     graphics.renderItemDecorations(ctx.font(), stack, subX, subY);
+                    iconBoxSize = 16; // renderItem always draws at a fixed 16x16, regardless of sub.size
                 } else if (bs != null) {
                     GuideBlockScenes.renderBlockModel(graphics.pose(), ctx, bs, subX, subY, sub.size, 0.18, 0.25, 0.1); // to get to -0.32,-0.25,-0.4
+                    iconBoxSize = sub.size;
+                }
+                String timeLabel = sub.getCurrentTimeLabel();
+                if (iconBoxSize > 0 && timeLabel != null && !timeLabel.isEmpty()) {
+                    drawTimeLabel(graphics, ctx.font(), timeLabel, subX, subY, iconBoxSize);
                 }
             }
 
@@ -355,6 +385,21 @@ class FlowchartPage implements GuidePage {
             else
                 graphics.fill(RenderType.guiOverlay(), hlX, hlY, hlX + hlSize, hlY + hlSize, 0x5588CCFF);
         }
+    }
+
+    /**
+     * Draws a small badge anchored at the icon's bottom-right corner.
+     * If the stack also shows a real count there, the two will overlap.
+     */
+    private static void drawTimeLabel(GuiGraphics graphics, Font font, String label, int x, int y, int iconBoxSize) {
+        float scale = 1f;
+        graphics.pose().pushPose();
+        graphics.pose().scale(scale, scale, 10000f);
+        int localRight = (int) ((x + iconBoxSize) / scale);
+        int localBottom = y + iconBoxSize + 2;
+        int width = font.width(label);
+        graphics.drawString(font, label, localRight - width / 2, localBottom - font.lineHeight, 0xFFFFFFFF, true);
+        graphics.pose().popPose();
     }
 
     private record PopupGeometry(int x, int y, int width, int height, int textX, int textY, LinkedText text) {}

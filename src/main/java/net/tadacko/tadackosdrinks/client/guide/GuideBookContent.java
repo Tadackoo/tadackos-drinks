@@ -550,11 +550,27 @@ public final class GuideBookContent {
     }
 
     private static Flowchart.SubIcon icon(List<ItemStack> items, int size) {
-        return new Flowchart.SubIcon(items, null, 2, 2, size, 0);
+        return icon(items, size, (List<String>) null);
+    }
+
+    private static Flowchart.SubIcon icon(List<ItemStack> items, int size, String timeLabel) {
+        return icon(items, size, timeLabel == null ? null : List.of(timeLabel));
+    }
+
+    private static Flowchart.SubIcon icon(List<ItemStack> items, int size, List<String> timeLabels) {
+        return new Flowchart.SubIcon(items, null, 2, 2, size, 0, timeLabels);
     }
 
     private static Flowchart.SubIcon blockIcon(BlockState state, int size) {
-        return new Flowchart.SubIcon(null, List.of(state), 2, 2, size, 0);
+        return blockIcon(state, size, (List<String>) null);
+    }
+
+    private static Flowchart.SubIcon blockIcon(BlockState state, int size, String timeLabel) {
+        return blockIcon(state, size, timeLabel == null ? null : List.of(timeLabel));
+    }
+
+    private static Flowchart.SubIcon blockIcon(BlockState state, int size, List<String> timeLabels) {
+        return new Flowchart.SubIcon(null, List.of(state), 2, 2, size, 0, timeLabels);
     }
 
     // ---- flowcharts ----
@@ -567,7 +583,7 @@ public final class GuideBookContent {
                 t("p14.node1.title"), "",
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p14.node2.title"), t("p14.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of( // symmetrical offsets are x1,y-7; x-7,y1
@@ -595,15 +611,15 @@ public final class GuideBookContent {
                 t("p15.node1.title"), "",
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20, "6s")),
                 t("p15.node2.title"), t("p15.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(CRUSHER_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20, "6s")),
                 t("p15.node3.title"), t("p15.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(PRESS_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModBlocks.COPPER_POT.get())), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModBlocks.COPPER_POT.get())), 20, "2m")),
                 t("p15.node4.title"), t("p15.node4.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(
@@ -640,7 +656,7 @@ public final class GuideBookContent {
                 t("p16.node2.title"), t("p16.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20, "6s")),
                 t("p16.node3.title"), t("p16.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(CRUSHER_RECIPE)));
 
@@ -655,10 +671,10 @@ public final class GuideBookContent {
                 t("common.yeast_title"), t("common.yeast_text"),
                 w/2 + 13, 86, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModBlocks.COPPER_POT.get())), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModBlocks.COPPER_POT.get())), 20, "2m")),
                 t("p16.node7.title"), t("p16.node7.text"),
                 w/2 - 13, 112, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_RECIPE)));
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p16.node8.title"), t("p16.node8.text"),
                 w/2 + 13, 112, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.BEER_WHEAT_GLASS.get(), 2)), 20)),
@@ -684,41 +700,41 @@ public final class GuideBookContent {
                 t("p18.node1.title"), t("p18.node1.text"),
                 w/2 + 13, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20, "6s")),
                 t("p18.node3.title"), t("p18.node3.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(CRUSHER_RECIPE)));
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20, "6s")),
                 t("p18.node4.title"), t("p18.node4.text"),
                 w/2 + 13, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.DASHED, List.of(CRUSHER_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p18.node5.title"), t("p18.node5.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.YEAST.get(), 2)), 20)),
                 t("common.yeast_title"), t("common.yeast_text"),
                 w/2 - 13, 60, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20, "6s")),
                 t("p18.node7.title"), t("p18.node7.text"),
                 w/2 + 13, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(PRESS_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20, "6s")),
                 t("p18.node8.title"), t("p18.node8.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(PRESS_RECIPE)));
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p18.node9.title"), t("p18.node9.text"),
                 w/2 + 13, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.YEAST.get(), 2)), 20)),
                 t("common.yeast_title"), t("common.yeast_text"),
                 w/2 + 39, 86, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p18.node11.title"), t("p18.node11.text"),
                 w/2 - 39, 112, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.DASHED, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.WINE_RED_GLASS.get(), 5),
                 new ItemStack(ModItems.WINE_ORANGE_GLASS.get(), 5)), 20)),
                 t("p18.node12.title"), t("p18.node12.text"),
                 w/2 - 13, 112, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, List.of(WINE_GLASS_RECIPE)));
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p18.node11.title"), t("p18.node11.text"),
                 w/2 + 13, 112, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.DASHED, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.WINE_ROSE_GLASS.get(), 5),
@@ -741,22 +757,22 @@ public final class GuideBookContent {
                 t("p20.node1.title"), "",
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20, "6s")),
                 t("p20.node2.title"), t("p20.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(CRUSHER_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20, "6s")),
                 t("p20.node3.title"), t("p20.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(PRESS_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p20.node4.title"), t("p20.node4.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.YEAST.get(), 2)), 20)),
                 t("common.yeast_title"), t("common.yeast_text"),
                 w/2 - 13, 86, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p20.node6.title"), t("p20.node6.text"),
                 w/2 - 39, 112, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.DASHED, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.CIDER_GLASS.get(), 2)), 20)),
@@ -782,14 +798,14 @@ public final class GuideBookContent {
                 t("p22.node2.title"), t("p22.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(HONEY_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p22.node3.title"), t("p22.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.YEAST.get(), 2)), 20)),
                 t("common.yeast_title"), t("common.yeast_text"),
                 w/2 - 13, 60, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p22.node5.title"), t("p22.node5.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.DASHED, List.of(FERMENTING_BARREL_RECIPE)));
 
@@ -820,7 +836,7 @@ public final class GuideBookContent {
                 t("p24.node3.title"), t("p24.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p24.node4.title"), t("p24.node4.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.YEAST.get(), 2)), 20)),
@@ -844,7 +860,7 @@ public final class GuideBookContent {
                 t("p25.node1.title"), "",
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20, "6s")),
                 t("p25.node2.title"), t("p25.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(CRUSHER_RECIPE)));
 
@@ -857,7 +873,7 @@ public final class GuideBookContent {
                 t("p25.node4.title"), t("p25.node4.text"),
                 w/2 - 13, 60, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p25.node5.title"), t("p25.node5.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.YEAST.get(), 2)), 20)),
@@ -882,22 +898,22 @@ public final class GuideBookContent {
                 t("p26.node1.title"), t("p26.node1.text"),
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(Items.FURNACE)), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(Items.FURNACE)), 20, "10s")),
                 t("p26.node2.title"), t("p26.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualCrushers(), 20, "6s")),
                 t("p26.node3.title"), t("p26.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(CRUSHER_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(manualPresses(), 20, "6s")),
                 t("p26.node4.title"), t("p26.node4.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(PRESS_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModItems.YEAST.get(), 2)), 20)),
                 t("common.yeast_title"), t("common.yeast_text"),
                 w/2 - 13, 86, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "1h")),
                 t("p26.node6.title"), t("p26.node6.text"),
                 w/2 - 13, 112, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
         flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModFluids.WASH_AGAVE.bucket().get(), 24)), 20)),
@@ -917,11 +933,11 @@ public final class GuideBookContent {
                 t("p30.node1.title"), t("p30.node1.text"),
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20, List.of("6m", "1.3m"))),
                 t("p30.node2.title"), t("p30.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_STILL_RECIPE, COLUMN_STILL_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p30.node3.title"), t("p30.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
 
@@ -950,11 +966,11 @@ public final class GuideBookContent {
                 t("p32.node1.title"), t("p32.node1.text"),
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20, List.of("6m", "1.3m"))),
                 t("p32.node2.title"), t("p32.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_STILL_RECIPE, COLUMN_STILL_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p32.node3.title"), t("p32.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(FERMENTING_BARREL_RECIPE)));
 
@@ -981,11 +997,11 @@ public final class GuideBookContent {
                 t("p34.node1.title"), t("p34.node1.text"),
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20, List.of("6m", "1.3m"))),
                 t("p34.node2.title"), t("p34.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_STILL_RECIPE, COLUMN_STILL_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p34.node3.title"), t("p34.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.DASHED, List.of(FERMENTING_BARREL_RECIPE)));
 
@@ -1017,7 +1033,7 @@ public final class GuideBookContent {
                 t("p36.node1.title"), t("p36.node1.text"),
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModBlocks.COLUMN_STILL.get())), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(List.of(new ItemStack(ModBlocks.COLUMN_STILL.get())), 20, "2m")),
                 t("p36.node2.title"), t("p36.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(COLUMN_STILL_RECIPE)));
 
@@ -1050,7 +1066,7 @@ public final class GuideBookContent {
                 t("p38.node1.title"), t("p38.node1.text"),
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20, List.of("4m", "1m"))),
                 t("p38.node2.title"), t("p38.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_STILL_RECIPE, COLUMN_STILL_RECIPE)));
 
@@ -1061,7 +1077,7 @@ public final class GuideBookContent {
                 t("p38.node4.title"), t("p38.node4.text"),
                 w/2 - 13, 60, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20, List.of("2m", "1.3m"))),
                 t("p38.node5.title"), t("p38.node5.text"),
                 w/2 - 39, 86, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_STILL_RECIPE, COLUMN_STILL_RECIPE)));
 
@@ -1088,11 +1104,11 @@ public final class GuideBookContent {
                 t("p40.node1.title"), t("p40.node1.text"),
                 w/2 - 39, 8, Flowchart.FlowNode.Shape.SQUARE, Flowchart.FlowNode.BorderStyle.FULL, null));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(stills(), 20, List.of("4m", "1m"))),
                 t("p40.node2.title"), t("p40.node2.text"),
                 w/2 - 39, 34, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.FULL, List.of(POT_STILL_RECIPE, COLUMN_STILL_RECIPE)));
 
-        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20)),
+        flow.nodes.add(new Flowchart.FlowNode(List.of(icon(fermentingBarrels(), 20, "8h")),
                 t("p40.node3.title"), t("p40.node3.text"),
                 w/2 - 39, 60, Flowchart.FlowNode.Shape.CIRCLE, Flowchart.FlowNode.BorderStyle.DASHED, List.of(FERMENTING_BARREL_RECIPE)));
 
