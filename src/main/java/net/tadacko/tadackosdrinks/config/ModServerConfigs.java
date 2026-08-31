@@ -24,7 +24,7 @@ public class ModServerConfigs {
         BUILDER.comment("These will only work for the world this file belongs to\nCommon configs are located at minecraft/config/tadackosdrinks-common.toml")
                 .define("_serverReadMe", "");
         CHARISMA_MULTIPLIER = BUILDER.comment("How much the Charisma effect discounts Villager prices per level (default 0.1)")
-                .defineInRange("charismaMultiplier", 0.1, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
+                .defineInRange("charismaMultiplier", 0.1, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
         MOLASSES_STACK_SIZE = BUILDER.comment("How much Sugarcane Molasses stacks to (default 16)")
                 .defineInRange("molassesStackSize", 16, 1, 64);
         KEG_STACK_SIZE = BUILDER.comment("How much Kegs stack to (default 1)")

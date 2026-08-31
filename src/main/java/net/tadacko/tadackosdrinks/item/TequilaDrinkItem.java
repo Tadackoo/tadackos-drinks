@@ -19,8 +19,8 @@ public class TequilaDrinkItem extends DrinkItem {
 
     public static double tequilaDurationMultiplier = 2; // fallback default, overridden by config value
 
-    public TequilaDrinkItem(Properties properties, int amplifier, double abv, double volumeL, DrinkVariant variant, Item emptyDrinkware) {
-        super(properties, null, 0, 0, abv, volumeL, variant, emptyDrinkware);
+    public TequilaDrinkItem(Properties properties, int amplifier, double volumeL, DrinkVariant variant, Item emptyDrinkware) {
+        super(properties, null, 0, 0, volumeL, variant, emptyDrinkware);
         this.amplifier = amplifier;
     }
 
@@ -30,7 +30,7 @@ public class TequilaDrinkItem extends DrinkItem {
 
         if (!pLevel.isClientSide) {
             if (!drinkSecondaryEffects) return result;
-            long baseDuration = BacUtils.computeEffectDurationTicks(this.abv, this.volumeL, pLivingEntity);
+            long baseDuration = BacUtils.computeEffectDurationTicks(this.getABV(this.getVariant()), this.volumeL, pLivingEntity);
 
             long totalDuration = (long) (baseDuration * tequilaDurationMultiplier * (amplifier + 1));
             if (totalDuration > Integer.MAX_VALUE) totalDuration = Integer.MAX_VALUE;

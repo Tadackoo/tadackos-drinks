@@ -23,7 +23,6 @@ public class DrinkItem extends PlaceableDrinkwareItem {
     private final MobEffect effect;
     private final int durationMultiplier;
     private final int amplifier;
-    protected final double abv;
     protected final double volumeL;
     private final Item emptyDrinkware;
 
@@ -32,15 +31,29 @@ public class DrinkItem extends PlaceableDrinkwareItem {
     private static final String KEY_MAX_AMP = "max_amp";
     private static final String KEY_HANGOVER_APPLIED = "hangover_done";
 
-    public static boolean drinkSecondaryEffects = true; // fallback default, overridden by config value
+    // fallback defaults, overridden by config values
+    public static boolean drinkSecondaryEffects = true;
+    public static double ABVBeer = 0.05;
+    public static double ABVWine = 0.12;
+    public static double ABVCider = 0.05;
+    public static double ABVMead = 0.12;
+    public static double ABVSpiritLow = 0.3;
+    public static double ABVSpiritMid = 0.6;
+    public static double ABVSpiritHigh = 0.8;
+    public static double ABVSpiritMax = 0.95;
+    public static double ABVWhisky = 0.4;
+    public static double ABVBrandy = 0.4;
+    public static double ABVRum = 0.4;
+    public static double ABVVodka = 0.4;
+    public static double ABVGin = 0.4;
+    public static double ABVTequila = 0.4;
 
-    public DrinkItem(Properties properties, MobEffect effect, int durationMultiplier, int amplifier, double abv, double volumeL,
-                     DrinkVariant variant, Item emptyDrinkware) {
+    public DrinkItem(Properties properties, MobEffect effect, int durationMultiplier, int amplifier, double volumeL, DrinkVariant variant,
+                     Item emptyDrinkware) {
         super(properties, variant);
         this.effect = effect;
         this.durationMultiplier = durationMultiplier;
         this.amplifier = amplifier;
-        this.abv = abv;
         this.volumeL = volumeL;
         this.emptyDrinkware = emptyDrinkware;
     }
@@ -75,11 +88,10 @@ public class DrinkItem extends PlaceableDrinkwareItem {
                 }
             }
 
-            double bacIncreasePercent = BacUtils.bacIncreasePercent(this.abv, this.volumeL, bodyWeightKg, ratio);
+            double bacIncreasePercent = BacUtils.bacIncreasePercent(this.getABV(this.getVariant()), this.volumeL, bodyWeightKg, ratio);
 
             currentBacPercent += bacIncreasePercent;
             if (currentBacPercent < 0.0) currentBacPercent = 0.0;
-            if (currentBacPercent > 5.0) currentBacPercent = 5.0;
 
             persistent.putDouble(KEY_BAC_PERCENT, currentBacPercent);
 
@@ -101,7 +113,7 @@ public class DrinkItem extends PlaceableDrinkwareItem {
             //        newAmp, applyDuration, applyDuration / 20.0));
 
             if (drinkSecondaryEffects && effect != null) {
-                int duration = durationMultiplier * BacUtils.computeEffectDurationTicks(this.abv, this.volumeL, pLivingEntity);
+                int duration = durationMultiplier * BacUtils.computeEffectDurationTicks(this.getABV(this.getVariant()), this.volumeL, pLivingEntity);
                 pLivingEntity.addEffect(new MobEffectInstance(effect, duration, amplifier, false, true, true));
             }
         }
@@ -129,4 +141,20 @@ public class DrinkItem extends PlaceableDrinkwareItem {
 
     @Override
     public SoundEvent getEatingSound() { return SoundEvents.GENERIC_DRINK; }
+
+    protected double getABV(DrinkVariant variant) {
+        return switch (variant) {
+            case BEER -> ABVBeer;
+            case WINE_RED, WINE_ROSE, WINE_ORANGE, WINE_WHITE -> ABVWine;
+            case CIDER -> ABVCider;
+            case MEAD -> ABVMead;
+            case WHISKY -> ABVWhisky;
+            case BRANDY -> ABVBrandy;
+            case RUM, RUM_AGED -> ABVRum;
+            case VODKA -> ABVVodka;
+            case GIN -> ABVGin;
+            case TEQUILA, TEQUILA_AGED -> ABVTequila;
+            default -> 0;
+        };
+    }
 }

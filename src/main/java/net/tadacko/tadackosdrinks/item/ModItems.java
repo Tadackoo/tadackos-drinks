@@ -13,7 +13,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.tadacko.tadackosdrinks.block.DrinkVariant;
 import net.tadacko.tadackosdrinks.block.ModBlocks;
 import net.tadacko.tadackosdrinks.effect.ModEffects;
-import net.tadacko.tadackosdrinks.util.BacUtils;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TadackosDrinks.MOD_ID);
@@ -104,231 +103,231 @@ public class ModItems {
     public static final RegistryObject<Item> BEER_WHEAT_GLASS = ITEMS.register("beer_wheat_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), MobEffects.DAMAGE_RESISTANCE, 1, 0,
-                    0.05, 0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
+                    0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> BEER_WHEAT_HOPPED_GLASS = ITEMS.register("beer_wheat_hopped_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), MobEffects.DAMAGE_RESISTANCE, 2, 0,
-                    0.05, 0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
+                    0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> BEER_BARLEY_GLASS = ITEMS.register("beer_barley_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), MobEffects.DAMAGE_RESISTANCE, 1, 0,
-                    0.05, 0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
+                    0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> BEER_BARLEY_HOPPED_GLASS = ITEMS.register("beer_barley_hopped_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), MobEffects.DAMAGE_RESISTANCE, 2, 0,
-                    0.05, 0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
+                    0.5, DrinkVariant.BEER, BEER_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> WINE_RED_GLASS = ITEMS.register("wine_red_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.HEALTH_BOOST_RED.get(), 1, 0,
-                    0.12, 0.2, DrinkVariant.WINE_RED, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_RED, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WINE_RED_AGED_GLASS = ITEMS.register("wine_red_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.HEALTH_BOOST_RED.get(), 1, 1,
-                    0.12, 0.2, DrinkVariant.WINE_RED, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_RED, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WINE_ROSE_GLASS = ITEMS.register("wine_rose_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.HEALTH_BOOST_ROSE.get(), 1, 0,
-                    0.12, 0.2, DrinkVariant.WINE_ROSE, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_ROSE, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WINE_ROSE_AGED_GLASS = ITEMS.register("wine_rose_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.HEALTH_BOOST_ROSE.get(), 1, 1,
-                    0.12, 0.2, DrinkVariant.WINE_ROSE, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_ROSE, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WINE_ORANGE_GLASS = ITEMS.register("wine_orange_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.ABSORPTION_ORANGE.get(), 1, 0,
-                    0.12, 0.2, DrinkVariant.WINE_ORANGE, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_ORANGE, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WINE_ORANGE_AGED_GLASS = ITEMS.register("wine_orange_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.ABSORPTION_ORANGE.get(), 1, 1,
-                    0.12, 0.2, DrinkVariant.WINE_ORANGE, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_ORANGE, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WINE_WHITE_GLASS = ITEMS.register("wine_white_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.ABSORPTION_WHITE.get(), 1, 0,
-                    0.12, 0.2, DrinkVariant.WINE_WHITE, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_WHITE, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WINE_WHITE_AGED_GLASS = ITEMS.register("wine_white_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.ABSORPTION_WHITE.get(), 1, 1,
-                    0.12, 0.2, DrinkVariant.WINE_WHITE, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.WINE_WHITE, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> CIDER_GLASS = ITEMS.register("cider_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), MobEffects.DIG_SPEED, 1, 0,
-                    0.05, 0.5, DrinkVariant.CIDER, BEER_GLASS_EMPTY.get())
+                    0.5, DrinkVariant.CIDER, BEER_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> CIDER_AGED_GLASS = ITEMS.register("cider_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), MobEffects.DIG_SPEED, 1, 1,
-                    0.05, 0.5, DrinkVariant.CIDER, BEER_GLASS_EMPTY.get())
+                    0.5, DrinkVariant.CIDER, BEER_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> MEAD_GLASS = ITEMS.register("mead_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.WISDOM.get(), 1, 0,
-                    0.12, 0.2, DrinkVariant.MEAD, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.MEAD, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> MEAD_AGED_GLASS = ITEMS.register("mead_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.WISDOM.get(), 1, 1,
-                    0.12, 0.2, DrinkVariant.MEAD, WINE_GLASS_EMPTY.get())
+                    0.2, DrinkVariant.MEAD, WINE_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> WHISKY_WHEAT_GLASS = ITEMS.register("whisky_wheat_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.ERUDITION.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.WHISKY, WHISKY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.WHISKY, WHISKY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> WHISKY_BARLEY_GLASS = ITEMS.register("whisky_barley_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.ERUDITION.get(), 1, 1,
-                    0.40, 0.05, DrinkVariant.WHISKY, WHISKY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.WHISKY, WHISKY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> BRANDY_GRAPE_GLASS = ITEMS.register("brandy_grape_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.IMPROVED_DIGESTION.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.BRANDY, BRANDY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.BRANDY, BRANDY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> BRANDY_APPLE_GLASS = ITEMS.register("brandy_apple_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.IMPROVED_DIGESTION.get(), 1, 1,
-                    0.40, 0.05, DrinkVariant.BRANDY, BRANDY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.BRANDY, BRANDY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> RUM_JUICE_GLASS = ITEMS.register("rum_juice_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.PIRACY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.RUM_LIGHT, WHISKY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.RUM, WHISKY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> RUM_JUICE_AGED_GLASS = ITEMS.register("rum_juice_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.PIRACY.get(), 2, 0,
-                    0.40, 0.05, DrinkVariant.RUM, WHISKY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.RUM_AGED, WHISKY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> RUM_MOLASSES_GLASS = ITEMS.register("rum_molasses_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.PIRACY.get(), 1, 1,
-                    0.40, 0.05, DrinkVariant.RUM_LIGHT, WHISKY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.RUM, WHISKY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> RUM_MOLASSES_AGED_GLASS = ITEMS.register("rum_molasses_aged_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.PIRACY.get(), 2, 1,
-                    0.40, 0.05, DrinkVariant.RUM, WHISKY_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.RUM_AGED, WHISKY_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> VODKA_GRAPE_GLASS = ITEMS.register("vodka_grape_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_APPLE_GLASS = ITEMS.register("vodka_apple_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_HONEY_GLASS = ITEMS.register("vodka_honey_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_SUGARCANE_JUICE_GLASS = ITEMS.register("vodka_sugarcane_juice_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_SUGARCANE_MOLASSES_GLASS = ITEMS.register("vodka_sugarcane_molasses_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_POTATO_GLASS = ITEMS.register("vodka_potato_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_AGAVE_GLASS = ITEMS.register("vodka_agave_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_WHEAT_GLASS = ITEMS.register("vodka_wheat_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 1,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> VODKA_BARLEY_GLASS = ITEMS.register("vodka_barley_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.CHARISMA.get(), 1, 1,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.VODKA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> GIN_GRAPE_GLASS = ITEMS.register("gin_grape_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_APPLE_GLASS = ITEMS.register("gin_apple_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_HONEY_GLASS = ITEMS.register("gin_honey_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_SUGARCANE_JUICE_GLASS = ITEMS.register("gin_sugarcane_juice_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_SUGARCANE_MOLASSES_GLASS = ITEMS.register("gin_sugarcane_molasses_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_POTATO_GLASS = ITEMS.register("gin_potato_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_AGAVE_GLASS = ITEMS.register("gin_agave_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_WHEAT_GLASS = ITEMS.register("gin_wheat_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 1,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> GIN_BARLEY_GLASS = ITEMS.register("gin_barley_glass",
             () -> new DrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), ModEffects.SAVAGERY.get(), 1, 1,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.GIN, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static final RegistryObject<Item> TEQUILA_GLASS = ITEMS.register("tequila_glass",
             () -> new TequilaDrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), 0,
-                    0.40, 0.05, DrinkVariant.SHOT, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.TEQUILA, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
     public static final RegistryObject<Item> TEQUILA_AGED_GLASS = ITEMS.register("tequila_aged_glass",
             () -> new TequilaDrinkItem(new Item.Properties()
                     .food(new FoodProperties.Builder().alwaysEat().build()), 1,
-                    0.40, 0.05, DrinkVariant.TEQUILA, SHOT_GLASS_EMPTY.get())
+                    0.05, DrinkVariant.TEQUILA_AGED, SHOT_GLASS_EMPTY.get())
             { @Override public int getMaxStackSize(ItemStack stack) { return drinkStackSize; } });
 
     public static void register(IEventBus eventBus) {

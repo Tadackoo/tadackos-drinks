@@ -6,14 +6,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.tadacko.tadackosdrinks.TadackosDrinks;
 import net.tadacko.tadackosdrinks.block.FermentingBarrelBlock;
-import net.tadacko.tadackosdrinks.block.HopCropBlock;
 import net.tadacko.tadackosdrinks.effect.*;
 import net.tadacko.tadackosdrinks.item.DrinkItem;
 import net.tadacko.tadackosdrinks.item.TequilaDrinkItem;
-import net.tadacko.tadackosdrinks.network.ModNetwork;
-import net.tadacko.tadackosdrinks.network.SyncPlayerConfigPacket;
 import net.tadacko.tadackosdrinks.util.BacUtils;
 import net.tadacko.tadackosdrinks.util.ThrownItemToCauldronEvent;
+import net.tadacko.tadackosdrinks.util.Tooltips;
 import net.tadacko.tadackosdrinks.util.WaterInteractionHandler;
 
 @Mod.EventBusSubscriber(modid = TadackosDrinks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -30,6 +28,20 @@ public class ModCommonConfigs {
     public static final ForgeConfigSpec.BooleanValue THROW_INGREDIENT_BARREL;
     public static final ForgeConfigSpec.BooleanValue THROW_MALTING;
     public static final ForgeConfigSpec.DoubleValue BAC_ELIMINATION_RATE;
+    public static final ForgeConfigSpec.DoubleValue ABV_BEER;
+    public static final ForgeConfigSpec.DoubleValue ABV_WINE;
+    public static final ForgeConfigSpec.DoubleValue ABV_CIDER;
+    public static final ForgeConfigSpec.DoubleValue ABV_MEAD;
+    public static final ForgeConfigSpec.DoubleValue ABV_SPIRIT_LOW;
+    public static final ForgeConfigSpec.DoubleValue ABV_SPIRIT_MID;
+    public static final ForgeConfigSpec.DoubleValue ABV_SPIRIT_HIGH;
+    public static final ForgeConfigSpec.DoubleValue ABV_SPIRIT_MAX;
+    public static final ForgeConfigSpec.DoubleValue ABV_WHISKY;
+    public static final ForgeConfigSpec.DoubleValue ABV_BRANDY;
+    public static final ForgeConfigSpec.DoubleValue ABV_RUM;
+    public static final ForgeConfigSpec.DoubleValue ABV_VODKA;
+    public static final ForgeConfigSpec.DoubleValue ABV_GIN;
+    public static final ForgeConfigSpec.DoubleValue ABV_TEQUILA;
     public static final ForgeConfigSpec.DoubleValue INEBRIATION_1_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue INEBRIATION_2_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue INEBRIATION_3_THRESHOLD;
@@ -82,6 +94,36 @@ public class ModCommonConfigs {
                 .define("throwMalting", false);
         BAC_ELIMINATION_RATE = BUILDER.comment("BAC elimination rate in percent per hour (default 0.15)")
                 .defineInRange("BACEliminationRate", 0.15, 0, Double.MAX_VALUE);
+        BUILDER.push("Drinks");
+        ABV_BEER = BUILDER.comment("Alcohol by volume of Beer in decimal (default 0.05)")
+                .defineInRange("ABVBeer", 0.05, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_WINE = BUILDER.comment("Alcohol by volume of Wine in decimal (default 0.12)")
+                .defineInRange("ABVWine", 0.12, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_CIDER = BUILDER.comment("Alcohol by volume of Cider in decimal (default 0.05)")
+                .defineInRange("ABVCider", 0.05, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_MEAD = BUILDER.comment("Alcohol by volume of Mead in decimal (default 0.12)")
+                .defineInRange("ABVMead", 0.12, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_SPIRIT_LOW = BUILDER.comment("Alcohol by volume of Low Wine in decimal (cosmetic only - used in tooltips) (default 0.3)")
+                .defineInRange("ABVSpiritLow", 0.3, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_SPIRIT_MID = BUILDER.comment("Alcohol by volume of Mid-Proof Spirit in decimal (cosmetic only - used in tooltips) (default 0.6)")
+                .defineInRange("ABVSpiritMid", 0.6, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_SPIRIT_HIGH = BUILDER.comment("Alcohol by volume of High-Proof Spirit in decimal (cosmetic only - used in tooltips) (default 0.8)")
+                .defineInRange("ABVSpiritHigh", 0.8, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_SPIRIT_MAX = BUILDER.comment("Alcohol by volume of Rectified Spirit in decimal (cosmetic only - used in tooltips) (default 0.95)")
+                .defineInRange("ABVSpiritMax", 0.95, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_WHISKY = BUILDER.comment("Alcohol by volume of Whisky in decimal (default 0.4)")
+                .defineInRange("ABVWhisky", 0.4, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_BRANDY = BUILDER.comment("Alcohol by volume of Brandy in decimal (default 0.4)")
+                .defineInRange("ABVBrandy", 0.4, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_RUM = BUILDER.comment("Alcohol by volume of Rum in decimal (default 0.4)")
+                .defineInRange("ABVRum", 0.4, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_VODKA = BUILDER.comment("Alcohol by volume of Vodka in decimal (default 0.4)")
+                .defineInRange("ABVVodka", 0.4, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_GIN = BUILDER.comment("Alcohol by volume of Gin in decimal (default 0.4)")
+                .defineInRange("ABVGin", 0.4, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        ABV_TEQUILA = BUILDER.comment("Alcohol by volume of Tequila in decimal (default 0.4)")
+                .defineInRange("ABVTequila", 0.4, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+        BUILDER.pop();
         BUILDER.push("Effects");
         BUILDER.comment("BAC thresholds in percent for each level of the Inebriation effect").define("inebriationReadMe", "");
         INEBRIATION_1_THRESHOLD = BUILDER.comment("Threshold for Inebriation II (default 0.04)")
@@ -95,9 +137,9 @@ public class ModCommonConfigs {
         INEBRIATION_5_THRESHOLD = BUILDER.comment("Threshold for Inebriation VI (default 0.32)")
                 .defineInRange("inebriation5Threshold", 0.32, 0, Double.MAX_VALUE);
         STUMBLE_STRENGTH = BUILDER.comment("Strength/speed of Inebriation Stumble in blocks per tick (default 0.02)")
-                .defineInRange("stumbleStrength", 0.02, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+                .defineInRange("stumbleStrength", 0.02, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
         STUMBLE_DAMP_FACTOR = BUILDER.comment("How much previous velocity Inebriation Stumble keeps when changing direction (default 0.8)")
-                .defineInRange("stumbleDampFactor", 0.8, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+                .defineInRange("stumbleDampFactor", 0.8, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
         STUMBLE_CHANGE_MIN = BUILDER.comment("Minimum time in ticks Inebriation Stumble takes to arrive at target angle (default 5)")
                 .defineInRange("stumbleChangeMin", 5, 0, Integer.MAX_VALUE);
         STUMBLE_CHANGE_MAX = BUILDER.comment("Maximum time in ticks Inebriation Stumble takes to arrive at target angle (default 10)")
@@ -107,7 +149,7 @@ public class ModCommonConfigs {
         STUMBLE_SHARP_TURN_CHANCE = BUILDER.comment("Chance in decimal to force a sharp turn when choosing new Inebriation Stumble direction (default 0.2)")
                 .defineInRange("stumbleSharpTurnChance", 0.2, 0, 1);
         STUMBLE_JITTER_STRENGTH = BUILDER.comment("Random Inebriation Stumble jitter in radians per tick (default 0.05)")
-                .defineInRange("stumbleJitterStrength", 0.05, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
+                .defineInRange("stumbleJitterStrength", 0.05, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect?
         CAMARADERIE_RANGE = BUILDER.comment("How many blocks far a player can be to count towards the Camaraderie effect (default 50)")
                 .defineInRange("camaraderieRange", 50, 0, Integer.MAX_VALUE);
         CAMARADERIE_PLAYER_CAP = BUILDER.comment("How much the Camaraderie effect stacks to/how many players within range it counts (default 4)")
@@ -117,9 +159,9 @@ public class ModCommonConfigs {
         HANGOVER_BASE_DURATION = BUILDER.comment("How long Hangover lasts in ticks per level (default 24000)")
                 .defineInRange("hangoverBaseDuration", 24000, -1, Integer.MAX_VALUE);
         VULNERABILITY_MULTIPLIER = BUILDER.comment("How much the Vulnerability effect increases damage taken per level (default 0.2)")
-                .defineInRange("vulnerabilityMultiplier", 0.2, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
+                .defineInRange("vulnerabilityMultiplier", 0.2, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
         WISDOM_MULTIPLIER = BUILDER.comment("How much the Wisdom effect multiplies XP by per level (default 1.5)")
-                .defineInRange("wisdomMultiplier", 1.5, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
+                .defineInRange("wisdomMultiplier", 1.5, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
         BUILDER.comment("What chance in percent the Piracy effect has for first 3 drop options, should add up to less than 100, the rest is chance for " +
                 "Diamond").define("piracyReadMe", "");
         PIRACY_0_NOTHING_CHANCE = BUILDER.comment("Chance for nothing (default 50)")
@@ -135,7 +177,7 @@ public class ModCommonConfigs {
         PIRACY_1_EMERALD_CHANCE = BUILDER.comment("Chance for Emerald (default 15)")
                 .defineInRange("piracy1EmeraldChance", 15, 0.0, 100.0);
         SAVAGERY_MULTIPLIER = BUILDER.comment("How much the Savagery effect increases critical hit damage per level (default 0.25)")
-                .defineInRange("savageryMultiplier", 0.25, Double.MIN_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
+                .defineInRange("savageryMultiplier", 0.25, -Double.MAX_VALUE, Double.MAX_VALUE); // negative allowed, reverses effect
         TEQUILA_DURATION_MULTIPLIER = BUILDER.comment("How much of its base duration Tequila distributes per level (default 2)")
                 .defineInRange("tequilaDurationMultiplier", 2, 0, Double.MAX_VALUE);
         BUILDER.pop();
@@ -157,6 +199,21 @@ public class ModCommonConfigs {
             WaterInteractionHandler.throwMalting = THROW_MALTING.get();
             if (!WaterInteractionHandler.throwMalting) WaterInteractionHandler.clearTracked();
             BacUtils.BACEliminationRatePercentPerHour = BAC_ELIMINATION_RATE.get();
+            DrinkItem.ABVBeer = ABV_BEER.get();
+            DrinkItem.ABVWine = ABV_WINE.get();
+            DrinkItem.ABVCider = ABV_CIDER.get();
+            DrinkItem.ABVMead = ABV_MEAD.get();
+            DrinkItem.ABVSpiritLow = ABV_SPIRIT_LOW.get();
+            DrinkItem.ABVSpiritMid = ABV_SPIRIT_MID.get();
+            DrinkItem.ABVSpiritHigh = ABV_SPIRIT_HIGH.get();
+            DrinkItem.ABVSpiritMax = ABV_SPIRIT_MAX.get();
+            DrinkItem.ABVWhisky = ABV_WHISKY.get();
+            DrinkItem.ABVBrandy = ABV_BRANDY.get();
+            DrinkItem.ABVRum = ABV_RUM.get();
+            DrinkItem.ABVVodka = ABV_VODKA.get();
+            DrinkItem.ABVGin = ABV_GIN.get();
+            DrinkItem.ABVTequila = ABV_TEQUILA.get();
+            Tooltips.TOOLTIP_MAP = null; // clear cache
             BacUtils.inebriation1Threshold = INEBRIATION_1_THRESHOLD.get();
             BacUtils.inebriation2Threshold = INEBRIATION_2_THRESHOLD.get();
             BacUtils.inebriation3Threshold = INEBRIATION_3_THRESHOLD.get();

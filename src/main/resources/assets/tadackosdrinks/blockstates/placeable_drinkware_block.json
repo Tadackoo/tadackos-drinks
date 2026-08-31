@@ -22,10 +22,12 @@
     "variant=whisky": { "model": "tadackosdrinks:block/whisky_glass_empty" },
     "variant=brandy_empty": { "model": "tadackosdrinks:block/brandy_glass_empty" },
     "variant=brandy": { "model": "tadackosdrinks:block/brandy_glass_empty" },
-    "variant=rum_light": { "model": "tadackosdrinks:block/whisky_glass_empty" },
     "variant=rum": { "model": "tadackosdrinks:block/whisky_glass_empty" },
+    "variant=rum_aged": { "model": "tadackosdrinks:block/whisky_glass_empty" },
     "variant=shot_empty": { "model": "tadackosdrinks:block/shot_glass_empty" },
-    "variant=shot": { "model": "tadackosdrinks:block/shot_glass_empty" },
-    "variant=tequila": { "model": "tadackosdrinks:block/shot_glass_empty" }
+    "variant=vodka": { "model": "tadackosdrinks:block/shot_glass_empty" },
+    "variant=gin": { "model": "tadackosdrinks:block/shot_glass_empty" },
+    "variant=tequila": { "model": "tadackosdrinks:block/shot_glass_empty" },
+    "variant=tequila_aged": { "model": "tadackosdrinks:block/shot_glass_empty" }
   }
 }

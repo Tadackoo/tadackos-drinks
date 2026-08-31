@@ -18,25 +18,25 @@ public class DrinkRenderHelper {
     public static final float SHADE_EAST   = 0.6f;
     public static final float SHADE_WEST   = 0.6f;
 
-    private static final Map<DrinkVariant, ResourceLocation> FLUID_TEXTURES =
-            new EnumMap<>(DrinkVariant.class);
-    private static final Map<DrinkVariant, ResourceLocation> FOAM_TEXTURES =
-            new EnumMap<>(DrinkVariant.class);
+    private static final Map<DrinkVariant, ResourceLocation> FLUID_TEXTURES = new EnumMap<>(DrinkVariant.class);
+    private static final Map<DrinkVariant, ResourceLocation> FOAM_TEXTURES = new EnumMap<>(DrinkVariant.class);
 
     static {
-        FLUID_TEXTURES.put(DrinkVariant.BEER,        new ResourceLocation(TadackosDrinks.MOD_ID, "item/beer_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.WINE_RED,    new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_red_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.WINE_ROSE,   new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_rose_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.WINE_ORANGE, new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_orange_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.WINE_WHITE,  new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_white_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.CIDER,       new ResourceLocation(TadackosDrinks.MOD_ID, "item/cider_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.MEAD,        new ResourceLocation(TadackosDrinks.MOD_ID, "item/mead_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.WHISKY,      new ResourceLocation(TadackosDrinks.MOD_ID, "item/whisky_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.BRANDY,      new ResourceLocation(TadackosDrinks.MOD_ID, "item/brandy_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.RUM_LIGHT,   new ResourceLocation(TadackosDrinks.MOD_ID, "item/spirit_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.RUM,         new ResourceLocation(TadackosDrinks.MOD_ID, "item/rum_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.SHOT,        new ResourceLocation(TadackosDrinks.MOD_ID, "item/spirit_texture"));
-        FLUID_TEXTURES.put(DrinkVariant.TEQUILA,     new ResourceLocation(TadackosDrinks.MOD_ID, "item/tequila_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.BEER,         new ResourceLocation(TadackosDrinks.MOD_ID, "item/beer_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.WINE_RED,     new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_red_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.WINE_ROSE,    new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_rose_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.WINE_ORANGE,  new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_orange_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.WINE_WHITE,   new ResourceLocation(TadackosDrinks.MOD_ID, "item/wine_white_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.CIDER,        new ResourceLocation(TadackosDrinks.MOD_ID, "item/cider_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.MEAD,         new ResourceLocation(TadackosDrinks.MOD_ID, "item/mead_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.WHISKY,       new ResourceLocation(TadackosDrinks.MOD_ID, "item/whisky_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.BRANDY,       new ResourceLocation(TadackosDrinks.MOD_ID, "item/brandy_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.RUM,          new ResourceLocation(TadackosDrinks.MOD_ID, "item/spirit_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.RUM_AGED,     new ResourceLocation(TadackosDrinks.MOD_ID, "item/rum_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.VODKA,        new ResourceLocation(TadackosDrinks.MOD_ID, "item/spirit_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.GIN,          new ResourceLocation(TadackosDrinks.MOD_ID, "item/spirit_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.TEQUILA,      new ResourceLocation(TadackosDrinks.MOD_ID, "item/spirit_texture"));
+        FLUID_TEXTURES.put(DrinkVariant.TEQUILA_AGED, new ResourceLocation(TadackosDrinks.MOD_ID, "item/tequila_texture"));
         // empty variants intentionally omitted — getFluidTexture returns null for them
 
         FOAM_TEXTURES.put(DrinkVariant.BEER,  new ResourceLocation(TadackosDrinks.MOD_ID, "item/foam"));
@@ -63,27 +63,23 @@ public class DrinkRenderHelper {
         VOLUMES.put(DrinkVariant.MEAD,         wine);
         VOLUMES.put(DrinkVariant.WHISKY,       whisky);
         VOLUMES.put(DrinkVariant.BRANDY,       brandy);
-        VOLUMES.put(DrinkVariant.RUM_LIGHT,    whisky);
         VOLUMES.put(DrinkVariant.RUM,          whisky);
-        VOLUMES.put(DrinkVariant.SHOT,         shot);
+        VOLUMES.put(DrinkVariant.RUM_AGED,     whisky);
+        VOLUMES.put(DrinkVariant.VODKA,        shot);
+        VOLUMES.put(DrinkVariant.GIN,          shot);
         VOLUMES.put(DrinkVariant.TEQUILA,      shot);
+        VOLUMES.put(DrinkVariant.TEQUILA_AGED, shot);
         // empty variants intentionally omitted — getVolume returns null for them
     }
 
     /** Returns null for empty/no-fluid variants. */
-    public static ResourceLocation getFluidTexture(DrinkVariant variant) {
-        return FLUID_TEXTURES.get(variant);
-    }
+    public static ResourceLocation getFluidTexture(DrinkVariant variant) { return FLUID_TEXTURES.get(variant); }
 
     /** Returns null for variants with no foam. */
-    public static ResourceLocation getFoamTexture(DrinkVariant variant) {
-        return FOAM_TEXTURES.get(variant);
-    }
+    public static ResourceLocation getFoamTexture(DrinkVariant variant) { return FOAM_TEXTURES.get(variant); }
 
     /** Returns null for empty/no-fluid variants. */
-    public static Volume getVolume(DrinkVariant variant) {
-        return VOLUMES.get(variant);
-    }
+    public static Volume getVolume(DrinkVariant variant) { return VOLUMES.get(variant); }
 
     /**
      * Renders the fluid box for the given volume using the provided sprite.

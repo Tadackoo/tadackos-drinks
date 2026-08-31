@@ -35,9 +35,7 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
         return INSTANCE;
     }
 
-    public DrinkItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
-        super(dispatcher, modelSet);
-    }
+    public DrinkItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) { super(dispatcher, modelSet); }
 
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource buffers, int light, int overlay) {
@@ -84,9 +82,9 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
         return switch (variant) {
             case BEER, CIDER -> ModItems.BEER_GLASS_EMPTY.get();
             case WINE_RED, WINE_ROSE, WINE_ORANGE, WINE_WHITE, MEAD -> ModItems.WINE_GLASS_EMPTY.get();
-            case WHISKY, RUM, RUM_LIGHT -> ModItems.WHISKY_GLASS_EMPTY.get();
+            case WHISKY, RUM, RUM_AGED -> ModItems.WHISKY_GLASS_EMPTY.get();
             case BRANDY -> ModItems.BRANDY_GLASS_EMPTY.get();
-            case SHOT, TEQUILA -> ModItems.SHOT_GLASS_EMPTY.get();
+            case VODKA, GIN, TEQUILA, TEQUILA_AGED -> ModItems.SHOT_GLASS_EMPTY.get();
             default -> ModItems.BEER_GLASS_EMPTY.get();
         };
     }

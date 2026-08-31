@@ -2,6 +2,7 @@ package net.tadacko.tadackosdrinks.block;
 
 import net.minecraft.util.StringRepresentable;
 
+// used for rendering and abv
 public enum DrinkVariant implements StringRepresentable {
     BEER_EMPTY("beer_empty"),
     BEER("beer"),
@@ -16,11 +17,13 @@ public enum DrinkVariant implements StringRepresentable {
     WHISKY("whisky"),
     BRANDY_EMPTY("brandy_empty"),
     BRANDY("brandy"),
-    RUM_LIGHT("rum_light"),
     RUM("rum"),
+    RUM_AGED("rum_aged"),
     SHOT_EMPTY("shot_empty"),
-    SHOT("shot"),
-    TEQUILA("tequila");
+    VODKA("vodka"),
+    GIN("gin"),
+    TEQUILA("tequila"),
+    TEQUILA_AGED("tequila_aged");
 
     private final String name;
     DrinkVariant(String name) { this.name = name; }
