@@ -34,9 +34,7 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
                              MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         FluidStack fluidStack = blockEntity.getFluidTank().getFluid();
 
-        if (fluidStack.isEmpty()) {
-            return;
-        }
+        if (fluidStack.isEmpty()) return;
 
         Fluid fluid = fluidStack.getFluid();
         IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(fluid);
@@ -105,11 +103,9 @@ public class ManualPressRenderer implements BlockEntityRenderer<ManualPressBlock
     }
 
     private float calculateSquishFactor(ManualPressBlockEntity blockEntity, float partialTick) {
-        if (!blockEntity.isProcessing() && !blockEntity.isReturning()) {
-            return 1.0f; // Full height when idle
-        }
+        if (!blockEntity.isProcessing() && !blockEntity.isReturning()) return 1.0f; // Full height when idle
 
-        float currentTime = blockEntity.getProgress() + partialTick;
+        float currentTime = blockEntity.getProgress() + partialTick - 2; // bandaid fix for gap
         float timeToBottom = 55f;
         // total time = 120f
 
